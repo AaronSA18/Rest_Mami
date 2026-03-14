@@ -20,63 +20,91 @@ let carouselPositions = {
 let isTransitioning = {};
 
 /**
- * Render menu items for all categories
+ * Initialize menu rendering with IntersectionObserver
  */
 export function renderMenu() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '100px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const category = entry.target.dataset.category;
+                renderCategory(category);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all category grids
     Object.keys(menuData).forEach(category => {
         const grid = document.getElementById(`${category}-grid`);
-        if (!grid) return;
-
-        grid.innerHTML = '';
-
-        const items = menuData[category];
-
-        // Check if mobile view
-        const isMobile = window.innerWidth <= 768;
-
-        // For mobile: show items once, for desktop: create infinite loop
-        const allItems = isMobile ? items : [...items, ...items, ...items];
-
-        grid.innerHTML = allItems.map((item, index) => {
-            const imagePath = item.image ? getImagePath(category, item.image) : null;
-
-            return `
-                <div class="menu-item" data-index="${index}">
-                    <div class="menu-item-image">
-                        ${imagePath
-                    ? `<img src="${imagePath}" alt="${item.name}" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                               <div style="display:none; align-items:center; 
-                                     justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
-                                     ${item.fallbackEmoji || item.emoji}
-                               </div>`
-                    : `<div style="display:flex;align-items:center; 
-                                     justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
-                                     ${item.fallbackEmoji || item.emoji}
-                               </div>`
-                }
-                    </div>
-                    <div class="menu-item-content">
-                        <h4>${item.name}</h4>
-                        <p>${item.description}</p>
-                        <div class="price-cart">
-                            <span class="price">S/ ${item.price.toFixed(2)}</span>
-                            <button class="add-to-cart" onclick="window.addToCart(${item.id})">Agregar</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        // Initialize carousel position only for desktop
-        if (!isMobile) {
-            carouselPositions[category] = items.length;
-            updateCarouselPosition(category, false);
-        } else {
-            // Add progress bar for mobile
-            initMobileProgressBar(category, grid);
+        if (grid) {
+            grid.dataset.category = category;
+            observer.observe(grid);
         }
     });
+}
+
+/**
+ * Render a specific menu category
+ * @param {string} category - Category name to render
+ */
+export function renderCategory(category) {
+    const grid = document.getElementById(`${category}-grid`);
+    if (!grid || grid.dataset.rendered === 'true') return;
+
+    const items = menuData[category];
+    if (!items) return;
+
+    const isMobile = window.innerWidth <= 768;
+    const allItems = isMobile ? items : [...items, ...items, ...items];
+
+    grid.innerHTML = allItems.map((item, index) => renderMenuItem(item, index, category)).join('');
+    grid.dataset.rendered = 'true';
+
+    if (!isMobile) {
+        carouselPositions[category] = items.length;
+        updateCarouselPosition(category, false);
+    } else {
+        initMobileProgressBar(category, grid);
+    }
+}
+
+/**
+ * Helper to render a single menu item HTML
+ */
+function renderMenuItem(item, index, category) {
+    const imagePath = item.image ? getImagePath(category, item.image) : null;
+    return `
+        <div class="menu-item" data-index="${index}">
+            <div class="menu-item-image">
+                ${imagePath
+                    ? `<img src="${imagePath}" alt="${item.name}" loading="lazy"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div style="display:none; align-items:center; 
+                             justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
+                             ${item.fallbackEmoji || item.emoji}
+                       </div>`
+                    : `<div style="display:flex;align-items:center; 
+                             justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
+                             ${item.fallbackEmoji || item.emoji}
+                       </div>`
+                }
+            </div>
+            <div class="menu-item-content">
+                <h4>${item.name}</h4>
+                <p>${item.description}</p>
+                <div class="price-cart">
+                    <span class="price">S/ ${item.price.toFixed(2)}</span>
+                    <button class="add-to-cart" onclick="window.addToCart(${item.id})">Agregar</button>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 /**

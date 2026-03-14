@@ -101,7 +101,11 @@
                 <button class="carousel-btn prev" onclick="moveCarousel('broaster', -1)"
                     aria-label="Anterior">←</button>
                 <div class="carousel-wrapper">
-                    <div class="menu-grid" id="broaster-grid"></div>
+                    <div class="menu-grid" id="broaster-grid">
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                    </div>
                 </div>
                 <button class="carousel-btn next" onclick="moveCarousel('broaster', 1)"
                     aria-label="Siguiente">→</button>
@@ -115,7 +119,11 @@
                 <button class="carousel-btn prev" onclick="moveCarousel('burgers', -1)"
                     aria-label="Anterior">←</button>
                 <div class="carousel-wrapper">
-                    <div class="menu-grid" id="burgers-grid"></div>
+                    <div class="menu-grid" id="burgers-grid">
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                    </div>
                 </div>
                 <button class="carousel-btn next" onclick="moveCarousel('burgers', 1)"
                     aria-label="Siguiente">→</button>
@@ -129,7 +137,11 @@
                 <button class="carousel-btn prev" onclick="moveCarousel('salchipapas', -1)"
                     aria-label="Anterior">←</button>
                 <div class="carousel-wrapper">
-                    <div class="menu-grid" id="salchipapas-grid"></div>
+                    <div class="menu-grid" id="salchipapas-grid">
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                    </div>
                 </div>
                 <button class="carousel-btn next" onclick="moveCarousel('salchipapas', 1)"
                     aria-label="Siguiente">→</button>
@@ -142,7 +154,11 @@
             <div class="carousel-container">
                 <button class="carousel-btn prev" onclick="moveCarousel('drinks', -1)" aria-label="Anterior">←</button>
                 <div class="carousel-wrapper">
-                    <div class="menu-grid" id="drinks-grid"></div>
+                    <div class="menu-grid" id="drinks-grid">
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                    </div>
                 </div>
                 <button class="carousel-btn next" onclick="moveCarousel('drinks', 1)" aria-label="Siguiente">→</button>
             </div>
@@ -154,7 +170,11 @@
             <div class="carousel-container">
                 <button class="carousel-btn prev" onclick="moveCarousel('combos', -1)" aria-label="Anterior">←</button>
                 <div class="carousel-wrapper">
-                    <div class="menu-grid" id="combos-grid"></div>
+                    <div class="menu-grid" id="combos-grid">
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
+                    </div>
                 </div>
                 <button class="carousel-btn next" onclick="moveCarousel('combos', 1)" aria-label="Siguiente">→</button>
             </div>
@@ -405,11 +425,8 @@
     <!-- Leaflet JS for Interactive Map (defer for performance) -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>
 
-    <!-- Main Application JS (defer for performance) -->
+    <!-- Main Application JS (defer) -->
     <script type="module" defer src="assets/js/main.js"></script>
-    
-    <!-- Geolocation Module (defer, loaded as ES6 module in main.js) -->
-    <script type="module" defer src="assets/js/modules/geolocation.js"></script>
 </body>
 
 </html>

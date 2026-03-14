@@ -19,23 +19,9 @@ let customerLocation = {
   address: '',
 };
 
-const NOTIFICATION_DURATION = 3000;
-
-/**
- * Show notification message
- * @param {string} message - Notification text
- * @param {string} type - 'success', 'error', 'info'
- */
-function showNotification(message, type = 'info') {
-  const notification = document.querySelector('.notification');
-  if (!notification) return;
-
-  notification.textContent = message;
-  notification.className = `notification visible notification-${type}`;
-
-  setTimeout(() => {
-    notification.classList.remove('visible');
-  }, NOTIFICATION_DURATION);
+// Internal logging helper
+function logStatus(message, type = 'info') {
+  console.log(`[Geolocation ${type.toUpperCase()}] ${message}`);
 }
 
 /**
@@ -81,7 +67,7 @@ function initMap() {
     console.log('✅ Map initialized successfully');
   } catch (error) {
     console.error('Error initializing map:', error);
-    showNotification('Error al cargar el mapa', 'error');
+    logStatus('Error al cargar el mapa', 'error');
   }
 }
 
@@ -155,17 +141,17 @@ async function searchAddress() {
 
     // Validate district selection
     if (!districtSelect || !districtSelect.value) {
-      showNotification('Selecciona un distrito primero', 'error');
+      logStatus('Selecciona un distrito primero', 'error');
       return;
     }
 
     if (!searchInput || !searchInput.value.trim()) {
-      showNotification('Ingresa una dirección', 'error');
+      logStatus('Ingresa una dirección', 'error');
       return;
     }
 
     const query = searchInput.value.trim();
-    showNotification('🔍 Buscando dirección...', 'info');
+    logStatus('🔍 Buscando dirección...', 'info');
 
     // Call Nominatim API
     const response = await fetch(
@@ -180,7 +166,7 @@ async function searchAddress() {
     const results = await response.json();
 
     if (results.length === 0) {
-      showNotification('No se encontró la dirección', 'error');
+      logStatus('No se encontró la dirección', 'error');
       return;
     }
 
@@ -189,10 +175,10 @@ async function searchAddress() {
     const lng = parseFloat(result.lon);
 
     setMarker(lat, lng);
-    showNotification('✅ Dirección encontrada', 'success');
+    logStatus('✅ Dirección encontrada', 'success');
   } catch (error) {
     console.error('Error searching address:', error);
-    showNotification('Error al buscar dirección', 'error');
+    logStatus('Error al buscar dirección', 'error');
   }
 }
 
@@ -202,17 +188,17 @@ async function searchAddress() {
 async function getCurrentLocation() {
   try {
     if (!navigator.geolocation) {
-      showNotification('Geolocalización no disponible en tu navegador', 'error');
+      logStatus('Geolocalización no disponible en tu navegador', 'error');
       return;
     }
 
-    showNotification('📍 Obteniendo ubicación...', 'info');
+    logStatus('📍 Obteniendo ubicación...', 'info');
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setMarker(latitude, longitude);
-        showNotification('✅ Ubicación obtenida', 'success');
+        logStatus('✅ Ubicación obtenida', 'success');
       },
       (error) => {
         console.error('Geolocation error:', error);
@@ -220,7 +206,7 @@ async function getCurrentLocation() {
         if (error.code === error.PERMISSION_DENIED) {
           message = 'Permiso de ubicación denegado';
         }
-        showNotification(message, 'error');
+        logStatus(message, 'error');
       },
       {
         enableHighAccuracy: true,
@@ -230,7 +216,7 @@ async function getCurrentLocation() {
     );
   } catch (error) {
     console.error('Error getting current location:', error);
-    showNotification('Error al obtener ubicación', 'error');
+    logStatus('Error al obtener ubicación', 'error');
   }
 }
 
@@ -304,9 +290,8 @@ function handleDistrictChange() {
 
 /**
  * Initialize geolocation when checkout form becomes visible
- * Uses MutationObserver to detect visibility changes
  */
-function initializeGeolocation() {
+export function initializeGeolocation() {
   const checkoutForm = document.getElementById('checkout-form');
   if (!checkoutForm) {
     console.warn('Checkout form not found');
@@ -339,7 +324,14 @@ function initializeGeolocation() {
     geoGpsBtn.addEventListener('click', getCurrentLocation);
   }
 
-  // Initialize map when form becomes visible
+  // Initialize map if form is already visible
+  const isAlreadyVisible = checkoutForm.style.display !== 'none' &&
+    window.getComputedStyle(checkoutForm).display !== 'none';
+  if (isAlreadyVisible && map === null) {
+    initMap();
+  }
+
+  // Use MutationObserver to detect when the form becomes visible later
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
@@ -358,13 +350,6 @@ function initializeGeolocation() {
     attributes: true,
     attributeFilter: ['style'],
   });
-
-  // Also initialize map if form is already visible
-  const isAlreadyVisible = checkoutForm.style.display !== 'none' &&
-    window.getComputedStyle(checkoutForm).display !== 'none';
-  if (isAlreadyVisible && map === null) {
-    initMap();
-  }
 
   console.log('✅ Geolocation system initialized');
 }
@@ -388,14 +373,4 @@ export function triggerAddressSearch() {
  */
 export function triggerGPS() {
   getCurrentLocation();
-}
-
-/**
- * Initialize on module load
- * Waits for DOM to be ready
- */
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeGeolocation);
-} else {
-  initializeGeolocation();
 }

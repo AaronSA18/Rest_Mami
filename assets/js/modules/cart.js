@@ -128,49 +128,42 @@ export function updateCart() {
         totalDiv.textContent = 'Total: S/ 0.00';
         if (proceedBtn) proceedBtn.disabled = true;
     } else {
-        let html = '';
-        let total = 0;
-
-        cart.forEach((item) => {
-            const itemTotal = item.price * item.quantity;
-            total += itemTotal;
-
-            // Construct image path
-            // Note: fallback to emoji if image fails loads (handled by onerror not inline, but layout assumes image)
-            // We use a container for the image/emoji
-            const imagePath = `assets/images/${item.category}/${item.image}`;
-
-            html += `
-                <div class="cart-item">
-                    <div class="cart-item-image">
-                        <img src="${imagePath}" alt="${item.name}" onerror="this.parentElement.innerHTML='<span style=\'font-size:2rem\'>${item.emoji}</span>'">
-                    </div>
-                    <div class="cart-item-info">
-                        <h4>${item.name}</h4>
-                        <p>S/ ${item.price.toFixed(2)}</p>
-                    </div>
-                    <div class="cart-item-controls">
-                        <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, -1)">−</button>
-                        <span class="quantity-display">${item.quantity}</span>
-                        <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, 1)">+</button>
-                    </div>
-                </div>
-            `;
-        });
-
-        cartItemsDiv.innerHTML = html;
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        cartItemsDiv.innerHTML = cart.map(renderCartItem).join('');
         totalDiv.textContent = `Total: S/ ${total.toFixed(2)}`;
         if (proceedBtn) proceedBtn.disabled = false;
     }
 
-    // Also check form validity in case user is already in step 2
     checkFormValidity();
+}
+
+/**
+ * Helper to render a single cart item HTML
+ */
+function renderCartItem(item) {
+    const imagePath = `assets/images/${item.category}/${item.image}`;
+    return `
+        <div class="cart-item">
+            <div class="cart-item-image">
+                <img src="${imagePath}" alt="${item.name}" onerror="this.parentElement.innerHTML='<span style=\'font-size:2rem\'>${item.emoji}</span>'" loading="lazy">
+            </div>
+            <div class="cart-item-info">
+                <h4>${item.name}</h4>
+                <p>S/ ${item.price.toFixed(2)}</p>
+            </div>
+            <div class="cart-item-controls">
+                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, -1)">−</button>
+                <span class="quantity-display">${item.quantity}</span>
+                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, 1)">+</button>
+            </div>
+        </div>
+    `;
 }
 
 /**
  * Show checkout form (Step 2)
  */
-export function showCheckoutForm() {
+export async function showCheckoutForm() {
     const form = document.getElementById('checkout-form');
     const summaryStep = document.getElementById('order-summary-step');
 
@@ -178,6 +171,17 @@ export function showCheckoutForm() {
         summaryStep.style.display = 'none'; // Hide Order Summary (Step 1)
         form.style.display = 'block'; // Show Form (Step 2)
         window.scrollTo(0, 0); // Scroll to top
+
+        // Dynamic load geolocation if not already loaded
+        if (!window.geolocationInitialized) {
+            try {
+                const { initializeGeolocation } = await import('./geolocation.js');
+                initializeGeolocation();
+                window.geolocationInitialized = true;
+            } catch (err) {
+                console.error('Failed to load geolocation module:', err);
+            }
+        }
     }
 }
 
