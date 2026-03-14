@@ -31,7 +31,7 @@ export const CONFIG = {
     defaultCenter: [-12.0464, -77.0428], // Lima, Peru [lat, lng]
     zoomLevel: 15,
     tileLayer: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: '© OpenStreetMap contributors',
+    attribution: "© OpenStreetMap contributors",
     nominatimBaseUrl: "https://nominatim.openstreetmap.org",
     googleMapsBaseUrl: "https://www.google.com/maps",
   },
@@ -40,9 +40,9 @@ export const CONFIG = {
   images: {
     basePath: "assets/images/",
     broaster: "assets/images/broaster/",
-    hamburguesas: "assets/images/hamburguesas/",
+    burgers: "assets/images/burgers/",
     salchipapas: "assets/images/salchipapas/",
-    bebidas: "assets/images/bebidas/",
+    drinks: "assets/images/drinks/",
     combos: "assets/images/combos/",
   },
 };

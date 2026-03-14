@@ -1,437 +1,773 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
-<head>
+  <head>
     <!-- Meta Tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Burger & Broaster Express - Las mejores hamburguesas y broaster de la ciudad. Pedidos a domicilio en Lima, Perú.">
-    <meta name="keywords" content="hamburguesas, broaster, pollo, salchipapas, delivery, Lima, Perú">
-    <meta name="author" content="Burger & Broaster Express">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Burger & Broaster Express - Las mejores hamburguesas y broaster de la ciudad. Pedidos a domicilio en Lima, Perú."
+    />
+    <meta
+      name="keywords"
+      content="hamburguesas, broaster, pollo, salchipapas, delivery, Lima, Perú"
+    />
+    <meta name="author" content="Burger & Broaster Express" />
 
     <!-- Title -->
-    <title>Burger & Broaster Express - Las mejores hamburguesas y broaster</title>
+    <title>
+      Burger & Broaster Express - Las mejores hamburguesas y broaster
+    </title>
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍔</text></svg>"
+    />
 
     <!-- Preload Critical Images for better LCP & UX -->
-    <link rel="preload" href="assets/images/hero-bg.webp" as="image" fetchpriority="high">
-    <link rel="preload" href="assets/images/broaster/Alita.webp" as="image" fetchpriority="high">
-    <link rel="preload" href="assets/images/broaster/Pierna.webp" as="image" fetchpriority="high">
+    <link
+      rel="preload"
+      href="assets/images/hero-bg.webp"
+      as="image"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="assets/images/broaster/Alita.webp"
+      as="image"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="assets/images/broaster/Pierna.webp"
+      as="image"
+      fetchpriority="high"
+    />
 
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css">
+    <!-- Stylesheet (async load for performance) -->
+    <link
+      rel="preload"
+      href="assets/css/main.css"
+      as="style"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
+    />
+    <noscript><link rel="stylesheet" href="assets/css/main.css" /></noscript>
 
     <!-- EmailJS Library (async for performance) -->
-    <script async src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-</head>
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+    ></script>
+  </head>
 
-<body>
+  <body>
     <!-- Header -->
     <header>
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">🍔</div>
-                <span>Burger & Broaster Express</span>
-            </div>
-            <nav aria-label="Navegación principal">
-                <ul>
-                    <div class="nav-indicator"></div>
-                    <li><a onclick="showSection('inicio')" role="button" tabindex="0"><span
-                                class="nav-icon">🏠</span><span class="nav-text">Inicio</span></a></li>
-                    <li><a onclick="scrollToMenu()" role="button" tabindex="0"><span class="nav-icon">📖</span><span
-                                class="nav-text">Menú</span></a></li>
-                    <li><a onclick="scrollToPedido()" role="button" tabindex="0" class="nav-pedido"><span class="nav-icon">🛒</span><span class="nav-text">Pedido</span><span class="cart-count">0</span></a></li>
-                    <li><a onclick="showSection('contacto')" role="button" tabindex="0"><span
-                                class="nav-icon">📞</span><span class="nav-text">Contacto</span></a></li>
-                </ul>
-            </nav>
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">🍔</div>
+          <span>Burger & Broaster Express</span>
         </div>
+        <nav aria-label="Navegación principal">
+          <ul>
+            <div class="nav-indicator"></div>
+            <li>
+              <a onclick="showSection('inicio')" role="button" tabindex="0"
+                ><span class="nav-icon">🏠</span
+                ><span class="nav-text">Inicio</span></a
+              >
+            </li>
+            <li>
+              <a onclick="scrollToMenu()" role="button" tabindex="0"
+                ><span class="nav-icon">📖</span
+                ><span class="nav-text">Menú</span></a
+              >
+            </li>
+            <li>
+              <a
+                onclick="scrollToPedido()"
+                role="button"
+                tabindex="0"
+                class="nav-pedido"
+                ><span class="nav-icon">🛒</span
+                ><span class="nav-text">Pedido</span
+                ><span class="cart-count">0</span></a
+              >
+            </li>
+            <li>
+              <a onclick="showSection('contacto')" role="button" tabindex="0"
+                ><span class="nav-icon">📞</span
+                ><span class="nav-text">Contacto</span></a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <!-- Notification -->
-    <div class="notification" id="notification" role="alert" aria-live="polite"></div>
+    <div
+      class="notification"
+      id="notification"
+      role="alert"
+      aria-live="polite"
+    ></div>
 
     <!-- Inicio Section -->
     <section id="inicio" class="section">
-        <div class="hero">
-            <img src="assets/images/hero-bg.webp" alt="Fondo Hero" class="hero-bg" fetchpriority="high" width="1200" height="600">
-            <div class="hero-content">
-                <div class="hero-card">
-                    <span class="hero-subtitle">SABOR QUE TE CONECTA</span>
-                    <h1>¡Bienvenido a <span class="hero-highlight">Burger & Broaster Express!</span></h1>
-                    <p>Descubre el sabor auténtico de las mejores hamburguesas y pollo broaster de la ciudad, preparados con pasión y los ingredientes más frescos.</p>
-                    <div class="hero-buttons">
-                        <a class="cta-button cta-primary" onclick="scrollToMenu()" role="button" tabindex="0">📖 Ver Menú</a>
-                        <a class="cta-button cta-secondary" onclick="showSection('contacto')" role="button" tabindex="0">📞 Contactanos</a>
-                    </div>
-                </div>
+      <div class="hero">
+        <img
+          src="assets/images/hero-bg.webp"
+          alt="Fondo Hero"
+          class="hero-bg"
+          fetchpriority="high"
+          width="1200"
+          height="600"
+        />
+        <div class="hero-content">
+          <div class="hero-card">
+            <span class="hero-subtitle">SABOR QUE TE CONECTA</span>
+            <h1>
+              ¡Bienvenido a
+              <span class="hero-highlight">Burger & Broaster Express!</span>
+            </h1>
+            <p>
+              Descubre el sabor auténtico de las mejores hamburguesas y pollo
+              broaster de la ciudad, preparados con pasión y los ingredientes
+              más frescos.
+            </p>
+            <div class="hero-buttons">
+              <a
+                class="cta-button cta-primary"
+                onclick="scrollToMenu()"
+                role="button"
+                tabindex="0"
+                >📖 Ver Menú</a
+              >
+              <a
+                class="cta-button cta-secondary"
+                onclick="showSection('contacto')"
+                role="button"
+                tabindex="0"
+                >📞 Contactanos</a
+              >
             </div>
+          </div>
         </div>
+      </div>
 
-        <div class="container">
-            <h2>Sobre Nosotros</h2>
-            <div class="about-content">
-                <div class="about-card">
-                    <div class="about-card-icon">📖</div>
-                    <h3>Nuestra Historia</h3>
-                    <p>En Burger & Broaster Express nos dedicamos a ofrecer la mejor comida rápida con ingredientes frescos y de calidad. Desde nuestros inicios, hemos mantenido el compromiso de brindar sabor auténtico y un servicio rápido.</p>
-                </div>
+      <div class="container">
+        <h2>Sobre Nosotros</h2>
+        <div class="about-content">
+          <div class="about-card">
+            <div class="about-card-icon">📖</div>
+            <h3>Nuestra Historia</h3>
+            <p>
+              En Burger & Broaster Express nos dedicamos a ofrecer la mejor
+              comida rápida con ingredientes frescos y de calidad. Desde
+              nuestros inicios, hemos mantenido el compromiso de brindar sabor
+              auténtico y un servicio rápido.
+            </p>
+          </div>
 
-                <div class="about-card">
-                    <div class="about-card-icon">🎯</div>
-                    <h3>Nuestra Misión</h3>
-                    <p>Proporcionar alimentos deliciosos y de calidad a precios accesibles, asegurando la satisfacción total de nuestros clientes en cada pedido.</p>
-                </div>
+          <div class="about-card">
+            <div class="about-card-icon">🎯</div>
+            <h3>Nuestra Misión</h3>
+            <p>
+              Proporcionar alimentos deliciosos y de calidad a precios
+              accesibles, asegurando la satisfacción total de nuestros clientes
+              en cada pedido.
+            </p>
+          </div>
 
-                <div class="about-card">
-                    <div class="about-card-icon">⭐</div>
-                    <h3>Nuestra Visión</h3>
-                    <p>Ser la cadena de comida rápida preferida en Perú, reconocida por nuestra calidad, rapidez y atención excepcional.</p>
-                </div>
-            </div>
+          <div class="about-card">
+            <div class="about-card-icon">⭐</div>
+            <h3>Nuestra Visión</h3>
+            <p>
+              Ser la cadena de comida rápida preferida en Perú, reconocida por
+              nuestra calidad, rapidez y atención excepcional.
+            </p>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Menu y Pedido Section (Combined) - ACTIVE BY DEFAULT -->
     <section id="menu" class="section active container">
-        <h2 id="menu-title">Nuestro Menú</h2>
+      <h2 id="menu-title">Nuestro Menú</h2>
 
-        <!-- Broaster Category -->
-        <div class="menu-category broaster">
-            <h3>🍗 Broaster</h3>
-            <div class="carousel-container">
-                <button class="carousel-btn prev" onclick="moveCarousel('broaster', -1)"
-                    aria-label="Anterior">←</button>
-                <div class="carousel-wrapper">
-                    <div class="menu-grid" id="broaster-grid">
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                    </div>
-                </div>
-                <button class="carousel-btn next" onclick="moveCarousel('broaster', 1)"
-                    aria-label="Siguiente">→</button>
+      <!-- Broaster Category -->
+      <div class="menu-category broaster">
+        <h3>🍗 Broaster</h3>
+        <div class="carousel-container">
+          <button
+            class="carousel-btn prev"
+            onclick="moveCarousel('broaster', -1)"
+            aria-label="Anterior"
+          >
+            ←
+          </button>
+          <div class="carousel-wrapper">
+            <div class="menu-grid" id="broaster-grid">
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
             </div>
+          </div>
+          <button
+            class="carousel-btn next"
+            onclick="moveCarousel('broaster', 1)"
+            aria-label="Siguiente"
+          >
+            →
+          </button>
         </div>
+      </div>
 
-        <!-- Hamburguesas Category -->
-        <div class="menu-category burgers">
-            <h3>🍔 Hamburguesas</h3>
-            <div class="carousel-container">
-                <button class="carousel-btn prev" onclick="moveCarousel('burgers', -1)"
-                    aria-label="Anterior">←</button>
-                <div class="carousel-wrapper">
-                    <div class="menu-grid" id="burgers-grid">
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                    </div>
-                </div>
-                <button class="carousel-btn next" onclick="moveCarousel('burgers', 1)"
-                    aria-label="Siguiente">→</button>
+      <!-- Hamburguesas Category -->
+      <div class="menu-category burgers">
+        <h3>🍔 Hamburguesas</h3>
+        <div class="carousel-container">
+          <button
+            class="carousel-btn prev"
+            onclick="moveCarousel('burgers', -1)"
+            aria-label="Anterior"
+          >
+            ←
+          </button>
+          <div class="carousel-wrapper">
+            <div class="menu-grid" id="burgers-grid">
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
             </div>
+          </div>
+          <button
+            class="carousel-btn next"
+            onclick="moveCarousel('burgers', 1)"
+            aria-label="Siguiente"
+          >
+            →
+          </button>
         </div>
+      </div>
 
-        <!-- Salchipapas Category -->
-        <div class="menu-category salchipapas">
-            <h3>🌭 Salchipapas</h3>
-            <div class="carousel-container">
-                <button class="carousel-btn prev" onclick="moveCarousel('salchipapas', -1)"
-                    aria-label="Anterior">←</button>
-                <div class="carousel-wrapper">
-                    <div class="menu-grid" id="salchipapas-grid">
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                    </div>
-                </div>
-                <button class="carousel-btn next" onclick="moveCarousel('salchipapas', 1)"
-                    aria-label="Siguiente">→</button>
+      <!-- Salchipapas Category -->
+      <div class="menu-category salchipapas">
+        <h3>🌭 Salchipapas</h3>
+        <div class="carousel-container">
+          <button
+            class="carousel-btn prev"
+            onclick="moveCarousel('salchipapas', -1)"
+            aria-label="Anterior"
+          >
+            ←
+          </button>
+          <div class="carousel-wrapper">
+            <div class="menu-grid" id="salchipapas-grid">
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
             </div>
+          </div>
+          <button
+            class="carousel-btn next"
+            onclick="moveCarousel('salchipapas', 1)"
+            aria-label="Siguiente"
+          >
+            →
+          </button>
         </div>
+      </div>
 
-        <!-- Bebidas Category -->
-        <div class="menu-category drinks">
-            <h3>🥤 Bebidas</h3>
-            <div class="carousel-container">
-                <button class="carousel-btn prev" onclick="moveCarousel('drinks', -1)" aria-label="Anterior">←</button>
-                <div class="carousel-wrapper">
-                    <div class="menu-grid" id="drinks-grid">
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                    </div>
-                </div>
-                <button class="carousel-btn next" onclick="moveCarousel('drinks', 1)" aria-label="Siguiente">→</button>
+      <!-- Bebidas Category -->
+      <div class="menu-category drinks">
+        <h3>🥤 Bebidas</h3>
+        <div class="carousel-container">
+          <button
+            class="carousel-btn prev"
+            onclick="moveCarousel('drinks', -1)"
+            aria-label="Anterior"
+          >
+            ←
+          </button>
+          <div class="carousel-wrapper">
+            <div class="menu-grid" id="drinks-grid">
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
             </div>
+          </div>
+          <button
+            class="carousel-btn next"
+            onclick="moveCarousel('drinks', 1)"
+            aria-label="Siguiente"
+          >
+            →
+          </button>
         </div>
+      </div>
 
-        <!-- Combos Category -->
-        <div class="menu-category combos">
-            <h3>🎁 Combos Especiales</h3>
-            <div class="carousel-container">
-                <button class="carousel-btn prev" onclick="moveCarousel('combos', -1)" aria-label="Anterior">←</button>
-                <div class="carousel-wrapper">
-                    <div class="menu-grid" id="combos-grid">
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                        <div class="menu-item-skeleton"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="skeleton skeleton-price"></div></div>
-                    </div>
-                </div>
-                <button class="carousel-btn next" onclick="moveCarousel('combos', 1)" aria-label="Siguiente">→</button>
+      <!-- Combos Category -->
+      <div class="menu-category combos">
+        <h3>🎁 Combos Especiales</h3>
+        <div class="carousel-container">
+          <button
+            class="carousel-btn prev"
+            onclick="moveCarousel('combos', -1)"
+            aria-label="Anterior"
+          >
+            ←
+          </button>
+          <div class="carousel-wrapper">
+            <div class="menu-grid" id="combos-grid">
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
+              <div class="menu-item-skeleton">
+                <div class="skeleton skeleton-img"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton skeleton-price"></div>
+              </div>
             </div>
+          </div>
+          <button
+            class="carousel-btn next"
+            onclick="moveCarousel('combos', 1)"
+            aria-label="Siguiente"
+          >
+            →
+          </button>
         </div>
-
+      </div>
     </section>
 
     <!-- Pedido Section (Now Separate) -->
     <section id="pedido" class="section container">
-        <h2>Mi Pedido</h2>
-        <div class="order-section">
-            <!-- Step 1: Order Summary -->
-            <div class="order-summary" id="order-summary-step">
-                <div class="order-content">
-                    <h3>Resumen de tu Orden</h3>
-                    <div id="cart-items" class="cart-items-container"></div>
-                    <div class="total" id="total-price">Total: S/ 0.00</div>
+      <h2>Mi Pedido</h2>
+      <div class="order-section">
+        <!-- Step 1: Order Summary -->
+        <div class="order-summary" id="order-summary-step">
+          <div class="order-content">
+            <h3>Resumen de tu Orden</h3>
+            <div id="cart-items" class="cart-items-container"></div>
+            <div class="total" id="total-price">Total: S/ 0.00</div>
 
-                    <!-- Action Buttons -->
-                    <button class="confirm-order" onclick="showCheckoutForm()" id="proceedBtn" disabled>
-                        Siguiente
-                    </button>
-                </div>
-            </div>
-
-            <!-- Step 2: Customer Data (Initially Hidden) -->
-            <div class="customer-data" id="checkout-form" style="display: none;">
-                <div class="form-content">
-                    <h3>Información de Entrega</h3>
-                    
-                    <!-- Nombre Completo -->
-                    <div class="form-group">
-                        <label for="customerName">Nombre Completo *</label>
-                        <input type="text" id="customerName" placeholder="Juan Pérez García" required aria-required="true">
-                    </div>
-
-                    <!-- Teléfono (máx 9 dígitos) -->
-                    <div class="form-group">
-                        <label for="customerPhone">Teléfono *</label>
-                        <input type="text" id="customerPhone" placeholder="987654321" maxlength="9" pattern="[0-9]{1,9}" required aria-required="true">
-                        <small>Máximo 9 dígitos</small>
-                    </div>
-
-                    <!-- Selección de Distritos -->
-                    <div class="form-group">
-                        <label for="customerDistrict">Distrito *</label>
-                        <select id="customerDistrict" required aria-required="true">
-                            <option value="">-- Seleccionar Distrito --</option>
-                            <option value="cercado-lima">Cercado de Lima</option>
-                            <option value="rimac">Rímac</option>
-                            <option value="brena">Breña</option>
-                            <option value="la-victoria">La Victoria</option>
-                            <option value="el-agustino">El Agustino</option>
-                        </select>
-                    </div>
-
-                    <!-- Geolocation Group -->
-                    <div class="geolocation-group">
-                        <label>Dirección de Entrega *</label>
-                        
-                        <!-- Geolocation Controls -->
-                        <div class="geo-controls">
-                            <input 
-                                type="text" 
-                                id="geo-search" 
-                                class="geo-search-input"
-                                placeholder="Selecciona un distrito primero"
-                                disabled
-                                aria-label="Buscador de dirección">
-                            <button type="button" id="geo-search-btn" class="geo-btn geo-search-btn" title="Buscar dirección">
-                                🔍
-                            </button>
-                            <button type="button" id="geo-gps-btn" class="geo-btn geo-gps-btn" title="Usar mi ubicación">
-                                📍
-                            </button>
-                        </div>
-
-                        <!-- Map Container -->
-                        <div class="map-wrapper">
-                            <div id="map-container">
-                                <div id="map" aria-label="Mapa interactivo para seleccionar ubicación"></div>
-                                <p class="map-hint">📍 Haz clic en el mapa o arrastra el marcador</p>
-                            </div>
-                            <p class="geo-help-text">💡 Si el buscador no encuentra tu dirección, puedes hacer clic directamente en el mapa</p>
-                        </div>
-
-                        <!-- Hidden coordinates input -->
-                        <input 
-                            type="hidden" 
-                            id="customerCoordinates" 
-                            value=""
-                            aria-hidden="true">
-                        
-                        <!-- Hidden address input (auto-filled by map) -->
-                        <input
-                            type="hidden"
-                            id="customerAddress"
-                            value=""
-                            aria-hidden="true">
-                    </div>
-
-                    <!-- Referencia de Dirección -->
-                    <div class="form-group">
-                        <label for="customerReference">Referencia de Dirección</label>
-                        <textarea id="customerReference" rows="2" placeholder="Ej: Al lado de la farmacia, cerca al parque..."></textarea>
-                    </div>
-
-                    <!-- Método de Pago -->
-                    <div class="form-group">
-                        <label>Método de Pago *</label>
-                        <div class="payment-methods">
-                            <button type="button" class="payment-btn" data-method="yape" onclick="selectPaymentMethod('yape')">
-                                💳 Yape
-                            </button>
-                            <button type="button" class="payment-btn" data-method="plin" onclick="selectPaymentMethod('plin')">
-                                💳 Plin
-                            </button>
-                            <button type="button" class="payment-btn" data-method="efectivo" onclick="selectPaymentMethod('efectivo')">
-                                💵 Efectivo
-                            </button>
-                        </div>
-                        <input type="hidden" id="paymentMethod" required>
-                    </div>
-
-                    <!-- Comentarios Adicionales -->
-                    <div class="form-group">
-                        <label for="customerComments">Comentarios Adicionales</label>
-                        <textarea id="customerComments" rows="2" placeholder="Ej: Sin cebolla, sin mayo..."></textarea>
-                    </div>
-
-                    <!-- Checkout Actions -->
-                    <div class="checkout-actions">
-                        <button class="btn-secondary" onclick="hideCheckoutForm()">Volver</button>
-                        <button class="confirm-order" onclick="showPaymentReminder()" id="nextStepBtn" disabled>
-                            Continuar
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <!-- Action Buttons -->
+            <button
+              class="confirm-order"
+              onclick="showCheckoutForm()"
+              id="proceedBtn"
+              disabled
+            >
+              Siguiente
+            </button>
+          </div>
         </div>
+
+        <!-- Step 2: Customer Data (Initially Hidden) -->
+        <div class="customer-data" id="checkout-form" style="display: none">
+          <div class="form-content">
+            <h3>Información de Entrega</h3>
+
+            <!-- Nombre Completo -->
+            <div class="form-group">
+              <label for="customerName">Nombre Completo *</label>
+              <input
+                type="text"
+                id="customerName"
+                placeholder="Juan Pérez García"
+                required
+                aria-required="true"
+              />
+            </div>
+
+            <!-- Teléfono (máx 9 dígitos) -->
+            <div class="form-group">
+              <label for="customerPhone">Teléfono *</label>
+              <input
+                type="text"
+                id="customerPhone"
+                placeholder="987654321"
+                maxlength="9"
+                pattern="[0-9]{1,9}"
+                required
+                aria-required="true"
+              />
+              <small>Máximo 9 dígitos</small>
+            </div>
+
+            <!-- Selección de Distritos -->
+            <div class="form-group">
+              <label for="customerDistrict">Distrito *</label>
+              <select id="customerDistrict" required aria-required="true">
+                <option value="">-- Seleccionar Distrito --</option>
+                <option value="cercado-lima">Cercado de Lima</option>
+                <option value="rimac">Rímac</option>
+                <option value="brena">Breña</option>
+                <option value="la-victoria">La Victoria</option>
+                <option value="el-agustino">El Agustino</option>
+              </select>
+            </div>
+
+            <!-- Geolocation Group -->
+            <div class="geolocation-group">
+              <label>Dirección de Entrega *</label>
+
+              <!-- Geolocation Controls -->
+              <div class="geo-controls">
+                <input
+                  type="text"
+                  id="geo-search"
+                  class="geo-search-input"
+                  placeholder="Selecciona un distrito primero"
+                  disabled
+                  aria-label="Buscador de dirección"
+                />
+                <button
+                  type="button"
+                  id="geo-search-btn"
+                  class="geo-btn geo-search-btn"
+                  title="Buscar dirección"
+                >
+                  🔍
+                </button>
+                <button
+                  type="button"
+                  id="geo-gps-btn"
+                  class="geo-btn geo-gps-btn"
+                  title="Usar mi ubicación"
+                >
+                  📍
+                </button>
+              </div>
+
+              <!-- Map Container -->
+              <div class="map-wrapper">
+                <div id="map-container">
+                  <div
+                    id="map"
+                    aria-label="Mapa interactivo para seleccionar ubicación"
+                  ></div>
+                  <p class="map-hint">
+                    📍 Haz clic en el mapa o arrastra el marcador
+                  </p>
+                </div>
+                <p class="geo-help-text">
+                  💡 Si el buscador no encuentra tu dirección, puedes hacer clic
+                  directamente en el mapa
+                </p>
+              </div>
+
+              <!-- Hidden coordinates input -->
+              <input
+                type="hidden"
+                id="customerCoordinates"
+                value=""
+                aria-hidden="true"
+              />
+
+              <!-- Hidden address input (auto-filled by map) -->
+              <input
+                type="hidden"
+                id="customerAddress"
+                value=""
+                aria-hidden="true"
+              />
+            </div>
+
+            <!-- Referencia de Dirección -->
+            <div class="form-group">
+              <label for="customerReference">Referencia de Dirección</label>
+              <textarea
+                id="customerReference"
+                rows="2"
+                placeholder="Ej: Al lado de la farmacia, cerca al parque..."
+              ></textarea>
+            </div>
+
+            <!-- Método de Pago -->
+            <div class="form-group">
+              <label>Método de Pago *</label>
+              <div class="payment-methods">
+                <button
+                  type="button"
+                  class="payment-btn"
+                  data-method="yape"
+                  onclick="selectPaymentMethod('yape')"
+                >
+                  💳 Yape
+                </button>
+                <button
+                  type="button"
+                  class="payment-btn"
+                  data-method="plin"
+                  onclick="selectPaymentMethod('plin')"
+                >
+                  💳 Plin
+                </button>
+                <button
+                  type="button"
+                  class="payment-btn"
+                  data-method="efectivo"
+                  onclick="selectPaymentMethod('efectivo')"
+                >
+                  💵 Efectivo
+                </button>
+              </div>
+              <input type="hidden" id="paymentMethod" required />
+            </div>
+
+            <!-- Comentarios Adicionales -->
+            <div class="form-group">
+              <label for="customerComments">Comentarios Adicionales</label>
+              <textarea
+                id="customerComments"
+                rows="2"
+                placeholder="Ej: Sin cebolla, sin mayo..."
+              ></textarea>
+            </div>
+
+            <!-- Checkout Actions -->
+            <div class="checkout-actions">
+              <button class="btn-secondary" onclick="hideCheckoutForm()">
+                Volver
+              </button>
+              <button
+                class="confirm-order"
+                onclick="showPaymentReminder()"
+                id="nextStepBtn"
+                disabled
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Modal: Payment Reminder -->
-    <div class="modal-overlay" id="paymentReminderModal" style="display: none;">
-        <div class="modal-content payment-reminder">
-            <div class="reminder-icon">⚠️</div>
-            <h3>Recordatorio Importante</h3>
-            <p>El pago es <strong>CONTRA ENTREGA</strong>. Pagarás el monto total al momento de recibir tu pedido.</p>
-            <div class="modal-actions">
-                <button class="btn-secondary" onclick="hidePaymentReminder()">Volver</button>
-                <button class="confirm-order" onclick="finalizeOrder()">Confirmar Pedido</button>
-            </div>
+    <div class="modal-overlay" id="paymentReminderModal" style="display: none">
+      <div class="modal-content payment-reminder">
+        <div class="reminder-icon">⚠️</div>
+        <h3>Recordatorio Importante</h3>
+        <p>
+          El pago es <strong>CONTRA ENTREGA</strong>. Pagarás el monto total al
+          momento de recibir tu pedido.
+        </p>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="hidePaymentReminder()">
+            Volver
+          </button>
+          <button class="confirm-order" onclick="finalizeOrder()">
+            Confirmar Pedido
+          </button>
         </div>
+      </div>
     </div>
 
     <!-- Modal: Thank You Message -->
-    <div class="modal-overlay modal-overlay-dark" id="thankYouModal" style="display: none;">
-        <div class="modal-content thank-you-modal">
-            <div class="thank-you-icon">✅</div>
-            <h2>¡Gracias por tu Pedido!</h2>
-            <p>Hemos recibido tu solicitud correctamente.</p>
-            <p>Te contactaremos pronto para confirmar los detalles de tu entrega.</p>
-            <button class="confirm-order" onclick="closeThankYouModal()">Aceptar</button>
-        </div>
+    <div
+      class="modal-overlay modal-overlay-dark"
+      id="thankYouModal"
+      style="display: none"
+    >
+      <div class="modal-content thank-you-modal">
+        <div class="thank-you-icon">✅</div>
+        <h2>¡Gracias por tu Pedido!</h2>
+        <p>Hemos recibido tu solicitud correctamente.</p>
+        <p>
+          Te contactaremos pronto para confirmar los detalles de tu entrega.
+        </p>
+        <button class="confirm-order" onclick="closeThankYouModal()">
+          Aceptar
+        </button>
+      </div>
     </div>
 
     <!-- Contacto Section -->
     <section id="contacto" class="section container">
-        <h2>Contáctanos</h2>
-        <div class="contact-grid">
-            <div class="contact-card">
-                <div class="contact-card-icon">📞</div>
-                <h3>Teléfono</h3>
-                <p>991 282 954</p>
-            </div>
-            <div class="contact-card">
-                <div class="contact-card-icon">📍</div>
-                <h3>Dirección</h3>
-                <p>Av. Principal 123<br>Lima, Perú</p>
-            </div>
-            <div class="contact-card">
-                <div class="contact-card-icon">🕐</div>
-                <h3>Horario</h3>
-                <p>Lunes a Domingo<br>11:00 AM - 11:00 PM</p>
-            </div>
-            <div class="contact-card">
-                <div class="contact-card-icon">📧</div>
-                <h3>Email</h3>
-                <p>fastfacu2@gmail.com</p>
-            </div>
+      <h2>Contáctanos</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-card-icon">📞</div>
+          <h3>Teléfono</h3>
+          <p>991 282 954</p>
         </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">📍</div>
+          <h3>Dirección</h3>
+          <p>Av. Principal 123<br />Lima, Perú</p>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">🕐</div>
+          <h3>Horario</h3>
+          <p>Lunes a Domingo<br />11:00 AM - 11:00 PM</p>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">📧</div>
+          <h3>Email</h3>
+          <p>fastfacu2@gmail.com</p>
+        </div>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <!-- Footer Brand Section -->
-            <div class="footer-section footer-brand">
-                <div class="footer-logo">
-                    <span class="logo-icon-footer">🍔</span>
-                    <div>
-                        <h3>Burger & Broaster Express</h3>
-                        <p class="footer-tagline">Las mejores hamburguesas y broaster</p>
-                    </div>
-                </div>
+      <div class="footer-content">
+        <!-- Footer Brand Section -->
+        <div class="footer-section footer-brand">
+          <div class="footer-logo">
+            <span class="logo-icon-footer">🍔</span>
+            <div>
+              <h3>Burger & Broaster Express</h3>
+              <p class="footer-tagline">Las mejores hamburguesas y broaster</p>
             </div>
-
-            <!-- Footer Links Section -->
-            <div class="footer-section">
-                <h4>Navegación</h4>
-                <ul class="footer-links">
-                    <li><a href="#inicio" onclick="showSection('inicio')">Inicio</a></li>
-                    <li><a href="#menu" onclick="scrollToMenu()">Menú</a></li>
-                    <li><a href="#pedido" onclick="scrollToPedido()">Pedido</a></li>
-                    <li><a href="#contacto" onclick="showSection('contacto')">Contacto</a></li>
-                </ul>
-            </div>
-
-            <!-- Footer Contact Section -->
-            <div class="footer-section">
-                <h4>Contacto</h4>
-                <ul class="footer-contact">
-                    <li><span class="contact-item">📞 +51 991 282 954</span></li>
-                    <li><span class="contact-item">📧 fastfacu2@gmail.com</span></li>
-                    <li><span class="contact-item">📍 Lima, Perú</span></li>
-                    <li><span class="contact-item">🕐 Lunes - Domingo: 11:00 AM - 11:00 PM</span></li>
-                </ul>
-            </div>
-
-            <!-- Footer Social Section -->
-            <div class="footer-section">
-                <h4>Síguenos</h4>
-                <div class="footer-social">
-                    <a href="#" aria-label="Facebook" class="social-link">f</a>
-                    <a href="#" aria-label="Instagram" class="social-link">📷</a>
-                    <a href="#" aria-label="WhatsApp" class="social-link">💬</a>
-                </div>
-            </div>
+          </div>
         </div>
 
-        <!-- Footer Bottom -->
-        <div class="footer-bottom">
-            <p>&copy; 2024 Burger & Broaster Express. Todos los derechos reservados.</p>
-            <p class="footer-powered">Delivery Express | Comida Rápida de Calidad</p>
+        <!-- Footer Links Section -->
+        <div class="footer-section">
+          <h4>Navegación</h4>
+          <ul class="footer-links">
+            <li>
+              <a href="#inicio" onclick="showSection('inicio')">Inicio</a>
+            </li>
+            <li><a href="#menu" onclick="scrollToMenu()">Menú</a></li>
+            <li><a href="#pedido" onclick="scrollToPedido()">Pedido</a></li>
+            <li>
+              <a href="#contacto" onclick="showSection('contacto')">Contacto</a>
+            </li>
+          </ul>
         </div>
+
+        <!-- Footer Contact Section -->
+        <div class="footer-section">
+          <h4>Contacto</h4>
+          <ul class="footer-contact">
+            <li><span class="contact-item">📞 +51 991 282 954</span></li>
+            <li><span class="contact-item">📧 fastfacu2@gmail.com</span></li>
+            <li><span class="contact-item">📍 Lima, Perú</span></li>
+            <li>
+              <span class="contact-item"
+                >🕐 Lunes - Domingo: 11:00 AM - 11:00 PM</span
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- Footer Social Section -->
+        <div class="footer-section">
+          <h4>Síguenos</h4>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook" class="social-link">f</a>
+            <a href="#" aria-label="Instagram" class="social-link">📷</a>
+            <a href="#" aria-label="WhatsApp" class="social-link">💬</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p>
+          &copy; 2024 Burger & Broaster Express. Todos los derechos reservados.
+        </p>
+        <p class="footer-powered">
+          Delivery Express | Comida Rápida de Calidad
+        </p>
+      </div>
     </footer>
 
     <!-- Leaflet CSS for Map (Deferred) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+      crossorigin=""
+    />
 
     <!-- Leaflet JS for Interactive Map (defer for performance) -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+      crossorigin=""
+    ></script>
 
     <!-- Main Application JS (defer) -->
     <script type="module" defer src="assets/js/main.js"></script>
-</body>
-
+  </body>
 </html>

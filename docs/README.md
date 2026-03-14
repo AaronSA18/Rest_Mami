@@ -44,16 +44,18 @@ Burger_&_Broaster_Express/
 - ✅ Catálogo de productos por categorías
 - ✅ Carruseles infinitos para navegación de productos
 - ✅ Carrito de compras interactivo
-- ✅ Sistema de pedidos por WhatsApp
+- ✅ Sistema de pedidos por EmailJS (envío de pedidos al negocio)
 - ✅ Diseño responsive (móvil, tablet, desktop)
 - ✅ Navegación suave entre secciones
+- ✅ Geolocalización con mapa interactivo (Leaflet/OpenStreetMap)
 
 ### Tecnologías Utilizadas
 
 - **HTML5** - Estructura semántica
 - **CSS3** - Estilos modularizados con variables CSS
 - **JavaScript ES6+** - Módulos y funcionalidad moderna
-- **WhatsApp API** - Integración para pedidos
+- **EmailJS** - Envío de pedidos por correo electrónico
+- **Leaflet.js** - Mapas interactivos y geolocalización
 
 ## 📦 Instalación y Uso
 
@@ -72,7 +74,6 @@ Burger_&_Broaster_Express/
    ```
 
 2. **Abrir el proyecto**
-
    - Opción 1: Abrir `index.html` directamente en el navegador
    - Opción 2: Usar un servidor local (recomendado)
 
@@ -125,18 +126,19 @@ export const menuData = {
 };
 ```
 
-### Cambiar Número de WhatsApp
+### Configurar EmailJS
 
 Edita `assets/js/config.js`:
 
-```javascript
+````javascript
 export const CONFIG = {
-  whatsapp: {
-    number: "51991282954", // Cambia este número
-    baseUrl: "https://wa.me/",
+  emailjs: {
+    serviceId: "service_xxxxxx", // Tu service ID de EmailJS
+    templateId: "template_xxxxxx", // Tu template ID
+    publicKey: "xxxxxxxxxxxxx", // Tu public key
+    businessEmail: "tu@email.com", // Email del negocio
   },
-};
-```
+};```
 
 ## 📱 Responsive Design
 
@@ -220,3 +222,4 @@ Para soporte o consultas:
 ## 📄 Licencia
 
 © 2024 Burger & Broaster Express. Todos los derechos reservados.
+````
