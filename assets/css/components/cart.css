@@ -1,0 +1,584 @@
+/**
+ * Cart & Order Component Styles
+ * Burger & Broaster Express
+ */
+
+/* ========== Order Section ========== */
+.order-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+/* ========== Order Summary & Form Content ========== */
+.order-content,
+.form-content {
+    background: var(--color-white);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.order-content h3,
+.form-content h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-h3);
+}
+
+/* ========== Empty Cart Message ========== */
+.empty-cart {
+    text-align: center;
+    padding: 3rem var(--spacing-xl);
+    color: var(--color-gray);
+}
+
+.empty-cart::before {
+    content: '🛒';
+    display: block;
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-cart p {
+    font-size: var(--font-size-h4);
+    margin: 0;
+}
+
+/* ========== Cart Items Container ========== */
+.cart-items-container {
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ========== Cart Item ========== */
+.cart-item {
+    background: var(--color-gray-light);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-info h4 {
+    color: var(--color-black);
+    margin: 0 0 0.3rem 0;
+    font-size: var(--font-size-base);
+}
+
+.cart-item-info p {
+    color: var(--color-primary);
+    margin: 0;
+    font-weight: var(--font-weight-bold);
+}
+
+.cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: var(--color-white);
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-md);
+}
+
+.quantity-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-circle);
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-fast);
+}
+
+.quantity-btn:hover {
+    background: var(--color-primary-dark);
+}
+
+.quantity-display {
+    min-width: 30px;
+    text-align: center;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-black);
+}
+
+/* ========== Total ========== */
+.total {
+    border-top: 2px solid var(--color-primary);
+    padding-top: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    text-align: right;
+}
+
+/* ========== Customer Data Form ========== */
+.customer-data {
+    background: var(--color-white);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-black);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--color-gray-dark);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-fast);
+    font-family: var(--font-family-base);
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    resize: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.3rem;
+    color: var(--color-gray);
+    font-size: 0.85rem;
+}
+
+/* ========== Payment Methods ========== */
+.payment-methods {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.payment-btn {
+    background: var(--color-gray-light);
+    border: 2px solid transparent;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-normal) ease;
+    color: var(--color-black);
+}
+
+.payment-btn:hover {
+    border-color: var(--color-primary);
+    background: rgba(198, 40, 40, 0.1);
+}
+
+.payment-btn.selected {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3);
+    transform: translateY(-2px);
+}
+
+.payment-btn:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== Buttons ========== */
+.confirm-order {
+    width: 100%;
+    background: var(--color-success);
+    color: var(--color-white);
+    border: none;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    margin-top: var(--spacing-md);
+    transition: all var(--transition-fast) ease;
+}
+
+.confirm-order:hover:not(:disabled) {
+    background: var(--color-success-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.confirm-order:active:not(:disabled) {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+}
+
+.confirm-order:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: var(--color-gray-dark);
+    color: var(--color-white);
+    border: none;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast) ease;
+}
+
+.btn-secondary:hover {
+    background: #555;
+    transform: translateY(-2px);
+}
+
+/* ========== Checkout Actions ========== */
+.checkout-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.checkout-actions .btn-secondary {
+    flex: 1;
+    margin: 0;
+}
+
+.checkout-actions .confirm-order {
+    flex: 1;
+    margin: 0;
+}
+
+/* ========== Modal Styles ========== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-overlay-dark {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background: var(--color-white);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    text-align: center;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ========== Payment Reminder Modal ========== */
+.payment-reminder {
+    max-width: 450px;
+}
+
+.reminder-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.payment-reminder h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-h3);
+}
+
+.payment-reminder p {
+    color: var(--color-black);
+    margin: var(--spacing-md) 0;
+    line-height: 1.6;
+}
+
+.payment-reminder strong {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+}
+
+.modal-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.modal-actions .btn-secondary,
+.modal-actions .confirm-order {
+    flex: 1;
+    margin: 0;
+}
+
+/* ========== Thank You Modal ========== */
+.thank-you-modal {
+    max-width: 400px;
+}
+
+.thank-you-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.thank-you-modal h2 {
+    color: var(--color-success);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-h2);
+}
+
+.thank-you-modal p {
+    color: var(--color-black);
+    margin: var(--spacing-md) 0;
+    line-height: 1.6;
+}
+
+.thank-you-modal .confirm-order {
+    margin-top: var(--spacing-lg);
+}
+
+/* ========== Notification ========== */
+.notification {
+    position: fixed;
+    top: 100px; /* Lower on desktop to avoid header overlap */
+    right: 20px;
+    background: rgba(46, 204, 113, 0.95); /* Better success green with slight transparency */
+    color: var(--color-white);
+    padding: 12px 24px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    display: none;
+    z-index: 10000;
+    animation: notificationSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 500;
+    border-left: 4px solid #27ae60;
+}
+
+@keyframes notificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.notification.show {
+    display: block;
+}
+
+.notification-success {
+    background: var(--color-success);
+}
+
+.notification-error {
+    background: #dc3545;
+}
+
+.notification-info {
+    background: #0d6efd;
+}
+
+/* ========== Geolocation Controls ========== */
+.geolocation-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.geolocation-group > label {
+    color: var(--color-black);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.geo-controls {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: stretch;
+}
+
+.geo-search-input {
+    flex: 1;
+    padding: 0.8rem var(--spacing-md);
+    border: 2px solid var(--color-gray-dark);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
+    transition: border-color var(--transition-fast);
+}
+
+.geo-search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.geo-search-input:disabled {
+    background-color: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.geo-btn {
+    padding: 0.8rem var(--spacing-md);
+    border: none;
+    border-radius: var(--radius-md);
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 45px;
+}
+
+.geo-btn:hover {
+    background-color: #d63031;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.geo-btn:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Map Wrapper & Container */
+.map-wrapper {
+    margin: var(--spacing-md) 0;
+}
+
+#map-container {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#map {
+    width: 100%;
+    height: 400px;
+    background-color: #e8e8e8;
+    border-radius: var(--radius-md);
+    z-index: 1;
+}
+
+.map-hint {
+    position: absolute;
+    bottom: var(--spacing-md);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--color-white);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.geo-help-text {
+    font-size: var(--font-size-sm);
+    color: #666;
+    margin-top: var(--spacing-sm);
+    margin-bottom: 0;
+    font-style: italic;
+    text-align: center;
+}
+
+/* Leaflet overrides for consistency */
+.leaflet-control-attribution {
+    background: rgba(255, 255, 255, 0.8) !important;
+    font-size: 0.75rem !important;
+}
+
+.leaflet-marker-icon {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Custom marker styling */
+.leaflet-popup-content-wrapper {
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}

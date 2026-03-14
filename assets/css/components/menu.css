@@ -1,0 +1,196 @@
+/**
+ * Menu Component Styles
+ * Burger & Broaster Express
+ */
+
+/* ========== Menu Categories ========== */
+.menu-category {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.menu-category h3 {
+    color: var(--color-primary-light);
+    font-size: var(--font-size-h3);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 3px solid var(--color-secondary);
+}
+
+/* ========== Carousel Container ========== */
+.carousel-container {
+    position: relative;
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 0 60px;
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+
+.menu-grid {
+    display: flex;
+    gap: var(--spacing-xl);
+    transition: transform var(--transition-normal) ease-in-out;
+    width: 100%;
+}
+
+/* ========== Carousel Buttons ========== */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-circle);
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-index-carousel-btn);
+    transition: background var(--transition-fast), transform var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.carousel-btn:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn.prev {
+    left: 0;
+}
+
+.carousel-btn.next {
+    right: 0;
+}
+
+/* ========== Menu Items ========== */
+.menu-item {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    flex: 0 0 calc(33.333% - 1.35rem);
+    max-width: calc(33.333% - 1.35rem);
+}
+
+
+
+.menu-item-image {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+
+.menu-item-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.menu-item-content {
+    padding: var(--spacing-lg);
+}
+
+.menu-item-content h4 {
+    color: var(--color-black);
+    font-size: var(--font-size-h4);
+    margin-bottom: var(--spacing-sm);
+}
+
+.menu-item-content p {
+    color: var(--color-gray);
+    margin-bottom: var(--spacing-md);
+    font-size: 0.95rem;
+}
+
+/* ========== Price & Cart ========== */
+.price-cart {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-size: var(--font-size-price);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.add-to-cart {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    padding: 0.7rem var(--spacing-lg);
+    border-radius: var(--radius-xl);
+    cursor: pointer;
+    font-weight: var(--font-weight-bold);
+    transition: background var(--transition-fast);
+}
+
+.add-to-cart:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ========== Category-Specific Image Sizes ========== */
+/* Broaster */
+.menu-category.broaster .menu-item-image img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    display: block;
+    margin: 0 auto;
+}
+
+/* Hamburguesas */
+.menu-category.hamburguesas .menu-item-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    display: block;
+    margin: 0 auto;
+}
+
+/* Salchipapas */
+.menu-category.salchipapas .menu-item-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+}
+
+/* Bebidas */
+.menu-category.bebidas .menu-item-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    /* border-radius: var(--radius-lg); POR MIENTRAS*/
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+}
+
+/* Combos */
+.menu-category.combos .menu-item-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    display: block;
+    margin: 0 auto;
+}

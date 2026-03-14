@@ -1,0 +1,74 @@
+/**
+ * Main CSS File
+ * Burger & Broaster Express
+ * 
+ * This file imports all CSS modules and provides base styles
+ */
+
+/* ========== Import Variables ========== */
+@import url('utilities/variables.css');
+
+/* ========== Import Components ========== */
+@import url('components/header.css');
+@import url('components/menu.css');
+@import url('components/cart.css');
+@import url('components/footer.css');
+
+/* ========== Import Utilities ========== */
+@import url('utilities/responsive.css');
+
+/* ========== Base Styles ========== */
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    line-height: var(--line-height-base);
+    color: var(--color-black);
+}
+
+/* ========== Container ========== */
+.container {
+    max-width: var(--max-width-container);
+    margin: 0 auto;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+}
+
+/* ========== Sections ========== */
+.section {
+    display: none;
+    animation: fadeIn var(--transition-normal) ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.section.active {
+    display: block;
+}
+
+/* ========== Typography ========== */
+h2 {
+    color: var(--color-primary);
+    font-size: var(--font-size-h2);
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+h3 {
+    color: var(--color-primary-light);
+    font-size: var(--font-size-h3);
+}

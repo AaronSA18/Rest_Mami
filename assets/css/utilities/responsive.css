@@ -1,0 +1,664 @@
+/**
+ * Responsive Styles
+ * Burger & Broaster Express
+ */
+
+/* ========== Mobile Devices (max-width: 768px) ========== */
+@media (max-width: 768px) {
+
+    /* Header */
+    header {
+        padding: 0.8rem 0;
+        background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+        /* Two-tone gradient */
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 0 1rem;
+    }
+
+    /* Logo visible, más grande y a la izquierda */
+    .logo {
+        display: flex;
+        width: 100%;
+        justify-content: flex-start;
+        font-size: 1.2rem;
+        gap: 0.8rem;
+        padding-left: 0.5rem;
+    }
+
+    .logo-icon {
+        width: 45px;
+        height: 40px;
+        font-size: 1.4rem;
+    }
+
+    .logo span {
+        font-size: 2.0rem;
+    }
+
+    /* Contenedor de navegación más ancho y cómodo */
+    nav {
+        width: 100%;
+    }
+
+    nav ul {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0.4rem 1rem;
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 50px;
+        width: 100%;
+        max-width: 90%;
+        margin: 0 auto;
+        position: relative;
+        gap: 0.3rem;
+        /* Context for indicator */
+    }
+
+    /* Sliding Indicator */
+    .nav-indicator {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        height: 48px;
+        width: 48px;
+        background: var(--color-secondary);
+        border-radius: 50%;
+        z-index: 1;
+        /* Behind icons */
+        transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        opacity: 0;
+        /* Hidden initially */
+    }
+
+    .nav-indicator.visible {
+        opacity: 1;
+    }
+
+    nav li {
+        flex: 0 0 auto;
+        z-index: 2;
+        /* Above indicator */
+    }
+
+    nav a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        background: transparent;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+
+    nav a::after {
+        display: none;
+    }
+
+    /* Hover/Active states handled mostly by indicator now */
+    nav a:hover,
+    nav a:active {
+        background: transparent;
+        transform: scale(0.95);
+    }
+
+    /* Estado activo */
+    nav a.active {
+        background: transparent;
+        /* Indicator provides background */
+        box-shadow: none;
+        transform: scale(1.1);
+        color: var(--color-black);
+    }
+
+    /* Mostrar solo íconos, ocultar texto */
+    .nav-icon {
+        display: block;
+        font-size: 1.4rem;
+    }
+
+    .nav-text {
+        display: none;
+    }
+
+    /* Badge para Pedido en móvil */
+    .nav-pedido {
+        background: transparent !important;
+        box-shadow: none !important;
+        color: var(--color-white) !important;
+        border-radius: 50% !important;
+        padding: 0 !important;
+        position: relative !important;
+    }
+
+    .nav-pedido .cart-count {
+        background: var(--color-primary);
+        color: var(--color-white);
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        font-weight: var(--font-weight-bold);
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        opacity: 0;
+        transform: scale(0);
+        transition: all var(--transition-normal) ease;
+    }
+
+    .nav-pedido .cart-count.visible {
+        opacity: 1;
+        transform: scale(1);
+        animation: popBadge 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    /* Hero */
+    .hero {
+        padding: var(--spacing-3xl) var(--spacing-md);
+        min-height: 500px;
+    }
+
+    .hero-content {
+        max-width: 100%;
+        width: 100%;
+        padding: 0 var(--spacing-sm);
+    }
+
+    .hero-card {
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(14px);
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    .hero-subtitle {
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+        margin-bottom: var(--spacing-lg);
+        line-height: 1.25;
+    }
+
+    /* Centered Notification (Mobile) */
+    .notification {
+        position: fixed;
+        top: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        right: auto !important;
+        bottom: auto !important;
+        min-width: 200px;
+        text-align: center;
+        border-radius: 50px;
+        z-index: 11000; /* Higher than modal */
+        font-size: 14px;
+        padding: 10px 20px !important;
+    }
+
+    .hero p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        max-width: 100%;
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .cta-button {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.95rem;
+        padding: var(--spacing-md) var(--spacing-lg);
+        min-height: 44px;
+    }
+
+    /* Order Section & About */
+    .order-section {
+        max-width: 100%;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+        padding: var(--spacing-xl);
+    }
+
+    .about-card {
+        padding: var(--spacing-md);
+    }
+
+    .about-card-icon {
+        font-size: 1.8rem;
+    }
+
+    .about-card h3 {
+        font-size: var(--font-size-base);
+    }
+
+    .about-card p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+        padding: var(--spacing-2xl) var(--spacing-xl);
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-2xl);
+    }
+
+    .footer-section {
+        padding-bottom: var(--spacing-lg);
+        border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+    }
+
+    .footer-section:last-child {
+        border-bottom: none;
+    }
+
+    .footer-logo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .logo-icon-footer {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+    }
+
+    .footer-brand h3 {
+        font-size: var(--font-size-h4);
+    }
+
+    .footer-social {
+        justify-content: flex-start;
+    }
+
+    .order-content,
+    .form-content {
+        padding: 1.5rem;
+    }
+
+    .payment-methods {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        max-width: 90%;
+        padding: 1.5rem;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .modal-actions .btn-secondary,
+    .modal-actions .confirm-order {
+        width: 100%;
+    }
+
+    /* Menu Categories - Reduce spacing */
+    .menu-category {
+        margin-bottom: 1.5rem;
+    }
+
+    .menu-category h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+    }
+
+    /* Carousel Container - Remove padding and hide buttons */
+    .carousel-container {
+        padding: 0;
+        margin: 0;
+        position: relative;
+        padding-bottom: 12px;
+    }
+
+    /* Progress bar track */
+    .carousel-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 1rem;
+        right: 1rem;
+        height: 3px;
+        background: transparent;
+        border-radius: 3px;
+    }
+
+    /* Progress bar indicator - controlled by JS */
+    .scroll-progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 1rem;
+        height: 3px;
+        background: linear-gradient(90deg, #c62828, #ff5252);
+        border-radius: 3px;
+        transition: width 0.1s ease, transform 0.1s ease, background 0.2s ease;
+        z-index: 5;
+    }
+
+    /* At start - green indicator */
+    .scroll-progress-bar.at-start {
+        background: #4CAF50;
+    }
+
+    /* At end - orange indicator */
+    .scroll-progress-bar.at-end {
+        background: #FF9800;
+    }
+
+    .carousel-btn {
+        display: none !important;
+    }
+
+    /* Carousel Wrapper - Enable horizontal scroll with peek */
+    .carousel-wrapper {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE/Edge */
+        padding: 0 0.5rem;
+        margin: 0;
+        position: relative;
+    }
+
+    .carousel-wrapper::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
+    }
+
+    /* Menu Grid - Horizontal scroll layout */
+    .menu-grid {
+        display: flex;
+        gap: 1rem;
+        transition: none;
+        transform: none !important;
+        padding-right: 0.5rem;
+    }
+
+    /* Menu Items - Compact size with peek effect */
+    .menu-item {
+        flex: 0 0 68vw;
+        max-width: 68vw;
+        scroll-snap-align: center;
+        height: auto;
+        min-height: 280px;
+    }
+
+    /* Reduce menu item image height - Uniform */
+    .menu-item-image {
+        height: 130px;
+        min-height: 130px;
+        max-height: 130px;
+    }
+
+    .menu-item-image img {
+        height: 130px !important;
+        min-height: 130px !important;
+        max-height: 130px !important;
+        object-fit: cover;
+    }
+
+    .menu-item-image>div {
+        height: 130px !important;
+        min-height: 130px !important;
+    }
+
+    /* Compact menu item content - Fixed height */
+    .menu-item-content {
+        padding: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        min-height: 140px;
+    }
+
+    .menu-item-content h4 {
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+        line-height: 1.2;
+        height: 2.4em;
+        overflow: hidden;
+    }
+
+    .menu-item-content p {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+        flex-grow: 1;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+
+    /* Price and button layout */
+    .price-cart {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: auto;
+    }
+
+    .price {
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    /* Compact add to cart button */
+    .add-to-cart {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* Typography */
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Container */
+    .container {
+        padding: var(--spacing-xl) var(--spacing-md);
+    }
+
+    .menu-category.broaster .menu-item-image,
+    .menu-category.hamburguesas .menu-item-image,
+    .menu-category.salchipapas .menu-item-image,
+    .menu-category.bebidas .menu-item-image,
+    .menu-category.combos .menu-item-image {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+        border-radius: var(--radius-lg);
+        display: block;
+        margin: 0 auto;
+    }
+
+    nav a:focus {
+        outline: none;
+    }
+}
+
+/* ========== Tablet Devices (768px - 1024px) ========== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .menu-item {
+        flex: 0 0 calc(50% - 1rem);
+        max-width: calc(50% - 1rem);
+    }
+
+    .carousel-container {
+        padding: 0 40px;
+    }
+}
+
+/* ========== Large Screens (min-width: 1200px) ========== */
+@media (min-width: 1200px) {
+    .container {
+        max-width: var(--max-width-container);
+    }
+}
+
+/* Cart Badge */
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-primary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: scale(0.5);
+}
+
+.cart-count.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Cart Item Layout (Mobile) */
+.cart-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.cart-item-image {
+    flex: 0 0 60px;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+}
+
+.cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-item-info {
+    flex: 1;
+    margin-right: 0.5rem;
+}
+
+.cart-item-info h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+    color: var(--color-black);
+}
+
+.cart-item-info p {
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    font-weight: bold;
+    margin: 0;
+}
+
+.cart-item-controls {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8f8f8;
+    padding: 0.3rem;
+    border-radius: 20px;
+}
+
+.cart-item-controls .quantity-btn {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1rem;
+    line-height: 1;
+    background: white;
+    color: var(--color-black);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.cart-item-controls .quantity-display {
+    font-size: 0.95rem;
+    font-weight: bold;
+    min-width: 1.2rem;
+    text-align: center;
+}
+
+/* Checkout Actions */
+.checkout-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkout-actions button {
+    flex: 1;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--color-text-light);
+    color: var(--color-text);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
