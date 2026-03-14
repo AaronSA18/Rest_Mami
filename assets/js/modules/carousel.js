@@ -79,11 +79,16 @@ export function renderCategory(category) {
  */
 function renderMenuItem(item, index, category) {
     const imagePath = item.image ? getImagePath(category, item.image) : null;
+    // Preload first 2 items of Broaster category for LCP/speed
+    const isPriority = category === 'broaster' && index < 2;
+    const loadingAttr = isPriority ? '' : 'loading="lazy"';
+    const priorityAttr = isPriority ? 'fetchpriority="high"' : '';
+
     return `
         <div class="menu-item" data-index="${index}">
             <div class="menu-item-image">
                 ${imagePath
-                    ? `<img src="${imagePath}" alt="${item.name}" loading="lazy"
+                    ? `<img src="${imagePath}" alt="${item.name}" ${loadingAttr} ${priorityAttr}
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                        <div style="display:none; align-items:center; 
                              justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">

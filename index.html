@@ -13,8 +13,10 @@
     <!-- Title -->
     <title>Burger & Broaster Express - Las mejores hamburguesas y broaster</title>
 
-    <!-- Leaflet CSS for Map -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="">
+    <!-- Preload Critical Images for better LCP & UX -->
+    <link rel="preload" href="assets/images/hero-bg.webp" as="image" fetchpriority="high">
+    <link rel="preload" href="assets/images/broaster/Alita.webp" as="image" fetchpriority="high">
+    <link rel="preload" href="assets/images/broaster/Pierna.webp" as="image" fetchpriority="high">
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="assets/css/main.css">
@@ -52,7 +54,7 @@
     <!-- Inicio Section -->
     <section id="inicio" class="section">
         <div class="hero">
-            <img src="assets/images/hero-bg.webp" alt="Fondo Hero" class="hero-bg" fetchpriority="high">
+            <img src="assets/images/hero-bg.webp" alt="Fondo Hero" class="hero-bg" fetchpriority="high" width="1200" height="600">
             <div class="hero-content">
                 <div class="hero-card">
                     <span class="hero-subtitle">SABOR QUE TE CONECTA</span>
@@ -421,6 +423,9 @@
             <p class="footer-powered">Delivery Express | Comida Rápida de Calidad</p>
         </div>
     </footer>
+
+    <!-- Leaflet CSS for Map (Deferred) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="">
 
     <!-- Leaflet JS for Interactive Map (defer for performance) -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>

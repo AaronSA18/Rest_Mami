@@ -5,25 +5,31 @@
  * Handles page navigation and smooth scrolling
  */
 
+// Cache for nav measurements to reduce reflows
+let navMeasurements = null;
+
 // Navigation Indicator Logic
 function updateIndicator(activeLink) {
     const indicator = document.querySelector('.nav-indicator');
     const navUl = document.querySelector('nav ul');
     if (!indicator || !navUl || !activeLink) return;
 
-    // Make visible
-    indicator.classList.add('visible');
+    // Use requestAnimationFrame to ensure we read and write in separate phases
+    requestAnimationFrame(() => {
+        // Read Phase
+        const listRect = navUl.getBoundingClientRect();
+        const linkRect = activeLink.getBoundingClientRect();
+        const left = linkRect.left - listRect.left;
+        const width = linkRect.width;
 
-    // Calculate position relative to container
-    const listRect = navUl.getBoundingClientRect();
-    const linkRect = activeLink.getBoundingClientRect();
-    const left = linkRect.left - listRect.left;
-
-    // Apply strict horizontal translation
-    // We use translate3d for hardware acceleration
-    indicator.style.width = `${linkRect.width}px`;
-    indicator.style.transform = `translate3d(${left}px, -50%, 0)`;
-    indicator.style.top = '50%';
+        // Write Phase
+        requestAnimationFrame(() => {
+            indicator.classList.add('visible');
+            indicator.style.width = `${width}px`;
+            indicator.style.transform = `translate3d(${left}px, -50%, 0)`;
+            indicator.style.top = '50%';
+        });
+    });
 }
 
 // Update on resize
