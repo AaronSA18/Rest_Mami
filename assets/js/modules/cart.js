@@ -168,6 +168,23 @@ function renderCartItem(item) {
 }
 
 /**
+ * Load cart styles dynamically when checkout is shown
+ * This optimizes initial page load by deferring non-critical CSS
+ */
+let cartStylesLoaded = false;
+
+function loadCartStyles() {
+  if (cartStylesLoaded) return;
+  
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'assets/css/components/cart.css';
+  document.head.appendChild(link);
+  cartStylesLoaded = true;
+  console.log('📦 Cart styles loaded on demand');
+}
+
+/**
  * Show checkout form (Step 2)
  */
 export async function showCheckoutForm() {
@@ -175,6 +192,9 @@ export async function showCheckoutForm() {
   const summaryStep = document.getElementById("order-summary-step");
 
   if (form && summaryStep) {
+    // Load cart styles on demand
+    loadCartStyles();
+    
     summaryStep.style.display = "none"; // Hide Order Summary (Step 1)
     form.style.display = "block"; // Show Form (Step 2)
     window.scrollTo(0, 0); // Scroll to top

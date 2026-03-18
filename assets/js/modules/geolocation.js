@@ -351,7 +351,52 @@ export function initializeGeolocation() {
     attributeFilter: ['style'],
   });
 
+  // Set up bfcache cleanup to fix "Pages with WebSocket cannot enter back/forward cache"
+  // This ensures Leaflet resources are properly released on pagehide
+  window.addEventListener('pagehide', (event) => {
+    if (event.persisted) {
+      // Page is going to be stored in bfcache - cleanup Leaflet resources
+      cleanupMapResources();
+    }
+  });
+  
+  // Also cleanup on unload as fallback
+  window.addEventListener('unload', cleanupMapResources);
+
   console.log('✅ Geolocation system initialized');
+}
+
+/**
+ * Cleanup Leaflet map resources for bfcache compatibility
+ * This fixes the "Pages with WebSocket cannot enter back/forward cache" issue
+ */
+function cleanupMapResources() {
+  if (marker) {
+    try {
+      marker.remove();
+      marker = null;
+    } catch (e) {
+      console.warn('Error removing marker:', e);
+    }
+  }
+  
+  if (map) {
+    try {
+      map.remove();
+      map = null;
+    } catch (e) {
+      console.warn('Error removing map:', e);
+    }
+  }
+  
+  // Reset customer location
+  customerLocation = {
+    lat: null,
+    lng: null,
+    address: '',
+  };
+  
+  console.log('🧹 Map resources cleaned up for bfcache');
 }
 
 /**

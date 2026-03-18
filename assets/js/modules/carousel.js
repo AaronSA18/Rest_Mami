@@ -5,7 +5,7 @@
  * Handles infinite carousel functionality for menu categories
  */
 
-import { menuData, getImagePath } from './menu-data.js';
+import { menuData, getImagePath, generateSrcSet, getResponsiveImagePath } from './menu-data.js';
 import { CONFIG } from '../config.js';
 
 // Carousel state
@@ -20,20 +20,26 @@ let carouselPositions = {
 let isTransitioning = {};
 
 /**
- * Initialize menu rendering with IntersectionObserver
+ * Initialize menu rendering with optimized IntersectionObserver
+ * Performance: Uses higher rootMargin to trigger earlier, fewer callbacks
  */
 export function renderMenu() {
+    // Optimized observer options for better performance
     const observerOptions = {
         root: null,
-        rootMargin: '100px',
-        threshold: 0.1
+        rootMargin: '200px', // Increased to preload earlier
+        threshold: 0.01 // Lower threshold for earlier detection
     };
 
+    // Single observer for all categories (performance optimization)
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const category = entry.target.dataset.category;
-                renderCategory(category);
+                if (category && entry.target.dataset.rendered !== 'true') {
+                    renderCategory(category);
+                }
+                // Always unobserve after first intersection
                 observer.unobserve(entry.target);
             }
         });
@@ -44,7 +50,10 @@ export function renderMenu() {
         const grid = document.getElementById(`${category}-grid`);
         if (grid) {
             grid.dataset.category = category;
-            observer.observe(grid);
+            // Skip if already rendered
+            if (grid.dataset.rendered !== 'true') {
+                observer.observe(grid);
+            }
         }
     });
 }
@@ -83,12 +92,17 @@ function renderMenuItem(item, index, category) {
     const isPriority = category === 'broaster' && index < 2;
     const loadingAttr = isPriority ? '' : 'loading="lazy"';
     const priorityAttr = isPriority ? 'fetchpriority="high"' : '';
+    
+    // Generate responsive image attributes
+    const srcsetAttr = item.image ? `srcset="${generateSrcSet(category, item.image)}"` : '';
+    // sizes: mobile 150px, tablet 278px, desktop 278px
+    const sizesAttr = item.image ? 'sizes="(max-width: 480px) 150px, (max-width: 768px) 200px, 278px"' : '';
 
     return `
         <div class="menu-item" data-index="${index}">
             <div class="menu-item-image">
                 ${imagePath
-            ? `<img src="${imagePath}" alt="${item.name}" ${loadingAttr} ${priorityAttr}
+                    ? `<img src="${imagePath}" alt="${item.name}" ${loadingAttr} ${priorityAttr} ${srcsetAttr} ${sizesAttr}
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                        <div style="display:none; align-items:center; 
                              justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
