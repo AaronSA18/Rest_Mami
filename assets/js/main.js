@@ -14,13 +14,13 @@ import './modules/navigation.js';
  */
 function init() {
     console.log('🍔 Burger & Broaster Express - Initializing...');
-    
+
     // Render menu items
     renderMenu();
-    
+
     // Initialize cart
     initCart();
-    
+
     console.log('✅ Application initialized successfully!');
 }
 

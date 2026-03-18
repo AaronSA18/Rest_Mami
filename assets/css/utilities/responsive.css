@@ -207,7 +207,8 @@
         min-width: 200px;
         text-align: center;
         border-radius: 50px;
-        z-index: 11000; /* Higher than modal */
+        z-index: 11000;
+        /* Higher than modal */
         font-size: 14px;
         padding: 10px 20px !important;
     }
@@ -409,42 +410,42 @@
 
     /* Menu Items - Compact size with peek effect */
     .menu-item {
-        flex: 0 0 68vw;
-        max-width: 68vw;
+        flex: 0 0 58vw;
+        max-width: 58vw;
         scroll-snap-align: center;
         height: auto;
-        min-height: 280px;
+        min-height: 238px;
     }
 
     /* Reduce menu item image height - Uniform */
     .menu-item-image {
-        height: 130px;
-        min-height: 130px;
-        max-height: 130px;
+        height: 110px;
+        min-height: 110px;
+        max-height: 110px;
     }
 
     .menu-item-image img {
-        height: 130px !important;
-        min-height: 130px !important;
-        max-height: 130px !important;
+        height: 110px !important;
+        min-height: 110px !important;
+        max-height: 110px !important;
         object-fit: cover;
     }
 
     .menu-item-image>div {
-        height: 130px !important;
-        min-height: 130px !important;
+        height: 110px !important;
+        min-height: 110px !important;
     }
 
     /* Compact menu item content - Fixed height */
     .menu-item-content {
-        padding: 0.8rem;
+        padding: 0.65rem;
         display: flex;
         flex-direction: column;
-        min-height: 140px;
+        min-height: 120px;
     }
 
     .menu-item-content h4 {
-        font-size: 1rem;
+        font-size: 0.85rem;
         margin-bottom: 0.4rem;
         line-height: 1.2;
         height: 2.4em;
@@ -452,7 +453,7 @@
     }
 
     .menu-item-content p {
-        font-size: 0.8rem;
+        font-size: 0.68rem;
         margin-bottom: 0.5rem;
         line-height: 1.3;
         flex-grow: 1;
@@ -471,14 +472,14 @@
     }
 
     .price {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         font-weight: bold;
     }
 
     /* Compact add to cart button */
     .add-to-cart {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
+        padding: 0.4rem 0.85rem;
+        font-size: 0.72rem;
     }
 
     /* Typography */
@@ -493,9 +494,9 @@
     }
 
     .menu-category.broaster .menu-item-image,
-    .menu-category.hamburguesas .menu-item-image,
+    .menu-category.burgers .menu-item-image,
     .menu-category.salchipapas .menu-item-image,
-    .menu-category.bebidas .menu-item-image,
+    .menu-category.driks .menu-item-image,
     .menu-category.combos .menu-item-image {
         width: 100%;
         height: 230px;

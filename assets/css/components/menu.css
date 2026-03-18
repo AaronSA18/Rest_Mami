@@ -154,7 +154,7 @@
 }
 
 /* Hamburguesas */
-.menu-category.hamburguesas .menu-item-image img {
+.menu-category.burgers .menu-item-image img {
     width: 100%;
     height: 250px;
     object-fit: cover;
@@ -175,7 +175,7 @@
 }
 
 /* Bebidas */
-.menu-category.bebidas .menu-item-image img {
+.menu-category.drinks .menu-item-image img {
     width: 100%;
     height: 200px;
     object-fit: contain;
