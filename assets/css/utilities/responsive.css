@@ -178,10 +178,18 @@
     }
 
     .hero-card {
-        background: rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(14px);
-        padding: 2rem 1.5rem;
+        background: rgba(0, 0, 0, 0.75);
+        /* Darker backplate for readability */
+        backdrop-filter: none;
+        /* Eliminated heavy rendering filter */
+        padding: 2.5rem 1.5rem;
+        /* Better breathing room */
         border-radius: 20px;
+    }
+
+    .hero-desc-extended {
+        display: none;
+        /* Simplified text on mobile */
     }
 
     .hero-subtitle {
@@ -321,6 +329,12 @@
     .modal-actions .btn-secondary,
     .modal-actions .confirm-order {
         width: 100%;
+    }
+
+    /* Hide main section titles */
+    #menu .menu-header h2,
+    #contacto h2 {
+        display: none;
     }
 
     /* Menu Categories - Reduce spacing */

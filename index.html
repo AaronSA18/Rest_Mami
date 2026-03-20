@@ -79,20 +79,18 @@
         height="600" />
       <div class="hero-content">
         <div class="hero-card">
-          <span class="hero-subtitle">SABOR QUE TE CONECTA</span>
+          <span class="hero-subtitle">MÁXIMA CALIDAD</span>
           <h1>
-            ¡Bienvenido a
-            <span class="hero-highlight">Burger & Broaster Express!</span>
+            Burger & Broaster <span class="hero-highlight">Express</span>
           </h1>
-          <p>
-            Descubre el sabor auténtico de las mejores hamburguesas y pollo
-            broaster de la ciudad, preparados con pasión y los ingredientes
-            más frescos.
+          <p class="hero-desc">
+            Las mejores hamburguesas y pollo broaster de la ciudad.
+            <span class="hero-desc-extended">Sabor auténtico preparado con pasión y los ingredientes más frescos.</span>
           </p>
           <div class="hero-buttons">
             <a class="cta-button cta-primary" onclick="scrollToMenu()" role="button" tabindex="0">📖 Ver Menú</a>
             <a class="cta-button cta-secondary" onclick="showSection('contacto')" role="button" tabindex="0">📞
-              Contactanos</a>
+              Contáctanos</a>
           </div>
         </div>
       </div>
@@ -323,12 +321,13 @@
         <div class="order-content">
           <h3>Resumen de tu Orden</h3>
           <div id="cart-items" class="cart-items-container"></div>
-          <div class="total" id="total-price">Total: S/ 0.00</div>
-
-          <!-- Action Buttons -->
-          <button class="confirm-order" onclick="showCheckoutForm()" id="proceedBtn" disabled>
-            Siguiente
-          </button>
+          <div class="floating-cta">
+            <div class="total" id="total-price">Total: S/ 0.00</div>
+            <!-- Action Buttons -->
+            <button class="confirm-order" onclick="showCheckoutForm()" id="proceedBtn" disabled>
+              Siguiente
+            </button>
+          </div>
         </div>
       </div>
 
@@ -433,7 +432,7 @@
           </div>
 
           <!-- Checkout Actions -->
-          <div class="checkout-actions">
+          <div class="checkout-actions floating-cta">
             <button class="btn-secondary" onclick="hideCheckoutForm()">
               Volver
             </button>

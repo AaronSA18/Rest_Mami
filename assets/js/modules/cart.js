@@ -159,9 +159,13 @@ function renderCartItem(item) {
                 <p>S/ ${item.price.toFixed(2)}</p>
             </div>
             <div class="cart-item-controls">
-                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, -1)">−</button>
+                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, -1)">
+                    <svg width="12" height="2" viewBox="0 0 12 2" fill="none"><path d="M1 1h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
                 <span class="quantity-display">${item.quantity}</span>
-                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, 1)">+</button>
+                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, 1)">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
             </div>
         </div>
     `;
@@ -173,16 +177,17 @@ function renderCartItem(item) {
  */
 let cartStylesLoaded = false;
 
-function loadCartStyles() {
-  if (cartStylesLoaded) return;
-  
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'assets/css/components/cart.css';
-  document.head.appendChild(link);
-  cartStylesLoaded = true;
+window.loadCartStyles = () => {
+    if (!document.getElementById('cart-styles')) {
+        const link = document.createElement('link');
+        link.id = 'cart-styles';
+        link.rel = 'stylesheet';
+        link.href = 'assets/css/components/cart.css'; // Load development CSS so responsive changes apply
+        document.head.appendChild(link);
+    }
+};
   console.log('📦 Cart styles loaded on demand');
-}
+
 
 /**
  * Show checkout form (Step 2)
@@ -504,3 +509,4 @@ window.showPaymentReminder = showPaymentReminder;
 window.hidePaymentReminder = hidePaymentReminder;
 window.closeThankYouModal = closeThankYouModal;
 window.showSection = showSection;
+window.loadCartStyles = loadCartStyles;

@@ -23,7 +23,7 @@ let isTransitioning = {};
  * Initialize menu rendering with optimized IntersectionObserver
  * Performance: Uses higher rootMargin to trigger earlier, fewer callbacks
  */
-export function renderMenu() {
+export async function renderMenu() {
     // Optimized observer options for better performance
     const observerOptions = {
         root: null,
@@ -33,11 +33,11 @@ export function renderMenu() {
 
     // Single observer for all categories (performance optimization)
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach(async entry => {
             if (entry.isIntersecting) {
                 const category = entry.target.dataset.category;
                 if (category && entry.target.dataset.rendered !== 'true') {
-                    renderCategory(category);
+                    await renderCategory(category);
                 }
                 // Always unobserve after first intersection
                 observer.unobserve(entry.target);
@@ -62,7 +62,7 @@ export function renderMenu() {
  * Render a specific menu category
  * @param {string} category - Category name to render
  */
-export function renderCategory(category) {
+export async function renderCategory(category) {
     const grid = document.getElementById(`${category}-grid`);
     if (!grid || grid.dataset.rendered === 'true') return;
 
@@ -71,6 +71,9 @@ export function renderCategory(category) {
 
     const isMobile = window.innerWidth <= 768;
     const allItems = isMobile ? items : [...items, ...items, ...items];
+
+    // Yield to main thread (TBT chunking pattern) before heavy string manipulation
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     grid.innerHTML = allItems.map((item, index) => renderMenuItem(item, index, category)).join('');
     grid.dataset.rendered = 'true';
@@ -93,16 +96,12 @@ function renderMenuItem(item, index, category) {
     const loadingAttr = isPriority ? '' : 'loading="lazy"';
     const priorityAttr = isPriority ? 'fetchpriority="high"' : '';
     
-    // Generate responsive image attributes
-    const srcsetAttr = item.image ? `srcset="${generateSrcSet(category, item.image)}"` : '';
-    // sizes: mobile 150px, tablet 278px, desktop 278px
-    const sizesAttr = item.image ? 'sizes="(max-width: 480px) 150px, (max-width: 768px) 200px, 278px"' : '';
-
+    // Note: srcset generation removed as the physical resized files were reverted
     return `
         <div class="menu-item" data-index="${index}">
             <div class="menu-item-image">
                 ${imagePath
-                    ? `<img src="${imagePath}" alt="${item.name}" ${loadingAttr} ${priorityAttr} ${srcsetAttr} ${sizesAttr}
+                    ? `<img src="${imagePath}" alt="${item.name}" ${loadingAttr} ${priorityAttr}
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                        <div style="display:none; align-items:center; 
                              justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">

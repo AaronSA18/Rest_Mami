@@ -146,9 +146,8 @@
 /* Broaster */
 .menu-category.broaster .menu-item-image img {
     width: 100%;
-    height: 230px;
+    height: 100%;
     object-fit: cover;
-    border-radius: var(--radius-lg);
     display: block;
     margin: 0 auto;
 }
@@ -156,9 +155,8 @@
 /* Hamburguesas */
 .menu-category.burgers .menu-item-image img {
     width: 100%;
-    height: 250px;
+    height: 100%;
     object-fit: cover;
-    border-radius: var(--radius-lg);
     display: block;
     margin: 0 auto;
 }
@@ -166,9 +164,8 @@
 /* Salchipapas */
 .menu-category.salchipapas .menu-item-image img {
     width: 100%;
-    height: 250px;
+    height: 100%;
     object-fit: cover;
-    border-radius: var(--radius-lg);
     display: block;
     margin: 0 auto;
     background-color: white;
@@ -177,9 +174,8 @@
 /* Bebidas */
 .menu-category.drinks .menu-item-image img {
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: contain;
-    /* border-radius: var(--radius-lg); POR MIENTRAS*/
     display: block;
     margin: 0 auto;
     background-color: white;
@@ -188,9 +184,8 @@
 /* Combos */
 .menu-category.combos .menu-item-image img {
     width: 100%;
-    height: 220px;
+    height: 100%;
     object-fit: cover;
-    border-radius: var(--radius-lg);
     display: block;
     margin: 0 auto;
 }
