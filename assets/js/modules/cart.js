@@ -178,15 +178,15 @@ function renderCartItem(item) {
 let cartStylesLoaded = false;
 
 window.loadCartStyles = () => {
-    if (!document.getElementById('cart-styles')) {
-        const link = document.createElement('link');
-        link.id = 'cart-styles';
-        link.rel = 'stylesheet';
-        link.href = 'assets/css/components/cart.css'; // Load development CSS so responsive changes apply
-        document.head.appendChild(link);
-    }
+  if (!document.getElementById('cart-styles')) {
+    const link = document.createElement('link');
+    link.id = 'cart-styles';
+    link.rel = 'stylesheet';
+    link.href = 'assets/css/components/cart.css'; // Load development CSS so responsive changes apply
+    document.head.appendChild(link);
+  }
 };
-  console.log('📦 Cart styles loaded on demand');
+console.log('📦 Cart styles loaded on demand');
 
 
 /**
@@ -199,7 +199,7 @@ export async function showCheckoutForm() {
   if (form && summaryStep) {
     // Load cart styles on demand
     loadCartStyles();
-    
+
     summaryStep.style.display = "none"; // Hide Order Summary (Step 1)
     form.style.display = "block"; // Show Form (Step 2)
     window.scrollTo(0, 0); // Scroll to top
@@ -418,6 +418,7 @@ export async function finalizeOrder() {
     console.error("Error al enviar el pedido:", emailError);
     showNotification(
       "❌ Error al enviar el pedido. Por favor intenta de nuevo.",
+      "error"
     );
   }
 
@@ -452,13 +453,18 @@ export async function finalizeOrder() {
 /**
  * Show notification message
  * @param {string} message - Message to display
+ * @param {string} type - Notification type (success, error, info)
  */
-function showNotification(message) {
+function showNotification(message, type = "success") {
   const notification = document.getElementById("notification");
   if (!notification) return;
 
+  // Clear previous classes and set message
+  notification.className = "notification";
   notification.textContent = message;
-  notification.classList.add("show");
+
+  // Add show and type classes
+  notification.classList.add("show", type);
 
   setTimeout(() => {
     notification.classList.remove("show");
