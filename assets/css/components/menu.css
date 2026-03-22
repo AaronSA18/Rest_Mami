@@ -84,18 +84,46 @@
 
 .menu-item-image {
     width: 100%;
-    height: 200px;
+    position: relative;
+    overflow: hidden;
     background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
-    display: flex;
+}
+
+.menu-item-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-normal) ease;
+}
+
+.menu-item:hover .menu-item-img {
+    transform: scale(1.05);
+}
+
+.menu-item-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    /* Changed from flex to none */
     align-items: center;
     justify-content: center;
     font-size: 4rem;
+    background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+    z-index: 1;
 }
 
-.menu-item-image img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+.menu-item-fallback.active {
+    display: flex;
+}
+
+.icon-fallback {
+    position: relative;
+    aspect-ratio: 16 / 10;
 }
 
 .menu-item-content {
@@ -142,43 +170,19 @@
     background: var(--color-primary-dark);
 }
 
-/* ========== Category-Specific Image Sizes ========== */
-/* Broaster */
-.menu-category.broaster .menu-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
-}
+/* Category Specific adjustments if needed */
 
-/* Hamburguesas */
-.menu-category.burgers .menu-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
-}
 
-/* Salchipapas */
-.menu-category.salchipapas .menu-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
-    background-color: white;
+/* Salchipollos background white (keeping consistency) */
+.menu-category.salchipapas .menu-item-img {
+    background-color: var(--color-white);
 }
 
 /* Bebidas */
-.menu-category.drinks .menu-item-image img {
-    width: 100%;
-    height: 100%;
+.menu-category.drinks .menu-item-img {
     object-fit: contain;
-    display: block;
-    margin: 0 auto;
-    background-color: white;
+    padding: var(--spacing-md);
+    background-color: var(--color-white);
 }
 
 /* Combos */

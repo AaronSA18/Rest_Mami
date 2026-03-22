@@ -430,10 +430,6 @@
         object-fit: cover;
     }
 
-    .menu-item-image>div {
-        height: 110px !important;
-        min-height: 110px !important;
-    }
 
     /* Compact menu item content - Fixed height */
     .menu-item-content {
@@ -492,18 +488,6 @@
         padding: var(--spacing-xl) var(--spacing-md);
     }
 
-    .menu-category.broaster .menu-item-image,
-    .menu-category.burgers .menu-item-image,
-    .menu-category.salchipapas .menu-item-image,
-    .menu-category.driks .menu-item-image,
-    .menu-category.combos .menu-item-image {
-        width: 100%;
-        height: 230px;
-        object-fit: cover;
-        border-radius: var(--radius-lg);
-        display: block;
-        margin: 0 auto;
-    }
 
     nav a:focus {
         outline: none;
