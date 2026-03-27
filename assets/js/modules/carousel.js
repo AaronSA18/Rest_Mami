@@ -20,23 +20,17 @@ let carouselPositions = {
 let isTransitioning = {};
 
 /**
- * Derives the -sm and -lg responsive paths from a base .webp image path.
+ * Genera las rutas responsivas para las imágenes.
+ * Móvil (sm): assets/images/.../-sm.webp
+ * Desktop: assets/imag_D/.../.webp
  *
- * Convention:
- *   Base →  assets/images/broaster/Alita.webp
- *   Small → assets/images/broaster/Alita-sm.webp  (320×200 px, calidad 80%)
- *   Large → assets/images/broaster/Alita-lg.webp  (640×400 px, calidad 80%)
- *
- * Prepara ambos archivos con Squoosh.app antes de desplegar.
- *
- * @param {string} fullPath - Ruta base devuelta por getImagePath()
- * @returns {{ sm: string, lg: string }}
+ * @param {string} fullPath - Ruta base devuelta por getImagePath() (assets/images/...)
+ * @returns {{ sm: string, desktop: string }}
  */
 function getResponsivePaths(fullPath) {
-    // Inserta el sufijo antes de la extensión: Alita.webp → Alita-sm.webp
     const sm = fullPath.replace(/\.webp$/i, '-sm.webp');
-    const lg = fullPath.replace(/\.webp$/i, '-lg.webp');
-    return { sm, lg };
+    const desktop = fullPath.replace('/images/', '/imag_D/');
+    return { sm, desktop };
 }
 
 /**
@@ -127,7 +121,7 @@ function renderMenuItem(item, index, category) {
     // Imagen responsiva con <picture> — usando -sm para móviles y original para desktop
     const imageHTML = basePath
         ? (() => {
-            const { sm } = getResponsivePaths(basePath);
+            const { sm, desktop } = getResponsivePaths(basePath);
             return `
                 <picture>
                   <source
@@ -136,7 +130,7 @@ function renderMenuItem(item, index, category) {
                     type="image/webp"
                   />
                   <img
-                    src="${basePath}"
+                    src="${desktop}"
                     alt="${item.name}"
                     width="400"
                     height="250"

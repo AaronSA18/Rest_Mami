@@ -148,7 +148,8 @@ export function updateCart() {
  * Helper to render a single cart item HTML
  */
 function renderCartItem(item) {
-  const imagePath = `assets/images/${item.category}/${item.image}`;
+  const imageSm = item.image ? item.image.replace(/\.webp$/i, '-sm.webp') : '';
+  const imagePath = item.image ? `assets/images/${item.category}/${imageSm}` : '';
   return `
         <div class="cart-item">
             <div class="cart-item-image">
