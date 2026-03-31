@@ -178,10 +178,18 @@
     }
 
     .hero-card {
-        background: rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(14px);
-        padding: 2rem 1.5rem;
+        background: rgba(0, 0, 0, 0.75);
+        /* Darker backplate for readability */
+        backdrop-filter: none;
+        /* Eliminated heavy rendering filter */
+        padding: 2.5rem 1.5rem;
+        /* Better breathing room */
         border-radius: 20px;
+    }
+
+    .hero-desc-extended {
+        display: none;
+        /* Simplified text on mobile */
     }
 
     .hero-subtitle {
@@ -196,22 +204,7 @@
         line-height: 1.25;
     }
 
-    /* Centered Notification (Mobile) */
-    .notification {
-        position: fixed;
-        top: 20px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        right: auto !important;
-        bottom: auto !important;
-        min-width: 200px;
-        text-align: center;
-        border-radius: 50px;
-        z-index: 11000;
-        /* Higher than modal */
-        font-size: 14px;
-        padding: 10px 20px !important;
-    }
+
 
     .hero p {
         font-size: 0.95rem;
@@ -323,6 +316,12 @@
         width: 100%;
     }
 
+    /* Hide main section titles */
+    #menu .menu-header h2,
+    #contacto h2 {
+        display: none;
+    }
+
     /* Menu Categories - Reduce spacing */
     .menu-category {
         margin-bottom: 1.5rem;
@@ -431,10 +430,6 @@
         object-fit: cover;
     }
 
-    .menu-item-image>div {
-        height: 110px !important;
-        min-height: 110px !important;
-    }
 
     /* Compact menu item content - Fixed height */
     .menu-item-content {
@@ -493,18 +488,6 @@
         padding: var(--spacing-xl) var(--spacing-md);
     }
 
-    .menu-category.broaster .menu-item-image,
-    .menu-category.burgers .menu-item-image,
-    .menu-category.salchipapas .menu-item-image,
-    .menu-category.driks .menu-item-image,
-    .menu-category.combos .menu-item-image {
-        width: 100%;
-        height: 230px;
-        object-fit: cover;
-        border-radius: var(--radius-lg);
-        display: block;
-        margin: 0 auto;
-    }
 
     nav a:focus {
         outline: none;

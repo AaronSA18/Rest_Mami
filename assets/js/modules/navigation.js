@@ -73,6 +73,11 @@ export function showSection(sectionId) {
     if (targetSection) {
         targetSection.classList.add('active');
         window.scrollTo(0, 0);
+        
+        // Cargar temporalmente el CSS del carrito cuando entramos a "Mi Pedido"
+        if (sectionId === 'pedido' && typeof window.loadCartStyles === 'function') {
+            window.loadCartStyles();
+        }
     }
 
     setActiveNav(sectionId);

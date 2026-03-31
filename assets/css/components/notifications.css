@@ -1,0 +1,107 @@
+/**
+ * Notification Component
+ * Burger & Broaster Express
+ */
+
+.notification {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: var(--z-index-notification);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--color-success);
+    color: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: none;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-weight: var(--font-weight-semibold);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: notification-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+}
+
+.notification.show {
+    display: flex;
+}
+
+/* Status variants */
+.notification.success {
+    background-color: var(--color-success);
+}
+
+.notification.error {
+    background-color: var(--color-danger);
+}
+
+.notification.info {
+    background-color: #3498db;
+}
+
+/* Animations */
+@keyframes notification-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes notification-out {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+    }
+}
+
+/* Desktop centering override (Optional - based on preference)
+   Currently set to Top-Right for a modern app feel, 
+   but can be easily changed to top-center if needed. */
+@media (min-width: 1025px) {
+    .notification {
+        top: 30px;
+        right: 30px;
+        min-width: 280px;
+    }
+}
+
+/* Responsive Mobile Styles */
+@media (max-width: 768px) {
+    .notification {
+        top: 15px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 350px;
+        justify-content: center;
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.9rem;
+        border-radius: var(--radius-full);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes notification-in {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -30px) scale(0.8);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0) scale(1);
+        }
+    }
+}

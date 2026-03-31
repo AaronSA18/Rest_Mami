@@ -148,7 +148,8 @@ export function updateCart() {
  * Helper to render a single cart item HTML
  */
 function renderCartItem(item) {
-  const imagePath = `assets/images/${item.category}/${item.image}`;
+  const imageSm = item.image ? item.image.replace(/\.webp$/i, '-sm.webp') : '';
+  const imagePath = item.image ? `assets/images/${item.category}/${imageSm}` : '';
   return `
         <div class="cart-item">
             <div class="cart-item-image">
@@ -159,13 +160,35 @@ function renderCartItem(item) {
                 <p>S/ ${item.price.toFixed(2)}</p>
             </div>
             <div class="cart-item-controls">
-                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, -1)">−</button>
+                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, -1)">
+                    <svg width="12" height="2" viewBox="0 0 12 2" fill="none"><path d="M1 1h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
                 <span class="quantity-display">${item.quantity}</span>
-                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, 1)">+</button>
+                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, 1)">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
             </div>
         </div>
     `;
 }
+
+/**
+ * Load cart styles dynamically when checkout is shown
+ * This optimizes initial page load by deferring non-critical CSS
+ */
+let cartStylesLoaded = false;
+
+window.loadCartStyles = () => {
+  if (!document.getElementById('cart-styles')) {
+    const link = document.createElement('link');
+    link.id = 'cart-styles';
+    link.rel = 'stylesheet';
+    link.href = 'assets/css/components/cart.css'; // Load development CSS so responsive changes apply
+    document.head.appendChild(link);
+  }
+};
+console.log('📦 Cart styles loaded on demand');
+
 
 /**
  * Show checkout form (Step 2)
@@ -175,6 +198,9 @@ export async function showCheckoutForm() {
   const summaryStep = document.getElementById("order-summary-step");
 
   if (form && summaryStep) {
+    // Load cart styles on demand
+    loadCartStyles();
+
     summaryStep.style.display = "none"; // Hide Order Summary (Step 1)
     form.style.display = "block"; // Show Form (Step 2)
     window.scrollTo(0, 0); // Scroll to top
@@ -393,6 +419,7 @@ export async function finalizeOrder() {
     console.error("Error al enviar el pedido:", emailError);
     showNotification(
       "❌ Error al enviar el pedido. Por favor intenta de nuevo.",
+      "error"
     );
   }
 
@@ -427,13 +454,18 @@ export async function finalizeOrder() {
 /**
  * Show notification message
  * @param {string} message - Message to display
+ * @param {string} type - Notification type (success, error, info)
  */
-function showNotification(message) {
+function showNotification(message, type = "success") {
   const notification = document.getElementById("notification");
   if (!notification) return;
 
+  // Clear previous classes and set message
+  notification.className = "notification";
   notification.textContent = message;
-  notification.classList.add("show");
+
+  // Add show and type classes
+  notification.classList.add("show", type);
 
   setTimeout(() => {
     notification.classList.remove("show");
@@ -484,3 +516,4 @@ window.showPaymentReminder = showPaymentReminder;
 window.hidePaymentReminder = hidePaymentReminder;
 window.closeThankYouModal = closeThankYouModal;
 window.showSection = showSection;
+window.loadCartStyles = loadCartStyles;

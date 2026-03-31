@@ -202,3 +202,38 @@ export function findItemById(id) {
 export function getImagePath(category, imageName) {
     return `assets/images/${category}/${imageName}`;
 }
+
+/**
+ * Get responsive image path for specific size
+ * @param {string} category - Category folder name
+ * @param {string} imageName - Image file name
+ * @param {string} size - Size variant: '150', '278', '400', or 'original'
+ * @returns {string} - Full image path for the requested size
+ */
+export function getResponsiveImagePath(category, imageName, size = 'original') {
+    const basePath = `assets/images/${category}/`;
+    const baseName = imageName.replace('.webp', '');
+    
+    if (size === 'original') {
+        return `${basePath}${imageName}`;
+    }
+    
+    // Return responsive version path (assumes images are resized)
+    return `${basePath}${baseName}-${size}.webp`;
+}
+
+/**
+ * Generate srcset attribute for responsive images
+ * @param {string} category - Category folder name
+ * @param {string} imageName - Image file name
+ * @returns {string} - Complete srcset string
+ */
+export function generateSrcSet(category, imageName) {
+    const sizes = ['150', '278', '400', 'original'];
+    const srcsetParts = sizes.map(size => {
+        const path = getResponsiveImagePath(category, imageName, size);
+        const width = size === 'original' ? '1024' : size;
+        return `${path} ${width}w`;
+    });
+    return srcsetParts.join(', ');
+}

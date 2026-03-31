@@ -411,50 +411,7 @@
     margin-top: var(--spacing-lg);
 }
 
-/* ========== Notification ========== */
-.notification {
-    position: fixed;
-    top: 100px; /* Lower on desktop to avoid header overlap */
-    right: 20px;
-    background: rgba(46, 204, 113, 0.95); /* Better success green with slight transparency */
-    color: var(--color-white);
-    padding: 12px 24px;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(8px);
-    display: none;
-    z-index: 10000;
-    animation: notificationSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-weight: 500;
-    border-left: 4px solid #27ae60;
-}
 
-@keyframes notificationSlideIn {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.notification.show {
-    display: block;
-}
-
-.notification-success {
-    background: var(--color-success);
-}
-
-.notification-error {
-    background: #dc3545;
-}
-
-.notification-info {
-    background: #0d6efd;
-}
 
 /* ========== Geolocation Controls ========== */
 .geolocation-group {
@@ -464,7 +421,7 @@
     margin-bottom: var(--spacing-lg);
 }
 
-.geolocation-group > label {
+.geolocation-group>label {
     color: var(--color-black);
     font-weight: 500;
     margin-bottom: 0.5rem;
@@ -581,4 +538,220 @@
 .leaflet-popup-content-wrapper {
     border-radius: var(--radius-md);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== Responsive "App-Like" Mobile Override ========== */
+@media (max-width: 768px) {
+    .order-section {
+        margin: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 120px;
+    }
+
+    .order-content {
+        padding-top: 0;
+    }
+
+    .floating-cta {
+        position: fixed;
+        bottom: 15px;
+        left: 15px;
+        width: calc(100% - 30px);
+        background: var(--color-white);
+        /* Blanco en lugar de negro */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: none;
+        /* Cero sombras */
+        border: 2px solid #d1d5db;
+        /* Línea gris marcada */
+        padding: 0.6rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        border-radius: 18px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .floating-cta .confirm-order,
+    .checkout-actions.floating-cta .btn-secondary {
+        margin: 0;
+        flex: 0 1 auto;
+        font-size: 0.95rem;
+        padding: 0.7rem 1rem;
+        background: #4CAF50;
+        border: 2px solid transparent;
+        border-radius: 12px;
+        /* Border redondos para el botón */
+        color: white;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .floating-cta .confirm-order {
+        margin-left: 0.8rem;
+        width: 100%;
+        max-width: 140px;
+    }
+
+    .floating-cta .total {
+        margin: 0;
+        border: none;
+        padding: 0;
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--color-primary);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Hide Titles */
+    #pedido h2,
+    #pedido .order-content h3,
+    #pedido .form-content h3 {
+        display: none;
+    }
+
+    /* Remove outer box styling */
+    .order-content,
+    .form-content {
+        background: transparent;
+        box-shadow: none;
+        padding: 0 0.5rem;
+    }
+
+    /* Flat Boxed Layout for Cart Items */
+    .cart-item {
+        background: var(--color-white);
+        padding: 0.8rem;
+        border-radius: 16px;
+        /* Bordes redondos */
+        border: 2px solid #d1d5db;
+        /* Línea gris marcada */
+        margin-bottom: 1rem;
+        display: grid;
+        grid-template-columns: 80px 1fr auto;
+        gap: 0.5rem 0.8rem;
+        align-items: center;
+        box-shadow: none;
+        /* Sin sombras */
+    }
+
+    .cart-items-container .cart-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .cart-item-image {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        width: 80px;
+        height: 80px;
+        margin: 0;
+        border-radius: 12px;
+        align-self: center;
+        box-shadow: none;
+        /* Cero sombras */
+        border: 1px solid #e5e7eb;
+        /* Borde interior suave */
+    }
+
+    .cart-item-info {
+        display: contents;
+    }
+
+    .cart-item-info h4 {
+        grid-column: 2 / 4;
+        grid-row: 1;
+        margin: 0;
+        font-size: 1.05rem;
+        color: #374151;
+        /* Gris súper oscuro en vez de negro puro */
+        word-break: break-word;
+        align-self: flex-start;
+        padding-top: 0.2rem;
+    }
+
+    .cart-item-info p {
+        grid-column: 2;
+        grid-row: 2;
+        font-size: 1.15rem;
+        color: var(--color-primary);
+        font-weight: 800;
+        white-space: nowrap;
+        align-self: flex-end;
+        padding-bottom: 0.2rem;
+    }
+
+    .cart-item-controls {
+        grid-column: 3;
+        grid-row: 2;
+        justify-self: end;
+        align-self: flex-end;
+        background: var(--color-white);
+        border-radius: 20px;
+        padding: 0.3rem 0.6rem;
+        gap: 0.6rem;
+        box-shadow: none;
+        /* Cero sombras */
+        border: 2px solid #d1d5db;
+        /* Linea gris marcada */
+    }
+
+    .cart-item-controls .quantity-display {
+        color: var(--color-black);
+    }
+
+    .cart-item-controls .quantity-btn {
+        width: 28px;
+        height: 28px;
+        background: transparent;
+        color: var(--color-primary);
+        /* Iconos rojos */
+        font-size: 1.2rem;
+    }
+
+    .cart-item-controls .quantity-btn svg {
+        transition: transform 0.2s ease;
+    }
+
+    .cart-item-controls .quantity-btn:active svg {
+        transform: scale(0.8);
+    }
+
+    /* Material Form Fields */
+    .geo-help-text {
+        display: none !important;
+    }
+
+    .geo-controls {
+        flex-direction: column;
+    }
+
+    .form-group input,
+    .form-group select,
+    .geo-search-input {
+        border: none;
+        border-bottom: 2px solid #ddd;
+        border-radius: 0;
+        padding: 0.8rem 0;
+        background: transparent;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .geo-search-input:focus {
+        border-color: var(--color-primary);
+    }
+
+    .geo-btn {
+        border-radius: 25px;
+        background: #f1f3f5;
+        color: #333;
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
 }
