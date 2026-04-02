@@ -234,8 +234,20 @@
     }
 
     /* Order Section & About */
+    #pedido {
+        padding: var(--spacing-xl) var(--spacing-md);
+        background-attachment: scroll; /* Performance on mobile */
+        animation: subtleDrift 60s linear infinite;
+    }
+
+    @keyframes subtleDrift {
+        from { background-position: 0 0; }
+        to { background-position: 300px 300px; }
+    }
+
     .order-section {
         max-width: 100%;
+        margin: 0;
     }
 
     .about-content {
@@ -302,7 +314,7 @@
 
     .order-content,
     .form-content {
-        padding: 1.5rem;
+        padding: 1rem;
     }
 
     .payment-methods {
@@ -596,6 +608,13 @@
     font-size: 0.95rem;
     margin-bottom: 0.3rem;
     color: var(--color-black);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+    max-height: 2.6em;
 }
 
 .cart-item-info p {

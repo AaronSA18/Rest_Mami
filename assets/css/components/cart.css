@@ -4,29 +4,72 @@
  */
 
 /* ========== Order Section ========== */
+#pedido {
+    background-image: url('../../images/fast-food-pattern.png');
+    background-repeat: repeat;
+    background-size: 800px;
+    background-attachment: fixed;
+    position: relative;
+    padding: var(--spacing-4xl) 0;
+    overflow: hidden;
+    animation: backgroundDrift 80s linear infinite;
+}
+
+@keyframes backgroundDrift {
+    from { background-position: 0 0; }
+    to { background-position: 800px 800px; }
+}
+
 .order-section {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    max-width: 600px;
-    margin: 2rem auto;
+    max-width: 940px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 /* ========== Order Summary & Form Content ========== */
 .order-content,
 .form-content {
-    background: var(--color-white);
-    padding: 2rem;
+    background: linear-gradient(145deg, #fff9f0 0%, #ffffff 100%);
+    padding: 2.5rem;
     border-radius: var(--radius-lg);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(198, 40, 40, 0.08), 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid rgba(198, 40, 40, 0.1);
     width: 100%;
+    position: relative;
+    overflow: hidden;
 }
+
+/* Elegant gradient accent strip at the top */
+.order-content::before,
+.form-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 60%, var(--color-primary) 100%);
+    background-size: 200% 100%;
+    animation: shimmerStripe 3s ease-in-out infinite;
+}
+
+@keyframes shimmerStripe {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
 
 .order-content h3,
 .form-content h3 {
     color: var(--color-primary);
     margin-bottom: var(--spacing-lg);
     font-size: var(--font-size-h3);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid rgba(198, 40, 40, 0.12);
 }
 
 /* ========== Empty Cart Message ========== */
@@ -55,13 +98,19 @@
 
 /* ========== Cart Item ========== */
 .cart-item {
-    background: var(--color-gray-light);
+    background: linear-gradient(135deg, #fff9f0 0%, #fff5ea 100%);
     padding: var(--spacing-md);
     border-radius: var(--radius-md);
     margin-bottom: var(--spacing-md);
     display: flex;
     gap: var(--spacing-md);
     align-items: center;
+    border: 1px solid rgba(198, 40, 40, 0.08);
+    transition: box-shadow var(--transition-fast);
+}
+
+.cart-item:hover {
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.1);
 }
 
 .cart-item-image {
@@ -135,8 +184,10 @@
 
 /* ========== Total ========== */
 .total {
+    background: linear-gradient(135deg, rgba(198,40,40,0.06) 0%, rgba(255,193,7,0.06) 100%);
     border-top: 2px solid var(--color-primary);
-    padding-top: var(--spacing-md);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    padding: var(--spacing-md) var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
     font-size: var(--font-size-h3);
     font-weight: var(--font-weight-bold);
