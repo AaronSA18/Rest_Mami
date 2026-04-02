@@ -112,8 +112,40 @@ document.addEventListener('DOMContentLoaded', () => {
     setActiveNav('menu');
 });
 
+/**
+ * Handle social link press (mobile only):
+ * Resets all icons instantly, activates the pressed one for 2s, then resets.
+ */
+let _socialTimer = null;
+
+function handleSocialClick(el) {
+    if (!window.matchMedia('(pointer: coarse)').matches) return;
+
+    // Cancel any pending reset
+    if (_socialTimer) {
+        clearTimeout(_socialTimer);
+        _socialTimer = null;
+    }
+
+    // Reset ALL social links first
+    document.querySelectorAll('.social-link').forEach(link => {
+        link.classList.remove('active-tooltip');
+        link.blur();
+    });
+
+    // Activate only the pressed one
+    el.classList.add('active-tooltip');
+
+    // Auto-reset after 2 seconds
+    _socialTimer = setTimeout(() => {
+        el.classList.remove('active-tooltip');
+        el.blur();
+        _socialTimer = null;
+    }, 2000);
+}
+
 // Make navigation functions available globally for onclick handlers
 window.showSection = showSection;
 window.scrollToMenu = scrollToMenu;
 window.scrollToPedido = scrollToPedido;
-
+window.handleSocialClick = handleSocialClick;

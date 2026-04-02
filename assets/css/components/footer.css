@@ -247,9 +247,80 @@ footer {
     transition: all var(--transition-fast);
     font-weight: var(--font-weight-bold);
     font-size: 1.1rem;
+    position: relative;
+    cursor: pointer;
 }
 
-.social-link:hover {
+/* Desktop: no cursor pointer, clicks don't do anything */
+@media (hover: hover) and (pointer: fine) {
+    .social-link {
+        cursor: default;
+    }
+}
+
+.social-link::after {
+    content: "¡Muy pronto!";
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background-color: var(--color-black);
+    color: var(--color-secondary);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: normal;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+    pointer-events: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+
+.social-link::before {
+    content: "";
+    position: absolute;
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--color-black) transparent transparent transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Desktop only: hover triggers animation */
+@media (hover: hover) and (pointer: fine) {
+    .social-link:hover::after,
+    .social-link:hover::before {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .social-link:hover {
+        background: var(--color-secondary);
+        color: var(--color-black);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(255, 193, 7, 0.3);
+    }
+}
+
+/* Mobile: JS-controlled animation via .active-tooltip */
+.social-link.active-tooltip::after,
+.social-link.active-tooltip::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.social-link.active-tooltip {
     background: var(--color-secondary);
     color: var(--color-black);
     transform: translateY(-3px);
