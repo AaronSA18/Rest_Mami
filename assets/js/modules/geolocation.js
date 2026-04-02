@@ -254,9 +254,17 @@ async function reverseGeocode(lat, lng) {
 
     // Update hidden address field
     const addressField = document.getElementById('customerAddress');
+    const geoSearchInput = document.getElementById('geo-search');
+    
     if (addressField) {
       addressField.value = address;
       addressField.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    
+    if (geoSearchInput && !geoSearchInput.value.trim()) {
+      geoSearchInput.value = address;
+      // Trigger input event to update cart validity
+      geoSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
     }
 
     console.log('✅ Dirección detectada:', address);
@@ -278,12 +286,9 @@ function handleDistrictChange() {
 
   if (geoSearchInput) {
     if (districtSelect && districtSelect.value) {
-      geoSearchInput.disabled = false;
       geoSearchInput.placeholder = 'Ingresa tu dirección...';
     } else {
-      geoSearchInput.disabled = true;
-      geoSearchInput.placeholder = 'Selecciona un distrito primero';
-      geoSearchInput.value = '';
+      geoSearchInput.placeholder = 'Ingresa tu dirección (selecciona distrito para buscar)...';
     }
   }
 }

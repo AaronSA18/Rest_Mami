@@ -229,7 +229,7 @@ function checkFormValidity() {
   const name = nameInput.value.trim();
   const phone = phoneInput.value.trim();
   const district = districtInput.value.trim();
-  const address = addressInput.value.trim();
+  const address = (document.getElementById("geo-search")?.value || addressInput.value).trim();
   const coords = coordsInput.value.trim();
   const payment = paymentMethod.value.trim();
 
@@ -329,7 +329,8 @@ export async function finalizeOrder() {
   const name = document.getElementById("customerName").value;
   const phone = document.getElementById("customerPhone").value;
   const district = document.getElementById("customerDistrict").value;
-  const address = document.getElementById("customerAddress").value;
+  const addressField = document.getElementById("geo-search");
+  const address = (addressField && addressField.value.trim()) || document.getElementById("customerAddress").value;
   const reference = document.getElementById("customerReference").value;
   const paymentMethod = document.getElementById("paymentMethod").value;
   const comments = document.getElementById("customerComments").value;
@@ -466,6 +467,9 @@ export function initCart() {
   }
   if (districtInput)
     districtInput.addEventListener("change", checkFormValidity);
+  
+  const geoSearch = document.getElementById("geo-search");
+  if (geoSearch) geoSearch.addEventListener("input", checkFormValidity);
   if (addressInput) addressInput.addEventListener("input", checkFormValidity);
 
   updateCart();
