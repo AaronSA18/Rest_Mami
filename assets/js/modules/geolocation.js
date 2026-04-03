@@ -22,6 +22,25 @@ let customerLocation = {
 // Internal logging helper
 function logStatus(message, type = 'info') {
   console.log(`[Geolocation ${type.toUpperCase()}] ${message}`);
+  showNotification(message);
+}
+
+/**
+ * Show notification helper (matches main notification style)
+ */
+function showNotification(message) {
+  const notification = document.getElementById('notification');
+  if (!notification) return;
+
+  notification.textContent = message;
+  notification.classList.add('show');
+
+  // Use the config duration or default 3s
+  const duration = (CONFIG.notification && CONFIG.notification.displayDuration) || 3000;
+  
+  setTimeout(() => {
+    notification.classList.remove('show');
+  }, duration);
 }
 
 /**
@@ -141,7 +160,7 @@ async function searchAddress() {
 
     // Validate district selection
     if (!districtSelect || !districtSelect.value) {
-      logStatus('Selecciona un distrito primero', 'error');
+      logStatus('📌 Primero selecciona un distrito', 'warning');
       return;
     }
 
@@ -150,13 +169,14 @@ async function searchAddress() {
       return;
     }
 
-    const query = searchInput.value.trim();
+    const districtText = districtSelect.options[districtSelect.selectedIndex].text;
+    const query = `${searchInput.value.trim()}, ${districtText}`;
     logStatus('🔍 Buscando dirección...', 'info');
 
-    // Call Nominatim API
+    // Call Nominatim API with strict boundaries (Peru only) and including district/city
     const response = await fetch(
       `${CONFIG.geolocation.nominatimBaseUrl}/search?` +
-      `q=${encodeURIComponent(query)},Lima,Peru&format=json&limit=1`
+      `q=${encodeURIComponent(query)}, ${districtText}, Lima, Peru&countrycodes=pe&format=json&limit=1`
     );
 
     if (!response.ok) {
@@ -166,11 +186,18 @@ async function searchAddress() {
     const results = await response.json();
 
     if (results.length === 0) {
-      logStatus('No se encontró la dirección', 'error');
+      logStatus('❌ Error en la búsqueda', 'error');
       return;
     }
 
     const result = results[0];
+    
+    // Validar que la respuesta tenga coordenadas válidas
+    if (!result.lat || !result.lon) {
+      logStatus('❌ Error al procesar la ubicación del servidor.', 'error');
+      return;
+    }
+
     const lat = parseFloat(result.lat);
     const lng = parseFloat(result.lon);
 
@@ -187,6 +214,12 @@ async function searchAddress() {
  */
 async function getCurrentLocation() {
   try {
+    const districtSelect = document.getElementById('customerDistrict');
+    if (!districtSelect || !districtSelect.value) {
+      logStatus('📌 Primero selecciona un distrito', 'warning');
+      return;
+    }
+
     if (!navigator.geolocation) {
       logStatus('Geolocalización no disponible en tu navegador', 'error');
       return;
@@ -202,11 +235,7 @@ async function getCurrentLocation() {
       },
       (error) => {
         console.error('Geolocation error:', error);
-        let message = 'Error al obtener ubicación';
-        if (error.code === error.PERMISSION_DENIED) {
-          message = 'Permiso de ubicación denegado';
-        }
-        logStatus(message, 'error');
+        logStatus('📍 No pudimos obtener tu ubicación', 'error');
       },
       {
         enableHighAccuracy: true,
@@ -261,12 +290,7 @@ async function reverseGeocode(lat, lng) {
       addressField.dispatchEvent(new Event('change', { bubbles: true }));
     }
     
-    if (geoSearchInput && !geoSearchInput.value.trim()) {
-      geoSearchInput.value = address;
-      // Trigger input event to update cart validity
-      geoSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-
+    // NOTA: No actualizamos geoSearchInput.value como solicitado para no interferir con la escritura manual.
     console.log('✅ Dirección detectada:', address);
   } catch (error) {
     console.error('Error reverse geocoding:', error);
@@ -283,13 +307,18 @@ async function reverseGeocode(lat, lng) {
 function handleDistrictChange() {
   const districtSelect = document.getElementById('customerDistrict');
   const geoSearchInput = document.getElementById('geo-search');
+  const geoSearchBtn = document.getElementById('geo-search-btn');
+  const geoGpsBtn = document.getElementById('geo-gps-btn');
 
-  if (geoSearchInput) {
-    if (districtSelect && districtSelect.value) {
-      geoSearchInput.placeholder = 'Ingresa tu dirección...';
-    } else {
-      geoSearchInput.placeholder = 'Ingresa tu dirección (selecciona distrito para buscar)...';
-    }
+  const isDisabled = !districtSelect || !districtSelect.value;
+
+  if (geoSearchInput) geoSearchInput.disabled = isDisabled;
+  if (geoSearchBtn) geoSearchBtn.disabled = isDisabled;
+  if (geoGpsBtn) geoGpsBtn.disabled = isDisabled;
+
+  if (!isDisabled) {
+    // Optional: focus the field when enabled to improve UX
+    // geoSearchInput.focus();
   }
 }
 
@@ -314,6 +343,17 @@ export function initializeGeolocation() {
   }
 
   if (geoSearchInput) {
+    // Proactive check when clicking/focusing
+    const showDistrictWarning = () => {
+      const districtSelect = document.getElementById('customerDistrict');
+      if (!districtSelect || !districtSelect.value) {
+        logStatus('📌 Primero selecciona un distrito', 'warning');
+      }
+    };
+
+    geoSearchInput.addEventListener('click', showDistrictWarning);
+    geoSearchInput.addEventListener('focus', showDistrictWarning);
+
     geoSearchInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         searchAddress();
@@ -328,6 +368,9 @@ export function initializeGeolocation() {
   if (geoGpsBtn) {
     geoGpsBtn.addEventListener('click', getCurrentLocation);
   }
+
+  // Set initial state based on current district selection
+  handleDistrictChange();
 
   // Initialize map if form is already visible
   const isAlreadyVisible = checkoutForm.style.display !== 'none' &&
