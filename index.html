@@ -367,36 +367,16 @@
           <div class="geolocation-group">
             <label>Dirección</label>
 
-            <!-- Geolocation Controls -->
+            <!-- Address Input -->
             <div class="geo-controls">
-              <input type="text" id="geo-search" class="geo-search-input" placeholder="Ej: Jr. Angamos 123, Miraflores"
-                aria-label="Buscador de dirección" disabled />
-              <button type="button" id="geo-search-btn" class="geo-btn geo-search-btn" title="Buscar dirección" disabled>
-                🔍
-              </button>
-              <button type="button" id="geo-gps-btn" class="geo-btn geo-gps-btn" title="Usar mi ubicación" disabled>
-                📍
-              </button>
-            </div>
-
-            <!-- Map Container -->
-            <div class="map-wrapper">
-              <div id="map-container">
-                <div id="map" aria-label="Mapa interactivo para seleccionar ubicación"></div>
-                <p class="map-hint">
-                  📍 Haz clic en el mapa o arrastra el marcador
-                </p>
-              </div>
-              <p class="geo-help-text">
-                💡 Si el buscador no encuentra tu dirección, puedes hacer clic
-                directamente en el mapa
-              </p>
+              <input type="text" id="geo-search" class="geo-search-input" placeholder="Ej: Jr. Angamos 123"
+                aria-label="Dirección de entrega" disabled />
             </div>
 
             <!-- Hidden coordinates input -->
             <input type="hidden" id="customerCoordinates" value="" aria-hidden="true" />
 
-            <!-- Hidden address input (auto-filled by map) -->
+            <!-- Hidden address input (auto-filled by code) -->
             <input type="hidden" id="customerAddress" value="" aria-hidden="true" />
           </div>
 

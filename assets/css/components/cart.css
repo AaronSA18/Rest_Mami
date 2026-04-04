@@ -548,75 +548,12 @@
     cursor: not-allowed;
 }
 
-.geo-btn {
-    padding: 0.8rem var(--spacing-md);
-    border: none;
-    border-radius: var(--radius-md);
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 45px;
-}
-
-.geo-btn:hover {
-    background-color: #d63031;
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-}
-
-.geo-btn:active {
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
 
 /* Map Wrapper & Container */
 .map-wrapper {
     margin: var(--spacing-md) 0;
 }
 
-#map-container {
-    position: relative;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-#map {
-    width: 100%;
-    height: 400px;
-    background-color: #e8e8e8;
-    border-radius: var(--radius-md);
-    z-index: 1;
-}
-
-.map-hint {
-    position: absolute;
-    bottom: var(--spacing-md);
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--color-white);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-sm);
-    white-space: nowrap;
-    z-index: 2;
-    pointer-events: none;
-}
-
-.geo-help-text {
-    font-size: var(--font-size-sm);
-    color: #666;
-    margin-top: var(--spacing-sm);
-    margin-bottom: 0;
-    font-style: italic;
-    text-align: center;
-}
 
 /* Leaflet overrides for consistency */
 .leaflet-control-attribution {
