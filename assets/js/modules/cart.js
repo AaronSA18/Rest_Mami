@@ -39,6 +39,12 @@ function saveCartToStorage() {
  * @param {number} itemId - ID of item to add
  */
 export function addToCart(itemId) {
+  // Prevent adding items if checkout is active
+  if (document.body.classList.contains("checkout-active")) {
+    showNotification("⚠️ Finaliza tu pedido actual primero");
+    return;
+  }
+
   const item = findItemById(itemId);
   if (!item) return;
 
@@ -171,24 +177,11 @@ function renderCartItem(item) {
  * Show checkout form (Step 2)
  */
 export async function showCheckoutForm() {
-  const form = document.getElementById("checkout-form");
-  const summaryStep = document.getElementById("order-summary-step");
+  const modal = document.getElementById("checkoutModal");
 
-  if (form && summaryStep) {
-    summaryStep.style.display = "none"; // Hide Order Summary (Step 1)
-    form.style.display = "block"; // Show Form (Step 2)
-    window.scrollTo(0, 0); // Scroll to top
-
-    // Dynamic load geolocation if not already loaded
-    if (!window.geolocationInitialized) {
-      try {
-        const { initializeGeolocation } = await import("./geolocation.js");
-        initializeGeolocation();
-        window.geolocationInitialized = true;
-      } catch (err) {
-        console.error("Failed to load geolocation module:", err);
-      }
-    }
+  if (modal) {
+    modal.style.display = "flex"; // Show Modal Overlay
+    document.body.classList.add("checkout-active"); // Block navigation and scroll
   }
 }
 
@@ -196,12 +189,11 @@ export async function showCheckoutForm() {
  * Hide checkout form (Go back to Step 1)
  */
 export function hideCheckoutForm() {
-  const form = document.getElementById("checkout-form");
-  const summaryStep = document.getElementById("order-summary-step");
+  const modal = document.getElementById("checkoutModal");
 
-  if (form && summaryStep) {
-    form.style.display = "none";
-    summaryStep.style.display = "block";
+  if (modal) {
+    modal.style.display = "none";
+    document.body.classList.remove("checkout-active"); // Allow navigation again
   }
 }
 
@@ -213,7 +205,6 @@ function checkFormValidity() {
   const phoneInput = document.getElementById("customerPhone");
   const districtInput = document.getElementById("customerDistrict");
   const addressInput = document.getElementById("customerAddress");
-  const coordsInput = document.getElementById("customerCoordinates");
   const paymentMethod = document.getElementById("paymentMethod");
   const nextStepBtn = document.getElementById("nextStepBtn");
 
@@ -229,8 +220,7 @@ function checkFormValidity() {
   const name = nameInput.value.trim();
   const phone = phoneInput.value.trim();
   const district = districtInput.value.trim();
-  const address = (document.getElementById("geo-search")?.value || addressInput.value).trim();
-  const coords = coordsInput.value.trim();
+  const address = addressInput.value.trim();
   const payment = paymentMethod.value.trim();
 
   // Validación robusta
@@ -238,7 +228,6 @@ function checkFormValidity() {
   const isPhoneValid = /^\d{9}$/.test(phone); // Exactamente 9 dígitos
   const isDistrictValid = district.length > 0;
   const isAddressValid = address.length >= 5;
-  const isCoordsValid = coords.length > 0;
   const isPaymentValid = payment.length > 0;
 
   if (
@@ -246,7 +235,6 @@ function checkFormValidity() {
     isPhoneValid &&
     isDistrictValid &&
     isAddressValid &&
-    isCoordsValid &&
     isPaymentValid &&
     cart.length > 0
   ) {
@@ -280,61 +268,101 @@ export function selectPaymentMethod(method) {
 /**
  * Show payment reminder modal
  */
-export function showPaymentReminder() {
-  const modal = document.getElementById("paymentReminderModal");
-  if (modal) {
-    modal.style.display = "flex";
-  }
-}
-
-/**
- * Hide payment reminder modal
- */
 export function hidePaymentReminder() {
-  const modal = document.getElementById("paymentReminderModal");
-  if (modal) {
-    modal.style.display = "none";
+  closeConfirmationModal();
+}
+
+/**
+ * Helper to change states in the unified confirmation modal
+ * @param {'reminder' | 'loading' | 'result'} state 
+ * @param {boolean} isSuccess - Only for 'result' state
+ */
+function setConfirmationModalState(state, isSuccess = true) {
+  const modal = document.getElementById("orderConfirmationModal");
+  if (!modal) return;
+
+  // Hide all states
+  document.querySelectorAll(".modal-state").forEach((el) => {
+    el.classList.remove("active");
+  });
+
+  // Show target state
+  const targetState = document.getElementById(`modal-state-${state}`);
+  if (targetState) {
+    targetState.classList.add("active");
+  }
+
+  // If result state, configure content
+  if (state === "result") {
+    const icon = document.getElementById("thankYouIcon");
+    const title = document.getElementById("thankYouTitle");
+    const message = document.getElementById("thankYouMessage");
+    const btn = document.getElementById("thankYouBtn");
+
+    modal.setAttribute("data-status", isSuccess ? "success" : "error");
+
+    if (isSuccess) {
+      if (icon) icon.textContent = "✅";
+      if (title) title.textContent = "¡Gracias por tu Pedido!";
+      if (message) {
+        message.innerHTML = `<p>Hemos recibido tu solicitud correctamente.</p><p>Te contactaremos pronto para confirmar los detalles de tu entrega.</p>`;
+      }
+      if (btn) btn.textContent = "Aceptar";
+    } else {
+      if (icon) icon.textContent = "❌";
+      if (title) title.textContent = "¡Ups! Algo salió mal";
+      if (message) {
+        message.innerHTML = `<p>Hubo un error al procesar tu pedido.</p><p>Por favor, intenta enviar el formulario nuevamente.</p>`;
+      }
+      if (btn) btn.textContent = "Reintentar";
+    }
   }
 }
 
 /**
- * Show thank you modal
+ * Show unified confirmation modal (Reminder state)
  */
-function showThankYouModal() {
-  const modal = document.getElementById("thankYouModal");
+export function showPaymentReminder() {
+  const modal = document.getElementById("orderConfirmationModal");
   if (modal) {
+    setConfirmationModalState("reminder");
     modal.style.display = "flex";
   }
 }
 
 /**
- * Close thank you modal and redirect to inicio
+ * Close unified confirmation modal
  */
-export function closeThankYouModal() {
-  const modal = document.getElementById("thankYouModal");
+export function closeConfirmationModal() {
+  const modal = document.getElementById("orderConfirmationModal");
   if (modal) {
+    const status = modal.getAttribute("data-status");
+    const isError = status === "error";
+    
     modal.style.display = "none";
-  }
 
-  // Redirect to inicio
-  showSection("inicio");
+    // Only redirect to inicio if order was successful
+    // If it was an error, just close this modal and stay in checkout
+    if (status === "success") {
+      showSection("inicio");
+    }
+  }
 }
 
 /**
  * Finalize order and send via EmailJS to business email
  */
 export async function finalizeOrder() {
-  hidePaymentReminder();
+  // Show loading state instead of hiding modal
+  setConfirmationModalState("loading");
 
   const name = document.getElementById("customerName").value;
   const phone = document.getElementById("customerPhone").value;
   const district = document.getElementById("customerDistrict").value;
-  const addressField = document.getElementById("geo-search");
-  const address = (addressField && addressField.value.trim()) || document.getElementById("customerAddress").value;
+  const address = document.getElementById("customerAddress").value.trim();
   const reference = document.getElementById("customerReference").value;
   const paymentMethod = document.getElementById("paymentMethod").value;
   const comments = document.getElementById("customerComments").value;
-  const coordinates = document.getElementById("customerCoordinates").value;
 
   // Build order details
   let total = 0;
@@ -360,6 +388,7 @@ export async function finalizeOrder() {
     .join("\n");
 
   // Send email via EmailJS
+  let isSuccess = false;
   try {
     if (typeof emailjs !== "undefined") {
       // Initialize EmailJS
@@ -377,9 +406,10 @@ export async function finalizeOrder() {
         payment_method: paymentMethod.toUpperCase(),
         order_total: total.toFixed(2),
         customer_comments: comments || "Sin comentarios adicionales",
-        order_date: new Date().toLocaleString("es-PE"),
-        coordinates: coordinates || "No disponibles",
       };
+
+      // Add a small artificial delay to ensure the loading animation is visible and smooth
+      await new Promise(resolve => setTimeout(resolve, 800));
 
       // Send email to business
       await emailjs.send(
@@ -388,41 +418,39 @@ export async function finalizeOrder() {
         emailParams,
       );
       console.log("✅ Pedido enviado exitosamente al email de la empresa");
-      showNotification("✅ Pedido enviado correctamente");
+      isSuccess = true;
     }
   } catch (emailError) {
     console.error("Error al enviar el pedido:", emailError);
-    showNotification(
-      "❌ Error al enviar el pedido. Por favor intenta de nuevo.",
-    );
   }
 
-  // Show thank you modal
-  showThankYouModal();
+  // Show result state in the same modal
+  setConfirmationModalState("result", isSuccess);
 
-  // Clear cart after 2 seconds
-  setTimeout(() => {
-    cart = [];
-    saveCartToStorage();
-    updateCart();
-    updateCartBadge();
-    document.getElementById("customerName").value = "";
-    document.getElementById("customerPhone").value = "";
-    document.getElementById("customerDistrict").value = "";
-    document.getElementById("customerAddress").value = "";
-    document.getElementById("customerReference").value = "";
-    document.getElementById("customerComments").value = "";
-    document.getElementById("paymentMethod").value = "";
-    document.getElementById("customerCoordinates").value = "";
+  // Clear cart only on success
+  if (isSuccess) {
+    setTimeout(() => {
+      cart = [];
+      saveCartToStorage();
+      updateCart();
+      updateCartBadge();
+      document.getElementById("customerName").value = "";
+      document.getElementById("customerPhone").value = "";
+      document.getElementById("customerDistrict").value = "";
+      document.getElementById("customerAddress").value = "";
+      document.getElementById("customerReference").value = "";
+      document.getElementById("customerComments").value = "";
+      document.getElementById("paymentMethod").value = "";
 
-    // Reset payment button styles
-    document.querySelectorAll(".payment-btn").forEach((btn) => {
-      btn.classList.remove("selected");
-    });
+      // Reset payment button styles
+      document.querySelectorAll(".payment-btn").forEach((btn) => {
+        btn.classList.remove("selected");
+      });
 
-    // Reset view
-    hideCheckoutForm();
-  }, 2000);
+      // Reset view
+      hideCheckoutForm();
+    }, 2000);
+  }
 }
 
 /**
@@ -468,8 +496,6 @@ export function initCart() {
   if (districtInput)
     districtInput.addEventListener("change", checkFormValidity);
   
-  const geoSearch = document.getElementById("geo-search");
-  if (geoSearch) geoSearch.addEventListener("input", checkFormValidity);
   if (addressInput) addressInput.addEventListener("input", checkFormValidity);
 
   updateCart();
@@ -485,6 +511,5 @@ window.hideCheckoutForm = hideCheckoutForm;
 window.finalizeOrder = finalizeOrder;
 window.selectPaymentMethod = selectPaymentMethod;
 window.showPaymentReminder = showPaymentReminder;
-window.hidePaymentReminder = hidePaymentReminder;
-window.closeThankYouModal = closeThankYouModal;
+window.closeConfirmationModal = closeConfirmationModal;
 window.showSection = showSection;

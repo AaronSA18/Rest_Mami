@@ -26,15 +26,6 @@ export const CONFIG = {
     displayDuration: 3000, // Duration to show notifications in milliseconds
   },
 
-  // Geolocation Configuration
-  geolocation: {
-    defaultCenter: [-12.0464, -77.0428], // Lima, Peru [lat, lng]
-    zoomLevel: 15,
-    tileLayer: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: "© OpenStreetMap contributors",
-    nominatimBaseUrl: "https://nominatim.openstreetmap.org",
-    googleMapsBaseUrl: "https://www.google.com/maps",
-  },
 
   // Image Paths
   images: {

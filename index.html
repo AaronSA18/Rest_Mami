@@ -331,132 +331,135 @@
         </div>
       </div>
 
-      <!-- Step 2: Customer Data (Initially Hidden) -->
-      <div class="customer-data" id="checkout-form" style="display: none">
-        <div class="form-content">
-          <h3>Información de Entrega</h3>
-
-          <!-- Nombre Completo -->
-          <div class="form-group">
-            <label for="customerName">Nombre</label>
-            <input type="text" id="customerName" placeholder="Juan Pérez García" maxlength="35" required aria-required="true" />
-          </div>
-
-          <!-- Teléfono (máx 9 dígitos) -->
-          <div class="form-group">
-            <label for="customerPhone">Teléfono</label>
-            <input type="text" id="customerPhone" placeholder="987654321" maxlength="9" pattern="[0-9]{1,9}" required
-              aria-required="true" />
-            <small>Máximo 9 dígitos</small>
-          </div>
-
-          <!-- Selección de Distritos -->
-          <div class="form-group">
-            <label for="customerDistrict">Distrito</label>
-            <select id="customerDistrict" required aria-required="true">
-              <option value="">-- Seleccionar Distrito --</option>
-              <option value="cercado-lima">Cercado de Lima</option>
-              <option value="rimac">Rímac</option>
-              <option value="brena">Breña</option>
-              <option value="la-victoria">La Victoria</option>
-              <option value="el-agustino">El Agustino</option>
-            </select>
-          </div>
-
-          <!-- Geolocation Group -->
-          <div class="geolocation-group">
-            <label>Dirección</label>
-
-            <!-- Address Input -->
-            <div class="geo-controls">
-              <input type="text" id="geo-search" class="geo-search-input" placeholder="Ej: Jr. Angamos 123"
-                aria-label="Dirección de entrega" disabled />
-            </div>
-
-            <!-- Hidden coordinates input -->
-            <input type="hidden" id="customerCoordinates" value="" aria-hidden="true" />
-
-            <!-- Hidden address input (auto-filled by code) -->
-            <input type="hidden" id="customerAddress" value="" aria-hidden="true" />
-          </div>
-
-          <!-- Referencia de Dirección -->
-          <div class="form-group">
-            <label for="customerReference">Referencia de Dirección</label>
-            <textarea id="customerReference" rows="2"
-              placeholder="Ej: Al lado de la farmacia, cerca al parque..."></textarea>
-          </div>
-
-          <!-- Método de Pago -->
-          <div class="form-group">
-            <label>Método de Pago *</label>
-            <div class="payment-methods">
-              <button type="button" class="payment-btn" data-method="yape" onclick="selectPaymentMethod('yape')">
-                💳 Yape
-              </button>
-              <button type="button" class="payment-btn" data-method="plin" onclick="selectPaymentMethod('plin')">
-                💳 Plin
-              </button>
-              <button type="button" class="payment-btn" data-method="efectivo"
-                onclick="selectPaymentMethod('efectivo')">
-                💵 Efectivo
-              </button>
-            </div>
-            <input type="hidden" id="paymentMethod" required />
-          </div>
-
-          <!-- Comentarios Adicionales -->
-          <div class="form-group">
-            <label for="customerComments">Comentarios Adicionales</label>
-            <textarea id="customerComments" rows="2" placeholder="Ej: Sin cebolla, sin mayo..."></textarea>
-          </div>
-
-          <!-- Checkout Actions -->
-          <div class="checkout-actions">
-            <button class="btn-secondary" onclick="hideCheckoutForm()">
-              Volver
-            </button>
-            <button class="confirm-order" onclick="showPaymentReminder()" id="nextStepBtn" disabled>
-              Continuar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
+  
+  <!-- Step 2: Customer Data Modal -->
+  <div class="modal-overlay modal-overlay-dark checkout-modal-overlay" id="checkoutModal" style="display: none">
+    <div class="modal-content checkout-modal-content" id="checkout-form">
+      <div class="form-content">
+        <h3>Información de Entrega</h3>
 
-  <!-- Modal: Payment Reminder -->
-  <div class="modal-overlay" id="paymentReminderModal" style="display: none">
-    <div class="modal-content payment-reminder">
-      <div class="reminder-icon">⚠️</div>
-      <h3>Recordatorio Importante</h3>
-      <p>
-        El pago es <strong>CONTRA ENTREGA</strong>. Pagarás el monto total al
-        momento de recibir tu pedido.
-      </p>
-      <div class="modal-actions">
-        <button class="btn-secondary" onclick="hidePaymentReminder()">
-          Volver
-        </button>
-        <button class="confirm-order" onclick="finalizeOrder()">
-          Confirmar Pedido
-        </button>
+        <!-- Nombre Completo -->
+        <div class="form-group">
+          <label for="customerName">Nombre</label>
+          <input type="text" id="customerName" placeholder="Juan Pérez García" maxlength="35" required aria-required="true" />
+        </div>
+
+        <!-- Teléfono (máx 9 dígitos) -->
+        <div class="form-group">
+          <label for="customerPhone">Teléfono</label>
+          <input type="text" id="customerPhone" placeholder="987654321" maxlength="9" pattern="[0-9]{1,9}" required
+            aria-required="true" />
+          <small>Máximo 9 dígitos</small>
+        </div>
+
+        <!-- Selección de Distritos -->
+        <div class="form-group">
+          <label for="customerDistrict">Distrito</label>
+          <select id="customerDistrict" required aria-required="true">
+            <option value="">-- Seleccionar Distrito --</option>
+            <option value="cercado-lima">Cercado de Lima</option>
+            <option value="rimac">Rímac</option>
+            <option value="brena">Breña</option>
+            <option value="la-victoria">La Victoria</option>
+            <option value="el-agustino">El Agustino</option>
+          </select>
+        </div>
+
+        <!-- Dirección -->
+        <div class="form-group">
+          <label for="customerAddress">Dirección</label>
+          <input type="text" id="customerAddress" placeholder="Ej: Jr. Angamos 123" required aria-required="true" />
+        </div>
+
+        <!-- Referencia de Dirección -->
+        <div class="form-group">
+          <label for="customerReference">Referencia de Dirección</label>
+          <textarea id="customerReference" rows="2"
+            placeholder="Ej: Al lado de la farmacia, cerca al parque..."></textarea>
+        </div>
+
+        <!-- Método de Pago -->
+        <div class="form-group">
+          <label>Método de Pago *</label>
+          <div class="payment-methods">
+            <button type="button" class="payment-btn" data-method="yape" onclick="selectPaymentMethod('yape')">
+              💳 Yape
+            </button>
+            <button type="button" class="payment-btn" data-method="plin" onclick="selectPaymentMethod('plin')">
+              💳 Plin
+            </button>
+            <button type="button" class="payment-btn" data-method="efectivo"
+              onclick="selectPaymentMethod('efectivo')">
+              💵 Efectivo
+            </button>
+          </div>
+          <input type="hidden" id="paymentMethod" required />
+        </div>
+
+        <!-- Comentarios Adicionales -->
+        <div class="form-group">
+          <label for="customerComments">Comentarios Adicionales</label>
+          <textarea id="customerComments" rows="2" placeholder="Ej: Sin cebolla, sin mayo..."></textarea>
+        </div>
+
+        <!-- Checkout Actions -->
+        <div class="checkout-actions">
+          <button class="btn-secondary" onclick="hideCheckoutForm()">
+            Volver
+          </button>
+          <button class="confirm-order" onclick="showPaymentReminder()" id="nextStepBtn" disabled>
+            Continuar
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal: Thank You Message -->
-  <div class="modal-overlay modal-overlay-dark" id="thankYouModal" style="display: none">
-    <div class="modal-content thank-you-modal">
-      <div class="thank-you-icon">✅</div>
-      <h2>¡Gracias por tu Pedido!</h2>
-      <p>Hemos recibido tu solicitud correctamente.</p>
-      <p>
-        Te contactaremos pronto para confirmar los detalles de tu entrega.
-      </p>
-      <button class="confirm-order" onclick="closeThankYouModal()">
-        Aceptar
-      </button>
+  <!-- Modal: Order Confirmation Flow (Unified) -->
+  <div class="modal-overlay modal-overlay-dark" id="orderConfirmationModal" style="display: none">
+    <div class="modal-content confirmation-modal-content">
+      
+      <!-- State 1: Reminder -->
+      <div id="modal-state-reminder" class="modal-state active">
+        <div class="reminder-icon">⚠️</div>
+        <h3>Recordatorio Importante</h3>
+        <p>
+          El pago es <strong>CONTRA ENTREGA</strong>. Pagarás el monto total al
+          momento de recibir tu pedido.
+        </p>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="closeConfirmationModal()">
+            Volver
+          </button>
+          <button class="confirm-order" onclick="finalizeOrder()">
+            Confirmar Pedido
+          </button>
+        </div>
+      </div>
+
+      <!-- State 2: Loading (Short Animation) -->
+      <div id="modal-state-loading" class="modal-state">
+        <div class="loader-container">
+          <div class="loader-spinner"></div>
+        </div>
+        <h3 class="loading-title">Procesando Pedido...</h3>
+        <p>Estamos enviando tu orden, por favor espera un momento.</p>
+      </div>
+
+      <!-- State 3: Result (Success/Error) -->
+      <div id="modal-state-result" class="modal-state">
+        <div class="thank-you-icon" id="thankYouIcon">✅</div>
+        <h2 id="thankYouTitle">¡Gracias por tu Pedido!</h2>
+        <div id="thankYouMessage">
+          <p>Hemos recibido tu solicitud correctamente.</p>
+          <p>Te contactaremos pronto para confirmar los detalles de tu entrega.</p>
+        </div>
+        <button class="confirm-order" id="thankYouBtn" onclick="closeConfirmationModal()">
+          Aceptar
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -563,11 +566,7 @@
     </div>
   </footer>
 
-  <!-- Leaflet CSS for Map (Deferred) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="" />
 
-  <!-- Leaflet JS for Interactive Map (defer for performance) -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>
 
   <!-- Main Application JS (defer) -->
   <script type="module" defer src="assets/js/main.js"></script>
