@@ -15,9 +15,15 @@
     Burger & Broaster Express - Las mejores hamburguesas y broaster
   </title>
 
-  <!-- Favicon -->
+  <!-- Favicon — Balón Mundial 2026 -->
   <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍔</text></svg>" />
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>" />
+
+  <!-- Preload Google Font Outfit (evita FOIT) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" /></noscript>
 
   <!-- Preload Critical Images for better LCP & UX -->
   <link rel="preload" href="assets/images/hero-bg.webp" as="image" fetchpriority="high" />
@@ -42,7 +48,7 @@
   <header>
     <div class="header-content">
       <div class="logo">
-        <div class="logo-icon">🍔</div>
+        <div class="logo-icon">⚽</div>
         <span>Burger & Broaster Express</span>
       </div>
       <nav aria-label="Navegación principal">
@@ -79,7 +85,7 @@
         height="600" />
       <div class="hero-content">
         <div class="hero-card">
-          <span class="hero-subtitle">SABOR QUE TE CONECTA</span>
+          <span class="hero-subtitle">⚽ MUNDIAL 2026 · SABOR QUE TE CONECTA</span>
           <h1>
             ¡Bienvenido a
             <span class="hero-highlight">Burger & Broaster Express!</span>
@@ -496,10 +502,10 @@
       <!-- Footer Brand Section -->
       <div class="footer-section footer-brand">
         <div class="footer-logo">
-          <span class="logo-icon-footer">🍔</span>
+          <span class="logo-icon-footer">⚽</span>
           <div>
             <h3>Burger & Broaster Express</h3>
-            <p class="footer-tagline">Las mejores hamburguesas y broaster</p>
+            <p class="footer-tagline">Sabor campeón · FIFA World Cup 2026 🏆</p>
           </div>
         </div>
       </div>
@@ -558,10 +564,10 @@
     <!-- Footer Bottom -->
     <div class="footer-bottom">
       <p>
-        &copy; 2024 Burger & Broaster Express. Todos los derechos reservados.
+        &copy; 2026 Burger & Broaster Express. Todos los derechos reservados.
       </p>
       <p class="footer-powered">
-        Delivery Express | Comida Rápida de Calidad
+        ⚽ Delivery Express | Temporada Mundial 2026 🏆
       </p>
     </div>
   </footer>

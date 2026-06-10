@@ -1,6 +1,6 @@
 /**
  * Footer & Contact Component Styles
- * Burger & Broaster Express
+ * Burger & Broaster Express — FIFA World Cup 2026 Edition
  */
 
 /* ========== About Section ========== */
@@ -9,19 +9,19 @@
     grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-lg);
     margin-top: var(--spacing-2xl);
-    background: linear-gradient(135deg, rgba(198, 40, 40, 0.03) 0%, rgba(255, 193, 7, 0.03) 100%);
+    background: linear-gradient(135deg, rgba(10, 34, 64, 0.03) 0%, rgba(232, 201, 75, 0.04) 100%);
     padding: var(--spacing-2xl);
     border-radius: var(--radius-lg);
-    border: 1px solid rgba(198, 40, 40, 0.08);
+    border: 1px solid rgba(10, 34, 64, 0.07);
 }
 
 .about-card {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     padding: var(--spacing-lg);
     border-radius: var(--radius-md);
-    border: 1px solid rgba(198, 40, 40, 0.1);
+    border: 1px solid rgba(10, 34, 64, 0.08);
     transition: all var(--transition-normal);
-    animation: slideInLeft 0.6s ease-out;
+    animation: slideInLeft 0.5s ease-out;
     animation-fill-mode: both;
     text-align: center;
     display: flex;
@@ -30,35 +30,45 @@
 }
 
 .about-card:nth-child(2) {
-    animation-delay: 0.1s;
+    animation-delay: 0.08s;
 }
 
 .about-card:nth-child(3) {
-    animation-delay: 0.2s;
+    animation-delay: 0.16s;
 }
 
 .about-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(198, 40, 40, 0.3);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    transform: translateY(-6px);
+    border-color: rgba(232, 201, 75, 0.4);
+    box-shadow: 0 14px 32px rgba(10, 34, 64, 0.12);
 }
 
 .about-card-icon {
     font-size: 2.2rem;
     margin-bottom: var(--spacing-md);
     display: block;
+    background: var(--gradient-gold);
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-circle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-gold);
 }
 
 .about-card h3 {
-    color: var(--color-primary-light);
+    color: var(--color-primary);
     margin-bottom: var(--spacing-sm);
     font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-bold);
+    margin-top: var(--spacing-sm);
 }
 
 .about-card p {
     margin-bottom: 0;
     line-height: 1.6;
-    color: var(--color-text);
+    color: var(--color-gray);
     font-size: var(--font-size-small);
 }
 
@@ -76,11 +86,14 @@
     border-radius: var(--radius-lg);
     text-align: center;
     box-shadow: var(--shadow-md);
-    transition: transform var(--transition-fast);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    border: 1px solid rgba(10, 34, 64, 0.06);
 }
 
 .contact-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(10, 34, 64, 0.12);
+    border-color: rgba(232, 201, 75, 0.35);
 }
 
 .contact-card-icon {
@@ -91,6 +104,7 @@
 .contact-card h3 {
     color: var(--color-primary);
     margin-bottom: var(--spacing-md);
+    font-weight: var(--font-weight-bold);
 }
 
 .contact-card p {
@@ -99,11 +113,22 @@
 
 /* ========== Footer ========== */
 footer {
-    background: linear-gradient(135deg, var(--color-black) 0%, #1a1a1a 100%);
+    background: linear-gradient(160deg, #0A1628 0%, #061020 60%, #0A1A35 100%);
     color: var(--color-white);
     padding: var(--spacing-3xl) var(--spacing-xl);
     margin-top: var(--spacing-4xl);
-    border-top: 2px solid var(--color-secondary);
+    border-top: 3px solid var(--color-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Sutil patrón de campo de fútbol */
+footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 50% 0%, rgba(232, 201, 75, 0.04) 0%, transparent 60%);
+    pointer-events: none;
 }
 
 .footer-content {
@@ -114,24 +139,18 @@ footer {
     gap: var(--spacing-3xl);
     margin-bottom: var(--spacing-2xl);
     padding-bottom: var(--spacing-2xl);
-    border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+    border-bottom: 1px solid rgba(232, 201, 75, 0.15);
+    position: relative;
+    z-index: 1;
 }
 
 .footer-section {
-    animation: fadeInUp 0.6s ease-out;
+    animation: fadeInUp 0.5s ease-out;
 }
 
-.footer-section:nth-child(2) {
-    animation-delay: 0.1s;
-}
-
-.footer-section:nth-child(3) {
-    animation-delay: 0.2s;
-}
-
-.footer-section:nth-child(4) {
-    animation-delay: 0.3s;
-}
+.footer-section:nth-child(2) { animation-delay: 0.08s; }
+.footer-section:nth-child(3) { animation-delay: 0.16s; }
+.footer-section:nth-child(4) { animation-delay: 0.24s; }
 
 .footer-brand {
     display: flex;
@@ -145,14 +164,15 @@ footer {
 }
 
 .logo-icon-footer {
-    font-size: 3rem;
+    font-size: 2.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, var(--color-secondary) 0%, rgba(255, 193, 7, 0.8) 100%);
+    background: var(--gradient-gold);
     border-radius: var(--radius-md);
+    box-shadow: var(--shadow-gold);
 }
 
 .footer-brand h3 {
@@ -160,12 +180,13 @@ footer {
     font-size: var(--font-size-large);
     color: var(--color-secondary);
     line-height: 1.2;
+    font-weight: var(--font-weight-bold);
 }
 
 .footer-tagline {
     margin: var(--spacing-sm) 0 0 0;
     font-size: var(--font-size-small);
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.6);
     font-style: italic;
 }
 
@@ -174,7 +195,7 @@ footer {
     margin-bottom: var(--spacing-md);
     color: var(--color-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     font-weight: var(--font-weight-bold);
 }
 
@@ -192,7 +213,7 @@ footer {
 
 .footer-links a,
 .footer-contact a {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.75);
     text-decoration: none;
     transition: all var(--transition-fast);
     display: inline-block;
@@ -212,11 +233,12 @@ footer {
 }
 
 .contact-item {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.75);
     text-decoration: none;
     transition: all var(--transition-fast);
     cursor: default;
     display: inline-block;
+    font-size: var(--font-size-small);
 }
 
 .contact-item:hover {
@@ -225,7 +247,7 @@ footer {
 }
 
 .footer-contact li {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.65);
 }
 
 .footer-social {
@@ -236,8 +258,8 @@ footer {
 .social-link {
     width: 42px;
     height: 42px;
-    background: rgba(255, 193, 7, 0.15);
-    border: 1px solid rgba(255, 193, 7, 0.3);
+    background: rgba(232, 201, 75, 0.12);
+    border: 1px solid rgba(232, 201, 75, 0.25);
     border-radius: var(--radius-circle);
     display: flex;
     align-items: center;
@@ -251,7 +273,7 @@ footer {
     cursor: pointer;
 }
 
-/* Desktop: no cursor pointer, clicks don't do anything */
+/* Desktop: no cursor pointer */
 @media (hover: hover) and (pointer: fine) {
     .social-link {
         cursor: default;
@@ -264,7 +286,7 @@ footer {
     bottom: 120%;
     left: 50%;
     transform: translateX(-50%) translateY(10px);
-    background-color: var(--color-black);
+    background-color: var(--color-primary);
     color: var(--color-secondary);
     padding: 6px 10px;
     border-radius: 4px;
@@ -287,7 +309,7 @@ footer {
     transform: translateX(-50%) translateY(10px);
     border-width: 5px;
     border-style: solid;
-    border-color: var(--color-black) transparent transparent transparent;
+    border-color: var(--color-primary) transparent transparent transparent;
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition-fast);
@@ -306,9 +328,9 @@ footer {
 
     .social-link:hover {
         background: var(--color-secondary);
-        color: var(--color-black);
+        color: var(--color-primary);
         transform: translateY(-3px);
-        box-shadow: 0 8px 16px rgba(255, 193, 7, 0.3);
+        box-shadow: var(--shadow-gold);
     }
 }
 
@@ -322,19 +344,21 @@ footer {
 
 .social-link.active-tooltip {
     background: var(--color-secondary);
-    color: var(--color-black);
+    color: var(--color-primary);
     transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(255, 193, 7, 0.3);
+    box-shadow: var(--shadow-gold);
 }
 
 .footer-bottom {
     text-align: center;
     padding-top: var(--spacing-xl);
+    position: relative;
+    z-index: 1;
 }
 
 .footer-bottom p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.6);
     font-size: var(--font-size-small);
     line-height: 1.6;
 }

@@ -1,16 +1,15 @@
 /**
  * Responsive Styles
- * Burger & Broaster Express
+ * Burger & Broaster Express — FIFA World Cup 2026 Edition
  */
 
 /* ========== Mobile Devices (max-width: 768px) ========== */
 @media (max-width: 768px) {
 
-    /* Header */
+    /* Header — azul marino alineado con desktop */
     header {
         padding: 0.8rem 0;
-        background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
-        /* Two-tone gradient */
+        background: linear-gradient(135deg, #0A2240 0%, #1A4A7A 100%);
     }
 
     .header-content {
@@ -50,17 +49,16 @@
         justify-content: space-around;
         align-items: center;
         padding: 0.4rem 1rem;
-        background: rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.2);
         border-radius: 50px;
         width: 100%;
         max-width: 90%;
         margin: 0 auto;
         position: relative;
         gap: 0.3rem;
-        /* Context for indicator */
     }
 
-    /* Sliding Indicator */
+    /* Sliding Indicator — dorado trofeo */
     .nav-indicator {
         position: absolute;
         top: 50%;
@@ -71,10 +69,8 @@
         background: var(--color-secondary);
         border-radius: 50%;
         z-index: 1;
-        /* Behind icons */
         transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         opacity: 0;
-        /* Hidden initially */
     }
 
     .nav-indicator.visible {
@@ -84,7 +80,6 @@
     nav li {
         flex: 0 0 auto;
         z-index: 2;
-        /* Above indicator */
     }
 
     nav a {
@@ -95,7 +90,7 @@
         height: 48px;
         background: transparent;
         border-radius: 50%;
-        transition: transform 0.3s ease;
+        transition: transform 0.25s ease;
         padding: 0 !important;
         gap: 0 !important;
     }
@@ -104,7 +99,7 @@
         display: none;
     }
 
-    /* Hover/Active states handled mostly by indicator now */
+    /* Hover/Active states handled by indicator */
     nav a:hover,
     nav a:active {
         background: transparent;
@@ -114,10 +109,9 @@
     /* Estado activo */
     nav a.active {
         background: transparent;
-        /* Indicator provides background */
         box-shadow: none;
         transform: scale(1.1);
-        color: var(--color-black);
+        color: var(--color-primary);
     }
 
     /* Mostrar solo íconos, ocultar texto */
@@ -141,7 +135,7 @@
     }
 
     .nav-pedido .cart-count {
-        background: var(--color-primary);
+        background: var(--color-accent);
         color: var(--color-white);
         border-radius: 50%;
         width: 18px;
@@ -178,8 +172,9 @@
     }
 
     .hero-card {
-        background: rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(14px);
+        background: rgba(6, 22, 41, 0.5);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         padding: 2rem 1.5rem;
         border-radius: 20px;
     }
@@ -208,7 +203,6 @@
         text-align: center;
         border-radius: 50px;
         z-index: 11000;
-        /* Higher than modal */
         font-size: 14px;
         padding: 10px 20px !important;
     }
@@ -238,6 +232,12 @@
         padding: var(--spacing-xl) var(--spacing-md);
         background-attachment: scroll; /* Performance on mobile */
         animation: subtleDrift 60s linear infinite;
+        animation-play-state: paused; /* Paused by default, activated via JS when visible */
+    }
+
+    /* Activar drift solo cuando la sección está visible */
+    #pedido.section.active {
+        animation-play-state: running;
     }
 
     @keyframes subtleDrift {
@@ -262,6 +262,8 @@
 
     .about-card-icon {
         font-size: 1.8rem;
+        width: 48px;
+        height: 48px;
     }
 
     .about-card h3 {
@@ -285,7 +287,7 @@
 
     .footer-section {
         padding-bottom: var(--spacing-lg);
-        border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+        border-bottom: 1px solid rgba(232, 201, 75, 0.15);
     }
 
     .footer-section:last-child {
@@ -364,26 +366,26 @@
         border-radius: 3px;
     }
 
-    /* Progress bar indicator - controlled by JS */
+    /* Progress bar indicator — colores Mundial 2026 */
     .scroll-progress-bar {
         position: absolute;
         bottom: 0;
         left: 1rem;
         height: 3px;
-        background: linear-gradient(90deg, #c62828, #ff5252);
+        background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
         border-radius: 3px;
         transition: width 0.1s ease, transform 0.1s ease, background 0.2s ease;
         z-index: 5;
     }
 
-    /* At start - green indicator */
+    /* At start — dorado trofeo */
     .scroll-progress-bar.at-start {
-        background: #4CAF50;
+        background: var(--gradient-gold);
     }
 
-    /* At end - orange indicator */
+    /* At end — rojo FIFA */
     .scroll-progress-bar.at-end {
-        background: #FF9800;
+        background: linear-gradient(90deg, var(--color-accent), #E8504A);
     }
 
     .carousel-btn {
@@ -397,9 +399,7 @@
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
-        /* Firefox */
         -ms-overflow-style: none;
-        /* IE/Edge */
         padding: 0 0.5rem;
         margin: 0;
         position: relative;
@@ -407,7 +407,6 @@
 
     .carousel-wrapper::-webkit-scrollbar {
         display: none;
-        /* Chrome/Safari */
     }
 
     /* Menu Grid - Horizontal scroll layout */
@@ -442,7 +441,7 @@
         object-fit: cover;
     }
 
-    .menu-item-image>div {
+    .menu-item-image > div {
         height: 110px !important;
         min-height: 110px !important;
     }
@@ -461,6 +460,7 @@
         line-height: 1.2;
         height: 2.4em;
         overflow: hidden;
+        color: var(--color-primary);
     }
 
     .menu-item-content p {
@@ -485,6 +485,7 @@
     .price {
         font-size: 0.95rem;
         font-weight: bold;
+        color: var(--color-primary);
     }
 
     /* Compact add to cart button */
@@ -507,7 +508,7 @@
     .menu-category.broaster .menu-item-image,
     .menu-category.burgers .menu-item-image,
     .menu-category.salchipapas .menu-item-image,
-    .menu-category.driks .menu-item-image,
+    .menu-category.drinks .menu-item-image,
     .menu-category.combos .menu-item-image {
         width: 100%;
         height: 230px;
@@ -546,7 +547,7 @@
     position: absolute;
     top: -5px;
     right: -5px;
-    background-color: var(--color-primary);
+    background-color: var(--color-accent);
     color: white;
     font-size: 0.7rem;
     font-weight: bold;
@@ -558,7 +559,7 @@
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.25s ease, transform 0.25s ease;
     transform: scale(0.5);
 }
 
@@ -567,7 +568,7 @@
     transform: scale(1);
 }
 
-/* Cart Item Layout (Mobile) */
+/* Cart Item Layout */
 .cart-item {
     display: flex;
     align-items: center;
@@ -575,8 +576,8 @@
     border-radius: 12px;
     padding: 0.8rem;
     margin-bottom: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(10, 34, 64, 0.06);
+    border: 1px solid rgba(10, 34, 64, 0.05);
 }
 
 .cart-item-image {
@@ -589,7 +590,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f5f5f5;
+    background: var(--color-gray-light);
 }
 
 .cart-item-image img {
@@ -606,7 +607,7 @@
 .cart-item-info h4 {
     font-size: 0.95rem;
     margin-bottom: 0.3rem;
-    color: var(--color-black);
+    color: var(--color-primary);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -618,7 +619,7 @@
 
 .cart-item-info p {
     font-size: 0.9rem;
-    color: var(--color-primary);
+    color: var(--color-accent);
     font-weight: bold;
     margin: 0;
 }
@@ -628,7 +629,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: #f8f8f8;
+    background: var(--color-gray-light);
     padding: 0.3rem;
     border-radius: 20px;
 }
@@ -644,7 +645,7 @@
     font-size: 1rem;
     line-height: 1;
     background: white;
-    color: var(--color-black);
+    color: var(--color-primary);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     border: none;
 }
@@ -654,6 +655,7 @@
     font-weight: bold;
     min-width: 1.2rem;
     text-align: center;
+    color: var(--color-primary);
 }
 
 /* Checkout Actions */
@@ -669,15 +671,17 @@
 
 .btn-secondary {
     background: transparent;
-    border: 1px solid var(--color-text-light);
-    color: var(--color-text);
+    border: 2px solid rgba(10, 34, 64, 0.2);
+    color: var(--color-primary);
     padding: 0.8rem 1.5rem;
     border-radius: 50px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
+    font-family: var(--font-family-base);
 }
 
 .btn-secondary:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(10, 34, 64, 0.05);
+    border-color: var(--color-primary);
 }

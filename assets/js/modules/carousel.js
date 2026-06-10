@@ -192,7 +192,10 @@ function updateCarouselPosition(category, animate = true) {
 
     if (!animate) {
         grid.style.transition = 'none';
+        grid.style.willChange = 'auto';
     } else {
+        // Activar will-change justo antes de animar
+        grid.style.willChange = 'transform';
         grid.style.transition = `transform ${CONFIG.carousel.transitionDuration}ms ease-in-out`;
     }
 
@@ -225,6 +228,10 @@ export function moveCarousel(category, direction) {
             carouselPositions[category] = totalItems * 2 - 1;
             updateCarouselPosition(category, false);
         }
+
+        // Limpiar will-change al terminar la transición (liberar capa GPU)
+        const grid = document.getElementById(`${category}-grid`);
+        if (grid) grid.style.willChange = 'auto';
 
         isTransitioning[category] = false;
     }, CONFIG.carousel.transitionDuration);

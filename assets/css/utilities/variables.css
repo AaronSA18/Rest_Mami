@@ -1,33 +1,43 @@
 /**
  * CSS Variables - Design System
- * Burger & Broaster Express
+ * Burger & Broaster Express — FIFA World Cup 2026 Edition
  */
 
 :root {
     /* ========== Colors ========== */
-    /* Primary Colors */
-    --color-primary: #c62828;
-    --color-primary-dark: #b71c1c;
-    --color-primary-light: #e53935;
+    /* Primary Colors — Azul Marino FIFA World Cup 2026 */
+    --color-primary: #0A2240;
+    --color-primary-dark: #061629;
+    --color-primary-light: #1A4A7A;
     
-    /* Secondary Colors */
-    --color-secondary: #FFC107;
-    --color-secondary-dark: #FF9800;
+    /* Secondary Colors — Dorado Trofeo */
+    --color-secondary: #E8C94B;
+    --color-secondary-dark: #C9A830;
+    
+    /* Accent — Rojo FIFA */
+    --color-accent: #C8102E;
+    --color-accent-dark: #A50D26;
     
     /* Neutral Colors */
     --color-white: #ffffff;
-    --color-black: #333333;
-    --color-gray-light: #f5f5f5;
-    --color-gray: #666666;
-    --color-gray-dark: #ddd;
+    --color-black: #1a1a2e;
+    --color-gray-light: #f4f6f9;
+    --color-gray: #64748b;
+    --color-gray-dark: #e2e8f0;
     
     /* Status Colors */
-    --color-success: #4CAF50;
-    --color-success-dark: #45a049;
-    --color-danger: #f44336;
+    --color-success: #10B981;
+    --color-success-dark: #059669;
+    --color-danger: #EF4444;
+    
+    /* ========== Gradients ========== */
+    --gradient-primary: linear-gradient(135deg, #0A2240 0%, #1A4A7A 100%);
+    --gradient-gold: linear-gradient(135deg, #E8C94B 0%, #C9A830 100%);
+    --gradient-world-cup: linear-gradient(135deg, #0A2240 0%, #1A4A7A 50%, #0A2240 100%);
+    --gradient-trophy: linear-gradient(90deg, #0A2240 0%, #E8C94B 50%, #0A2240 100%);
     
     /* ========== Typography ========== */
-    --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-family-base: 'Outfit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     --font-size-base: 1rem;
     --font-size-small: 0.9rem;
     --font-size-large: 1.1rem;
@@ -41,6 +51,7 @@
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
     
     --line-height-base: 1.6;
     --line-height-heading: 1.2;
@@ -64,15 +75,16 @@
     --radius-circle: 50%;
     
     /* ========== Shadows ========== */
-    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
-    --shadow-button: 0 5px 15px rgba(255, 193, 7, 0.4);
+    --shadow-sm: 0 2px 10px rgba(10, 34, 64, 0.15);
+    --shadow-md: 0 4px 15px rgba(10, 34, 64, 0.1);
+    --shadow-lg: 0 8px 25px rgba(10, 34, 64, 0.15);
+    --shadow-gold: 0 5px 15px rgba(232, 201, 75, 0.35);
+    --shadow-button: 0 5px 15px rgba(232, 201, 75, 0.4);
     
-    /* ========== Transitions ========== */
-    --transition-fast: 0.3s;
-    --transition-normal: 0.5s;
-    --transition-slow: 0.8s;
+    /* ========== Transitions (aligeradas para performance) ========== */
+    --transition-fast: 0.2s;
+    --transition-normal: 0.35s;
+    --transition-slow: 0.6s;
     
     /* ========== Layout ========== */
     --max-width-container: 1200px;
