@@ -5,7 +5,7 @@
  * Handles shopping cart functionality and order processing
  */
 
-import { findItemById } from "./menu-data.js";
+import { findItemById, getImagePath } from "./menu-data.js";
 import { CONFIG } from "../config.js";
 import { showSection } from "./navigation.js";
 
@@ -154,20 +154,30 @@ export function updateCart() {
  * Helper to render a single cart item HTML
  */
 function renderCartItem(item) {
-  const imagePath = `assets/images/${item.category}/${item.image}`;
+  const imagePath = item.image ? getImagePath(item.dbCategory || item.category, item.image) : null;
   return `
         <div class="cart-item">
             <div class="cart-item-image">
-                <img src="${imagePath}" alt="${item.name}" onerror="this.parentElement.innerHTML='<span style=\'font-size:2rem\'>${item.emoji}</span>'" loading="lazy">
+                ${imagePath
+      ? `<div style="position: relative; width: 100%; height: 100%;">
+                   <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2rem;z-index: 1;">
+                       ${item.fallbackEmoji || item.emoji || '🍽️'}
+                   </div>
+                   <img src="${imagePath}" alt="${item.name}" loading="lazy" style="position: relative; z-index: 2; opacity: 0; transition: opacity 0.3s ease; width: 100%; height: 100%; object-fit: cover;" onload="this.style.opacity=1;" onerror="this.style.display='none'">
+               </div>`
+      : `<div style="display:flex; align-items:center; justify-content:center; width: 100%; height: 100%;">
+                   ${item.fallbackEmoji || item.emoji || '🍽️'}
+               </div>`
+    }
             </div>
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
                 <p>S/ ${item.price.toFixed(2)}</p>
             </div>
             <div class="cart-item-controls">
-                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, -1)">−</button>
+                <button class="quantity-btn" onclick="window.updateQuantity('${item.id}', -1)">−</button>
                 <span class="quantity-display">${item.quantity}</span>
-                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, 1)">+</button>
+                <button class="quantity-btn" onclick="window.updateQuantity('${item.id}', 1)">+</button>
             </div>
         </div>
     `;
@@ -338,7 +348,7 @@ export function closeConfirmationModal() {
   if (modal) {
     const status = modal.getAttribute("data-status");
     const isError = status === "error";
-    
+
     modal.style.display = "none";
 
     // Only redirect to inicio if order was successful
@@ -495,7 +505,7 @@ export function initCart() {
   }
   if (districtInput)
     districtInput.addEventListener("change", checkFormValidity);
-  
+
   if (addressInput) addressInput.addEventListener("input", checkFormValidity);
 
   updateCart();

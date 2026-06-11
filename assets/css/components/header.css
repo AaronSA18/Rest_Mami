@@ -260,6 +260,9 @@ header::after {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    background-image: url('https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/hero-bg.webp');
+    background-size: cover;
+    background-position: center;
 }
 
 .hero-bg {

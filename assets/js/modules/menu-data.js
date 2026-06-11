@@ -2,190 +2,111 @@
  * Menu Data Module
  * Burger & Broaster Express
  * 
- *  all menu items organized by category
+ * Fetches menu items from Supabase and organizes them by category
  */
 
-export const menuData = {
-    broaster: [
-        {
-            id: 1,
-            name: 'Alita de Pollo',
-            price: 10.00,
-            emoji: '🍗',
-            description: 'Crujientes alitas de pollo broaster doradas y jugosas',
-            image: 'Alita.webp',
-            fallbackEmoji: '🍗'
-        },
-        {
-            id: 2,
-            name: 'Pierna de Pollo',
-            price: 12.00,
-            emoji: '🍗',
-            description: 'Jugosa pierna de pollo broaster con piel crujiente',
-            image: 'Pierna.webp',
-            fallbackEmoji: '🍗'
-        },
-        {
-            id: 3,
-            name: 'Entrepierna de Pollo',
-            price: 12.00,
-            emoji: '🍗',
-            description: 'Tierna entrepierna de pollo con sabor inigualable',
-            image: 'Entrepierna.webp',
-            fallbackEmoji: '🍗'
-        },
-        {
-            id: 4,
-            name: 'Pecho de Pollo',
-            price: 13.00,
-            emoji: '🍗',
-            description: 'Pechuga de pollo jugosa y bien sazonada',
-            image: 'Pechodepollo.webp',
-            fallbackEmoji: '🍗'
-        }
-    ],
+import { getSupabase, SUPABASE_URL } from './supabase.js';
 
-    burgers: [
-        {
-            id: 5,
-            name: 'Hamburguesa de Pollo',
-            price: 6.00,
-            emoji: '🍔',
-            description: 'Jugosa hamburguesa de pollo con lechuga y tomate',
-            image: 'H_pollo.webp',
-            fallbackEmoji: '🍔'
-        },
-        {
-            id: 6,
-            name: 'Hamburguesa de Carne',
-            price: 8.00,
-            emoji: '🍔',
-            description: 'Deliciosa hamburguesa de carne con queso y vegetales',
-            image: 'H_carne.webp',
-            fallbackEmoji: '🍔'
-        },
-        {
-            id: 7,
-            name: 'Hamburguesa de Chorizo',
-            price: 8.00,
-            emoji: '🍔',
-            description: 'Sabrosa hamburguesa con chorizo parrillero',
-            image: 'H_chorizo.webp',
-            fallbackEmoji: '🍔'
-        },
-        {
-            id: 8,
-            name: 'Hamburguesa Mixta',
-            price: 10.00,
-            emoji: '🍔',
-            description: 'Combinación perfecta de pollo y carne',
-            image: 'H_mixta.webp',
-            fallbackEmoji: '🍔'
-        },
-        {
-            id: 9,
-            name: 'Hamburguesa Royal',
-            price: 12.00,
-            emoji: '👑',
-            description: 'La hamburguesa premium con todos los ingredientes',
-            image: 'H_royal.webp',
-            fallbackEmoji: '👑'
-        }
-    ],
-
-    salchipapas: [
-        {
-            id: 10,
-            name: 'Salchipapa Clásica',
-            price: 8.00,
-            emoji: '🌭',
-            description: 'Papas fritas crujientes con salchicha y salsas',
-            image: 'S_.webp',
-            fallbackEmoji: '🌭'
-        },
-        {
-            id: 11,
-            name: 'Salchipapa Especial',
-            price: 12.00,
-            emoji: '🌭',
-            description: 'Con huevo, queso y salchichas premium',
-            image: 'S_especial.webp',
-            fallbackEmoji: '🌭'
-        },
-        {
-            id: 12,
-            name: 'Salchipollo',
-            price: 15.00,
-            emoji: '🌭',
-            description: 'Papas fritas con pollo broaster y salchicha',
-            image: 'S_pollo.webp',
-            fallbackEmoji: '🌭'
-        }
-    ],
-
-    drinks: [
-        {
-            id: 13,
-            name: 'Inka Cola 500ml',
-            price: 3.50,
-            emoji: '🥤',
-            description: 'Refrescante bebida peruana',
-            image: 'inka-cola500ml.webp'
-        },
-        {
-            id: 14,
-            name: 'Coca Cola 500ml',
-            price: 3.50,
-            emoji: '🥤',
-            description: 'Clásica Coca Cola',
-            image: 'COCA-COLA500ml.webp'
-        },
-        {
-            id: 15,
-            name: 'Guaraná 450ml',
-            price: 2.00,
-            emoji: '🥤',
-            description: 'Energizante bebida de guaraná',
-            image: 'guarana450ml.webp'
-        }
-    ],
-
-    combos: [
-        {
-            id: 16,
-            name: 'Combo Pollo',
-            price: 12.00,
-            emoji: '🎁',
-            description: 'Hamburguesa de pollo + Broaster + Bebida',
-            fallbackEmoji: '🎁'
-        },
-        {
-            id: 17,
-            name: 'Combo Carne',
-            price: 12.00,
-            emoji: '🎁',
-            description: 'Hamburguesa de carne + Broaster + Bebida',
-            fallbackEmoji: '🎁'
-        },
-        {
-            id: 18,
-            name: 'Combo Familiar',
-            price: 35.00,
-            emoji: '🎁',
-            description: '2 Hamburguesas + 4 Broasters + 4 Bebidas',
-            fallbackEmoji: '🎁'
-        }
-    ]
+export let menuData = {
+    broaster: [],
+    burgers: [],
+    salchipapas: [],
+    drinks: [],
+    combos: []
 };
+
+// Map database category names to our UI keys if they differ
+const categoryNameMap = {
+    'broaster': 'broaster',
+    'hamburguesas': 'burgers',
+    'burgers': 'burgers',
+    'salchipapas': 'salchipapas',
+    'bebidas': 'drinks',
+    'drinks': 'drinks'
+};
+
+export async function loadMenuData() {
+    const supabase = getSupabase();
+    if (!supabase) throw new Error('Supabase client not initialized');
+
+    try {
+        // 1. Fetch categories
+        const { data: categories, error: catError } = await supabase
+            .from('categories')
+            .select('*');
+            
+        if (catError) throw catError;
+
+        // Map category ID to our internal keys
+        const categoryMap = {};
+        categories.forEach(cat => {
+            const uiKey = categoryNameMap[cat.name.toLowerCase()] || cat.name.toLowerCase();
+            categoryMap[cat.id] = uiKey;
+            // Initialize array if it doesn't exist
+            if (!menuData[uiKey]) {
+                menuData[uiKey] = [];
+            }
+        });
+
+        // 2. Fetch active products
+        const { data: products, error: prodError } = await supabase
+            .from('products')
+            .select('*')
+            .eq('is_active', true);
+
+        if (prodError) throw prodError;
+
+        products.forEach(prod => {
+            const uiKey = categoryMap[prod.category_id];
+            if (uiKey && menuData[uiKey]) {
+                menuData[uiKey].push({
+                    id: prod.id,
+                    name: prod.name,
+                    price: Number(prod.price),
+                    description: prod.description,
+                    emoji: prod.emoji,
+                    fallbackEmoji: prod.emoji,
+                    image: prod.image_path,
+                    // Store the raw category for reference
+                    dbCategory: uiKey
+                });
+            }
+        });
+
+        // 3. Fetch active combos
+        const { data: combos, error: comboError } = await supabase
+            .from('combos')
+            .select('*')
+            .eq('is_active', true);
+
+        if (comboError) throw comboError;
+
+        menuData.combos = combos.map(combo => ({
+            id: 'combo_' + combo.id, // Prefix to avoid ID collisions with products
+            name: combo.name,
+            price: Number(combo.price),
+            description: combo.description,
+            emoji: combo.emoji || '🎁',
+            fallbackEmoji: combo.emoji || '🎁',
+            image: combo.image_path || 'combos/Combos_generico.webp'
+        }));
+
+        console.log('✅ Menu data loaded from Supabase:', menuData);
+        return true;
+    } catch (error) {
+        console.error('❌ Error loading menu data:', error);
+        return false;
+    }
+}
 
 /**
  * Find an item by ID across all categories
- * @param {number} id - Item ID to find
+ * @param {number|string} id - Item ID to find
  * @returns {Object|null} - Found item or null
  */
 export function findItemById(id) {
     for (let category in menuData) {
-        const item = menuData[category].find(i => i.id === id);
+        const item = menuData[category].find(i => String(i.id) === String(id));
         if (item) {
             return { ...item, category };
         }
@@ -194,11 +115,13 @@ export function findItemById(id) {
 }
 
 /**
- * Get image path for a category
- * @param {string} category - Category name
- * @param {string} imageName - Image file name
- * @returns {string} - Full image path
+ * Get full public image URL from Supabase Storage
+ * @param {string} category - Category name (unused now as path includes it)
+ * @param {string} imagePath - Image path in bucket (e.g., 'broaster/Alita.webp')
+ * @returns {string} - Full image URL
  */
-export function getImagePath(category, imageName) {
-    return `assets/images/${category}/${imageName}`;
+export function getImagePath(category, imagePath) {
+    if (!imagePath) return null;
+    // Combos explicitly use this per user instruction, or any other path provided by DB
+    return `${SUPABASE_URL}/storage/v1/object/public/menu-images/${imagePath}`;
 }

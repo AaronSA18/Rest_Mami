@@ -26,9 +26,7 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" /></noscript>
 
   <!-- Preload Critical Images for better LCP & UX -->
-  <link rel="preload" href="assets/images/hero-bg.webp" as="image" fetchpriority="high" />
-  <link rel="preload" href="assets/images/broaster/Alita.webp" as="image" fetchpriority="high" />
-  <link rel="preload" href="assets/images/broaster/Pierna.webp" as="image" fetchpriority="high" />
+  <link rel="preload" href="https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/hero-bg.webp" as="image" fetchpriority="high" />
 
   <!-- Stylesheet (async load for performance) -->
   <link rel="preload" href="assets/css/main.css" as="style" onload="
@@ -41,6 +39,9 @@
 
   <!-- EmailJS Library (async for performance) -->
   <script async src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -48,7 +49,7 @@
   <header>
     <div class="header-content">
       <div class="logo">
-        <div class="logo-icon">⚽</div>
+        <img src="https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/Log.webp" alt="Rest Mami Logo" class="logo-img" width="40" height="40" style="object-fit: contain; border-radius: 50%;" />
         <span>Burger & Broaster Express</span>
       </div>
       <nav aria-label="Navegación principal">
@@ -81,8 +82,6 @@
   <!-- Inicio Section -->
   <section id="inicio" class="section">
     <div class="hero">
-      <img src="assets/images/hero-bg.webp" alt="Fondo Hero" class="hero-bg" fetchpriority="high" width="1200"
-        height="600" />
       <div class="hero-content">
         <div class="hero-card">
           <span class="hero-subtitle">⚽ MUNDIAL 2026 · SABOR QUE TE CONECTA</span>
@@ -104,8 +103,9 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container about-section-wrapper">
       <h2>Sobre Nosotros</h2>
+      <img src="https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/about-food.webp" alt="Sobre Nosotros" class="about-main-img" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 2rem; box-shadow: var(--shadow-md);" />
       <div class="about-content">
         <div class="about-card">
           <div class="about-card-icon">📖</div>

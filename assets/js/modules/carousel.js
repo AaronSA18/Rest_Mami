@@ -88,16 +88,15 @@ function renderMenuItem(item, index, category) {
         <div class="menu-item" data-index="${index}">
             <div class="menu-item-image">
                 ${imagePath
-            ? `<img src="${imagePath}" alt="${item.name}" ${loadingAttr} ${priorityAttr}
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                       <div style="display:none; align-items:center; 
-                             justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
-                             ${item.fallbackEmoji || item.emoji}
-                       </div>`
-            : `<div style="display:flex;align-items:center; 
-                             justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
-                             ${item.fallbackEmoji || item.emoji}
-                       </div>`
+            ? `<div style="position: relative; width: 100%; height: 100%;">
+                   <div style="position: absolute; inset: 0; margin-left: 41%; display: flex; align-items: center; ">
+                       ${item.fallbackEmoji || item.emoji || '🍽️'}
+                   </div>
+                   <img src="${imagePath}" alt="${item.name}" ${loadingAttr} ${priorityAttr} style="position: relative; z-index: 2; opacity: 0; transition: opacity 0.3s ease; width: 100%; height: 100%;" onload="this.style.opacity=1;" onerror="this.style.display='none'">
+               </div>`
+            : `<div style="display:flex;align-items:center; justify-content:center; font-size:4rem;">
+                   ${item.fallbackEmoji || item.emoji || '🍽️'}
+               </div>`
         }
             </div>
             <div class="menu-item-content">
@@ -105,7 +104,7 @@ function renderMenuItem(item, index, category) {
                 <p>${item.description}</p>
                 <div class="price-cart">
                     <span class="price">S/ ${item.price.toFixed(2)}</span>
-                    <button class="add-to-cart" onclick="window.addToCart(${item.id})">Agregar</button>
+                    <button class="add-to-cart" onclick="window.addToCart('${item.id}')">Agregar</button>
                 </div>
             </div>
         </div>

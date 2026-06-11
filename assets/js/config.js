@@ -27,13 +27,5 @@ export const CONFIG = {
   },
 
 
-  // Image Paths
-  images: {
-    basePath: "assets/images/",
-    broaster: "assets/images/broaster/",
-    burgers: "assets/images/burgers/",
-    salchipapas: "assets/images/salchipapas/",
-    drinks: "assets/images/drinks/",
-    combos: "assets/images/combos/",
-  },
+
 };

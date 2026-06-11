@@ -116,7 +116,6 @@ footer {
     background: linear-gradient(160deg, #0A1628 0%, #061020 60%, #0A1A35 100%);
     color: var(--color-white);
     padding: var(--spacing-3xl) var(--spacing-xl);
-    margin-top: var(--spacing-4xl);
     border-top: 3px solid var(--color-secondary);
     position: relative;
     overflow: hidden;
@@ -148,9 +147,17 @@ footer::before {
     animation: fadeInUp 0.5s ease-out;
 }
 
-.footer-section:nth-child(2) { animation-delay: 0.08s; }
-.footer-section:nth-child(3) { animation-delay: 0.16s; }
-.footer-section:nth-child(4) { animation-delay: 0.24s; }
+.footer-section:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+.footer-section:nth-child(3) {
+    animation-delay: 0.16s;
+}
+
+.footer-section:nth-child(4) {
+    animation-delay: 0.24s;
+}
 
 .footer-brand {
     display: flex;
@@ -297,7 +304,7 @@ footer::before {
     visibility: hidden;
     transition: all var(--transition-fast);
     pointer-events: none;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     z-index: 10;
 }
 
@@ -319,6 +326,7 @@ footer::before {
 
 /* Desktop only: hover triggers animation */
 @media (hover: hover) and (pointer: fine) {
+
     .social-link:hover::after,
     .social-link:hover::before {
         opacity: 1;
