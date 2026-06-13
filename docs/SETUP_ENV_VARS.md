@@ -1,128 +1,139 @@
-# 🔐 Configuración Segura de Variables de Entorno
+# Configuración segura de variables de entorno
 
-## ¿Por qué usar variables de entorno?
+## Regla principal
 
-Las claves de EmailJS y Supabase **NO deben estar en el código**.
+Una aplicación frontend no puede ocultar credenciales reales del navegador. Las variables de entorno sirven para evitar que los valores queden escritos en Git o en el código fuente.
 
-❌ **Inseguro:**
-```javascript
-export const emailjs = {
-  serviceId: "service_2opd7vp",  // ¡VISIBLE EN GIT!
-  publicKey: "MuH16VnihKaVvx7a2"
-}
+Si una clave debe ser secreta de verdad, debe vivir en backend. En frontend usa solo claves públicas o anon keys.
+
+## Archivos
+
+| Archivo | Función |
+| --- | --- |
+| `.env.example` | Plantilla pública con nombres de variables, sin valores reales |
+| `.env` | Archivo local con valores reales, nunca se debe commitear |
+| `.gitignore` | Evita que `.env`, `.env.local` y `.env.*.local` se suban a Git |
+| `assets/js/config.js` | Lee variables de entorno para EmailJS |
+| `assets/js/modules/supabase.js` | Lee variables de entorno para Supabase |
+
+## Archivos generados que se eliminan
+
+Estos archivos se generan al instalar o compilar, pero no forman parte del código fuente:
+
+```text
+node_modules/
+dist/
 ```
 
-✅ **Seguro:**
-```javascript
-export const emailjs = {
-  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
-  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-}
-```
+Se eliminan porque:
 
----
+- `node_modules/` contiene dependencias instaladas y se regenera con `pnpm install`.
+- `dist/` contiene el build generado y se regenera con `pnpm build`.
 
-## 📋 Pasos para configurar
+No deben subirse al repositorio.
 
-### 1. Copiar `.env.example` a `.env.local`
+
+### 1. Copia la plantilla
 
 ```bash
-cp .env.example .env.local
+cp .env.example .env
 ```
 
-### 2. Editar `.env.local` con tus claves reales
+### 2. Completa `.env`
 
-```
-# EmailJS Configuration
-VITE_EMAILJS_SERVICE_ID=service_2opd7vp
-VITE_EMAILJS_TEMPLATE_ID=template_4bl7von
-VITE_EMAILJS_PUBLIC_KEY=MuH16VnihKaVvx7a2
-VITE_EMAILJS_BUSINESS_EMAIL=info@burgerbroaster.pe
+```env
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+VITE_SUPABASE_ANON_KEY=tu_anon_key
 
-# Supabase Configuration (cuando la integres)
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key_here
+VITE_EMAILJS_SERVICE_ID=tu_service_id
+VITE_EMAILJS_TEMPLATE_ID=tu_template_id
+VITE_EMAILJS_PUBLIC_KEY=tu_public_key
+VITE_EMAILJS_BUSINESS_EMAIL=tu_email
 ```
 
-### 3. Verificar que `.gitignore` incluya `.env.local`
+### 3. No uses service role key en frontend
+
+No agregues esto al frontend:
+
+```env
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+La `service role key` solo debe usarse en backend. En frontend usa `VITE_SUPABASE_ANON_KEY` y configura Row Level Security en Supabase.
+
+### 4. Instala dependencias con pnpm
 
 ```bash
-cat .gitignore | grep ".env"
-# Debería mostrar: .env, .env.local, .env.*.local
+pnpm install
 ```
 
-### 4. Verificar que NO esté en Git
+### 5. Ejecuta el proyecto
+
+```bash
+pnpm dev
+```
+
+### 6. Verifica que no se suban secretos
 
 ```bash
 git status
-# .env.local NO debe aparecer en la lista
 ```
 
-### 5. Instalar dependencias si es necesario
+`.env` no debe aparecer.
+
+Para ver archivos ignorados:
 
 ```bash
-npm install
+git status --ignored -s
 ```
 
-### 6. Iniciar el proyecto
+## Antes de publicar
+
+Ejecuta:
 
 ```bash
-npm run dev
+pnpm install
+pnpm build
 ```
 
----
+No publiques estas carpetas como parte del código fuente:
 
-## 📝 Archivos involucrados
-
-| Archivo | Función |
-|---------|---------|
-| `.env.example` | Plantilla con nombres de variables (sin valores) |
-| `.env.local` | Tus claves reales (NUNCA commitear) |
-| `.gitignore` | Excluye `.env.local` del repositorio |
-| `assets/js/config.js` | Lee variables de entorno |
-
----
-
-## ⚠️ Reglas IMPORTANTES
-
-✅ **Hacer:**
-- Copiar `.env.example` a `.env.local`
-- Editar `.env.local` localmente con valores reales
-- Compartir `.env.example` en Git (sin claves)
-- Rotar claves si alguien las ve
-
-❌ **NO hacer:**
-- Commitear `.env` o `.env.local` a Git
-- Compartir `.env.local` por email/chat
-- Hardcodear claves en archivos `.js` o `.html`
-- Usar la misma clave en desarrollo y producción
-
----
-
-## 🔍 Verificar que funciona
-
-En la consola del navegador (DevTools):
-
-```javascript
-// Esto debería mostrar tu serviceId (no una cadena vacía)
-console.log(CONFIG.emailjs.serviceId)
+```text
+node_modules/
+dist/
 ```
 
----
+`node_modules/` se regenera con `pnpm install`. `dist/` se regenera con `pnpm build`.
 
-## 🚀 Para producción (Vercel/Netlify)
+No publiques `.env` en repositorios públicos. En el hosting usa variables de entorno.
 
-1. Ve a tu plataforma de hosting
-2. Crea variables de entorno en la configuración:
-   - `VITE_EMAILJS_SERVICE_ID=...`
-   - `VITE_EMAILJS_TEMPLATE_ID=...`
-   - `VITE_EMAILJS_PUBLIC_KEY=...`
-3. Redeploy la aplicación
 
----
+En Vercel, Netlify, Render o el hosting que uses, configura estas variables de entorno:
 
-## 📚 Más información
+```env
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+VITE_EMAILJS_SERVICE_ID=
+VITE_EMAILJS_TEMPLATE_ID=
+VITE_EMAILJS_PUBLIC_KEY=
+VITE_EMAILJS_BUSINESS_EMAIL=
+```
 
-- [Vite Environment Variables](https://vitejs.dev/guide/env-and-mode.html)
-- [EmailJS Documentation](https://www.emailjs.com/docs/)
-- [Supabase Security](https://supabase.com/docs/guides/auth)
+Luego vuelve a desplegar.
+
+## Si una credencial ya estuvo en Git
+
+1. Rota la credencial en el proveedor correspondiente.
+2. Elimina el archivo del tracking:
+
+```bash
+git rm --cached .env
+```
+
+3. Confirma el cambio:
+
+```bash
+git commit -m "Remove environment files from git"
+```
+
+Borrar el archivo no elimina el historial. Si ya se publicó, rota las claves expuestas.
