@@ -9,6 +9,32 @@ import { findItemById, getImagePath } from "./menu-data.js";
 import { CONFIG } from "../config.js";
 import { showSection } from "./navigation.js";
 
+/**
+ * Sanitize user input to prevent XSS attacks
+ * @param {string} input - Raw user input
+ * @returns {string} - Sanitized input
+ */
+function sanitizeInput(input) {
+  if (typeof input !== "string") return "";
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;")
+    .replace(/\//g, "&#x2F;")
+    .trim();
+}
+
+/**
+ * Validate phone number (Peruvian format)
+ * @param {string} phone - Phone number
+ * @returns {boolean} - Is valid
+ */
+function isValidPhone(phone) {
+  return /^[0-9]{9}$/.test(phone);
+}
+
 // Cart state
 let cart = [];
 
@@ -375,13 +401,27 @@ export async function finalizeOrder() {
   // Show loading state instead of hiding modal
   setConfirmationModalState("loading");
 
-  const name = document.getElementById("customerName").value;
-  const phone = document.getElementById("customerPhone").value;
-  const district = document.getElementById("customerDistrict").value;
-  const address = document.getElementById("customerAddress").value.trim();
-  const reference = document.getElementById("customerReference").value;
+  // Sanitize all user inputs to prevent XSS
+  const name = sanitizeInput(document.getElementById("customerName").value);
+  const phone = document.getElementById("customerPhone").value.replace(/[^0-9]/g, "");
+  const district = sanitizeInput(document.getElementById("customerDistrict").value);
+  const address = sanitizeInput(document.getElementById("customerAddress").value);
+  const reference = sanitizeInput(document.getElementById("customerReference").value);
   const paymentMethod = document.getElementById("paymentMethod").value;
-  const comments = document.getElementById("customerComments").value;
+  const comments = sanitizeInput(document.getElementById("customerComments").value);
+
+  // Validate required fields
+  if (!name || !phone || !district || !address) {
+    showNotification("⚠️ Por favor completa todos los campos obligatorios");
+    setConfirmationModalState("reminder");
+    return;
+  }
+
+  if (!isValidPhone(phone)) {
+    showNotification("⚠️ El teléfono debe tener 9 dígitos");
+    setConfirmationModalState("reminder");
+    return;
+  }
 
   // Build order details
   let total = 0;
@@ -500,7 +540,15 @@ export function initCart() {
   const districtInput = document.getElementById("customerDistrict");
   const addressInput = document.getElementById("customerAddress");
 
-  if (nameInput) nameInput.addEventListener("input", checkFormValidity);
+  if (nameInput) {
+    nameInput.addEventListener("input", (e) => {
+      // Limit name to 100 characters
+      if (e.target.value.length > 100) {
+        e.target.value = e.target.value.slice(0, 100);
+      }
+      checkFormValidity();
+    });
+  }
   if (phoneInput) {
     phoneInput.addEventListener("input", (e) => {
       // Allow only numbers
@@ -515,7 +563,15 @@ export function initCart() {
   if (districtInput)
     districtInput.addEventListener("change", checkFormValidity);
 
-  if (addressInput) addressInput.addEventListener("input", checkFormValidity);
+  if (addressInput) {
+    addressInput.addEventListener("input", (e) => {
+      // Limit address to 200 characters
+      if (e.target.value.length > 200) {
+        e.target.value = e.target.value.slice(0, 200);
+      }
+      checkFormValidity();
+    });
+  }
 
   updateCart();
   updateCartBadge();

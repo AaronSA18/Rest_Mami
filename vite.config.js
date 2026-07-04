@@ -5,11 +5,19 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     allowedHosts: [
-      '0e65-38-252-215-45.ngrok-free.app',
+      'f5cf-38-252-215-44.ngrok-free.app',
       'localhost',
       '127.0.0.1',
       '0.0.0.0'
-    ]
+    ],
+    // Security headers for development
+    headers: {
+      'X-Frame-Options': 'SAMEORIGIN',
+      'X-Content-Type-Options': 'nosniff',
+      'X-XSS-Protection': '1; mode=block',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+    }
   },
   build: {
     outDir: 'dist',
