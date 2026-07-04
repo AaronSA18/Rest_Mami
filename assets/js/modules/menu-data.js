@@ -1,11 +1,20 @@
 /**
- * Menu Data Module
+ * Menu Data Module - Optimized
  * Burger & Broaster Express
  * 
- * Fetches menu items from Supabase and organizes them by category
+ * Fetches menu items from Supabase and organizes them by category.
+ * Uses localStorage cache with per-type staleTime to reduce unnecessary
+ * backend requests.
+ * Performance: Production-safe logging, optimized cache operations
  */
 
 import { getSupabase, SUPABASE_URL } from './supabase.js';
+
+// Production-safe logging
+const isDev = import.meta.env.DEV;
+const log = isDev ? console.log.bind(console) : () => {};
+const warn = isDev ? console.warn.bind(console) : () => {};
+const error = isDev ? console.error.bind(console) : () => {};
 
 export let menuData = {
     broaster: [],
@@ -25,36 +34,103 @@ const categoryNameMap = {
     'drinks': 'drinks'
 };
 
-export async function loadMenuData() {
+// ─── Cache configuration ─────────────────────────────────────────────────────
+// staleTime: ms before the cached value is considered outdated
+// refetchOnFocus: whether to silently re-check when the user returns to the tab
+const CACHE_CONFIG = {
+    categories: { key: 'cache_bex_categories', staleTime: 24 * 60 * 60 * 1000, refetchOnFocus: false }, // 24 h
+    products:   { key: 'cache_bex_products',   staleTime: 30 * 60 * 1000,       refetchOnFocus: true  }, // 30 min
+    combos:     { key: 'cache_bex_combos',     staleTime: 30 * 60 * 1000,       refetchOnFocus: true  }, // 30 min
+};
+
+// ─── Cache helpers ────────────────────────────────────────────────────────────
+function readCache(key) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        return JSON.parse(raw); // { data, timestamp }
+    } catch {
+        return null;
+    }
+}
+
+function writeCache(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }));
+    } catch (e) {
+        warn('Cache write failed (storage full?):', e);
+    }
+}
+
+function isCacheStale(cached, staleTime) {
+    if (!cached || typeof cached.timestamp !== 'number') return true;
+    return Date.now() - cached.timestamp > staleTime;
+}
+
+// Exposed so main.js can ask "should products/combos be refetched right now?"
+export function shouldRefetchOnFocus() {
+    const prodCached  = readCache(CACHE_CONFIG.products.key);
+    const comboCached = readCache(CACHE_CONFIG.combos.key);
+    return (
+        isCacheStale(prodCached,  CACHE_CONFIG.products.staleTime) ||
+        isCacheStale(comboCached, CACHE_CONFIG.combos.staleTime)
+    );
+}
+
+// ─── Main loader ──────────────────────────────────────────────────────────────
+/**
+ * Load menu data, served from localStorage cache when fresh.
+ * @param {object} options
+ * @param {boolean} [options.forceRefresh=false] - Bypass cache and always hit Supabase
+ */
+export async function loadMenuData({ forceRefresh = false } = {}) {
     const supabase = getSupabase();
     if (!supabase) throw new Error('Supabase client not initialized');
 
     try {
-        // 1. Fetch categories
-        const { data: categories, error: catError } = await supabase
-            .from('categories')
-            .select('*');
-            
-        if (catError) throw catError;
+        // ── 1. Categories (staleTime 24 h, no refetchOnFocus) ────────────────
+        let categories;
+        const cachedCats = readCache(CACHE_CONFIG.categories.key);
 
-        // Map category ID to our internal keys
+        if (!forceRefresh && !isCacheStale(cachedCats, CACHE_CONFIG.categories.staleTime)) {
+            categories = cachedCats.data;
+            log('📦 Categories: served from cache');
+        } else {
+            const { data, error } = await supabase.from('categories').select('*');
+            if (error) throw error;
+            categories = data;
+            writeCache(CACHE_CONFIG.categories.key, categories);
+            log('🌐 Categories: fetched from Supabase');
+        }
+
+        // Build category id → UI key map
         const categoryMap = {};
         categories.forEach(cat => {
             const uiKey = categoryNameMap[cat.name.toLowerCase()] || cat.name.toLowerCase();
             categoryMap[cat.id] = uiKey;
-            // Initialize array if it doesn't exist
-            if (!menuData[uiKey]) {
-                menuData[uiKey] = [];
-            }
+            if (!menuData[uiKey]) menuData[uiKey] = [];
         });
 
-        // 2. Fetch active products
-        const { data: products, error: prodError } = await supabase
-            .from('products')
-            .select('*')
-            .eq('is_active', true);
+        // ── 2. Products (staleTime 30 min, refetchOnFocus: true) ─────────────
+        let products;
+        const cachedProds = readCache(CACHE_CONFIG.products.key);
 
-        if (prodError) throw prodError;
+        if (!forceRefresh && !isCacheStale(cachedProds, CACHE_CONFIG.products.staleTime)) {
+            products = cachedProds.data;
+            log('📦 Products: served from cache');
+        } else {
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .eq('is_active', true);
+            if (error) throw error;
+            products = data;
+            writeCache(CACHE_CONFIG.products.key, products);
+            log('🌐 Products: fetched from Supabase');
+        }
+
+        // Reset product arrays before filling
+        Object.keys(menuData).forEach(k => { if (k !== 'combos') menuData[k] = []; });
 
         products.forEach(prod => {
             const uiKey = categoryMap[prod.category_id];
@@ -67,22 +143,31 @@ export async function loadMenuData() {
                     emoji: prod.emoji,
                     fallbackEmoji: prod.emoji,
                     image: prod.image_path,
-                    // Store the raw category for reference
                     dbCategory: uiKey
                 });
             }
         });
 
-        // 3. Fetch active combos
-        const { data: combos, error: comboError } = await supabase
-            .from('combos')
-            .select('*')
-            .eq('is_active', true);
+        // ── 3. Combos (staleTime 30 min, refetchOnFocus: true) ───────────────
+        let combos;
+        const cachedCombos = readCache(CACHE_CONFIG.combos.key);
 
-        if (comboError) throw comboError;
+        if (!forceRefresh && !isCacheStale(cachedCombos, CACHE_CONFIG.combos.staleTime)) {
+            combos = cachedCombos.data;
+            log('📦 Combos: served from cache');
+        } else {
+            const { data, error } = await supabase
+                .from('combos')
+                .select('*')
+                .eq('is_active', true);
+            if (error) throw error;
+            combos = data;
+            writeCache(CACHE_CONFIG.combos.key, combos);
+            log('🌐 Combos: fetched from Supabase');
+        }
 
         menuData.combos = combos.map(combo => ({
-            id: 'combo_' + combo.id, // Prefix to avoid ID collisions with products
+            id: 'combo_' + combo.id,
             name: combo.name,
             price: Number(combo.price),
             description: combo.description,
@@ -91,10 +176,77 @@ export async function loadMenuData() {
             image: combo.image_path || 'combos/Combos_generico.webp'
         }));
 
-        console.log('✅ Menu data loaded from Supabase:', menuData);
+        log('✅ Menu data ready:', menuData);
         return true;
-    } catch (error) {
-        console.error('❌ Error loading menu data:', error);
+
+    } catch (err) {
+        error('❌ Error loading menu data:', err);
+        return false;
+    }
+}
+
+/**
+ * Synchronously populate menuData from localStorage cache.
+ * Returns true if ALL three tables had valid, non-stale cache.
+ * Call this BEFORE any await to eliminate the skeleton flash on repeat visits.
+ */
+export function loadMenuDataSync() {
+    try {
+        const cachedCats   = readCache(CACHE_CONFIG.categories.key);
+        const cachedProds  = readCache(CACHE_CONFIG.products.key);
+        const cachedCombos = readCache(CACHE_CONFIG.combos.key);
+
+        // Abort if any entry is missing or stale — async loader will handle it
+        if (
+            isCacheStale(cachedCats,   CACHE_CONFIG.categories.staleTime) ||
+            isCacheStale(cachedProds,  CACHE_CONFIG.products.staleTime)   ||
+            isCacheStale(cachedCombos, CACHE_CONFIG.combos.staleTime)
+        ) return false;
+
+        const categories = cachedCats.data;
+        const products   = cachedProds.data;
+        const combos     = cachedCombos.data;
+
+        // Build category id → UI key map
+        const categoryMap = {};
+        categories.forEach(cat => {
+            const uiKey = categoryNameMap[cat.name.toLowerCase()] || cat.name.toLowerCase();
+            categoryMap[cat.id] = uiKey;
+            if (!menuData[uiKey]) menuData[uiKey] = [];
+        });
+
+        // Reset and fill products
+        Object.keys(menuData).forEach(k => { if (k !== 'combos') menuData[k] = []; });
+        products.forEach(prod => {
+            const uiKey = categoryMap[prod.category_id];
+            if (uiKey && menuData[uiKey]) {
+                menuData[uiKey].push({
+                    id: prod.id,
+                    name: prod.name,
+                    price: Number(prod.price),
+                    description: prod.description,
+                    emoji: prod.emoji,
+                    fallbackEmoji: prod.emoji,
+                    image: prod.image_path,
+                    dbCategory: uiKey
+                });
+            }
+        });
+
+        // Fill combos
+        menuData.combos = combos.map(combo => ({
+            id: 'combo_' + combo.id,
+            name: combo.name,
+            price: Number(combo.price),
+            description: combo.description,
+            emoji: combo.emoji || '🎁',
+            fallbackEmoji: combo.emoji || '🎁',
+            image: combo.image_path || 'combos/Combos_generico.webp'
+        }));
+
+        log('⚡ Menu data loaded synchronously from cache (no flash)');
+        return true;
+    } catch {
         return false;
     }
 }
@@ -122,6 +274,5 @@ export function findItemById(id) {
  */
 export function getImagePath(category, imagePath) {
     if (!imagePath) return null;
-    // Combos explicitly use this per user instruction, or any other path provided by DB
     return `${SUPABASE_URL}/storage/v1/object/public/menu-images/${imagePath}`;
 }

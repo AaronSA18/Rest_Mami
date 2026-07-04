@@ -152,6 +152,7 @@ export function updateCart() {
 
 /**
  * Helper to render a single cart item HTML
+ * Optimized for performance with responsive images and proper dimensions
  */
 function renderCartItem(item) {
   const imagePath = item.image ? getImagePath(item.dbCategory || item.category, item.image) : null;
@@ -163,7 +164,15 @@ function renderCartItem(item) {
                    <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2rem;z-index: 1;">
                        ${item.fallbackEmoji || item.emoji || '🍽️'}
                    </div>
-                   <img src="${imagePath}" alt="${item.name}" loading="lazy" style="position: relative; z-index: 2; opacity: 0; transition: opacity 0.3s ease; width: 100%; height: 100%; object-fit: cover;" onload="this.style.opacity=1;" onerror="this.style.display='none'">
+                   <img src="${imagePath}?w=120&q=80&fm=webp" 
+                        alt="${item.name}" 
+                        width="60" 
+                        height="60" 
+                        loading="lazy" 
+                        decoding="async"
+                        style="position: relative; z-index: 2; opacity: 0; transition: opacity 0.3s ease; width: 100%; height: 100%; object-fit: cover;" 
+                        onload="this.style.opacity=1;" 
+                        onerror="this.style.display='none'">
                </div>`
       : `<div style="display:flex; align-items:center; justify-content:center; width: 100%; height: 100%;">
                    ${item.fallbackEmoji || item.emoji || '🍽️'}

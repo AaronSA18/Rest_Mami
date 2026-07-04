@@ -1,62 +1,71 @@
 /**
- * Navigation Module
+ * Navigation Module - Optimized
  * Burger & Broaster Express
  * 
  * Handles page navigation and smooth scrolling
+ * Performance: Reduced DOM queries, debounced resize, batched reads/writes
  */
 
-// Cache for nav measurements to reduce reflows
-let navMeasurements = null;
+// Cache DOM elements to reduce queries
+let cachedIndicator = null;
+let cachedNavUl = null;
+let cachedNavLinks = null;
 
-// Navigation Indicator Logic
+// Debounce utility for resize handler
+let resizeTimeout;
+function debounce(fn, delay) {
+    return function(...args) {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => fn.apply(this, args), delay);
+    };
+}
+
+// Navigation Indicator Logic - Batched reads/writes
 function updateIndicator(activeLink) {
-    const indicator = document.querySelector('.nav-indicator');
-    const navUl = document.querySelector('nav ul');
-    if (!indicator || !navUl || !activeLink) return;
+    if (!cachedIndicator) cachedIndicator = document.querySelector('.nav-indicator');
+    if (!cachedNavUl) cachedNavUl = document.querySelector('nav ul');
+    
+    if (!cachedIndicator || !cachedNavUl || !activeLink) return;
 
-    // Use requestAnimationFrame to ensure we read and write in separate phases
+    // Batch read phase
+    const listRect = cachedNavUl.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+    const left = linkRect.left - listRect.left;
+    const width = linkRect.width;
+
+    // Batch write phase (single rAF)
     requestAnimationFrame(() => {
-        // Read Phase
-        const listRect = navUl.getBoundingClientRect();
-        const linkRect = activeLink.getBoundingClientRect();
-        const left = linkRect.left - listRect.left;
-        const width = linkRect.width;
-
-        // Write Phase
-        requestAnimationFrame(() => {
-            indicator.classList.add('visible');
-            indicator.style.width = `${width}px`;
-            indicator.style.transform = `translate3d(${left}px, -50%, 0)`;
-            indicator.style.top = '50%';
-        });
+        cachedIndicator.classList.add('visible');
+        cachedIndicator.style.cssText = `width:${width}px;transform:translate3d(${left}px,-50%,0);top:50%`;
     });
 }
 
-// Update on resize
-window.addEventListener('resize', () => {
-    const active = document.querySelector('nav a.active');
+// Update on resize (debounced)
+const handleResize = debounce(() => {
+    if (!cachedNavLinks) cachedNavLinks = document.querySelectorAll('nav a');
+    const active = cachedNavLinks.length > 0 ? 
+        Array.from(cachedNavLinks).find(link => link.classList.contains('active')) : null;
     if (active) updateIndicator(active);
-});
+}, 100);
+
+window.addEventListener('resize', handleResize, { passive: true });
 
 /**
  * Set active navigation link
  * @param {string} navType - 'inicio', 'menu', 'pedido', 'contacto'
  */
 function setActiveNav(navType) {
-    document.querySelectorAll('nav a').forEach(link => {
-        link.classList.remove('active');
-    });
+    if (!cachedNavLinks) cachedNavLinks = document.querySelectorAll('nav a');
+    
+    // Batch class removal
+    cachedNavLinks.forEach(link => link.classList.remove('active'));
 
     const navMap = { 'inicio': 0, 'menu': 1, 'pedido': 2, 'contacto': 3 };
-    const navLinks = document.querySelectorAll('nav a');
     const index = navMap[navType];
 
-    if (navLinks[index]) {
-        navLinks[index].classList.add('active');
-        // Trigger animation frame for smoothness
-        requestAnimationFrame(() => {
-            updateIndicator(navLinks[index]);
-        });
+    if (cachedNavLinks[index]) {
+        cachedNavLinks[index].classList.add('active');
+        requestAnimationFrame(() => updateIndicator(cachedNavLinks[index]));
     }
 }
 
@@ -65,14 +74,17 @@ function setActiveNav(navType) {
  * @param {string} sectionId - ID of section to show
  */
 export function showSection(sectionId) {
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-    });
+    // Cache sections on first use
+    if (!showSection._sections) {
+        showSection._sections = document.querySelectorAll('.section');
+    }
+    
+    showSection._sections.forEach(section => section.classList.remove('active'));
 
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         targetSection.classList.add('active');
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     setActiveNav(sectionId);
@@ -83,21 +95,17 @@ export function showSection(sectionId) {
  */
 export function scrollToMenu() {
     showSection('menu');
-    setTimeout(() => {
+    requestAnimationFrame(() => {
         const menuTitle = document.getElementById('menu-title');
         const header = document.querySelector('header');
-
         if (!menuTitle || !header) return;
 
         const headerHeight = header.offsetHeight;
         const elementPosition = menuTitle.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20;
 
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
-    }, 100);
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    });
 }
 
 /**
@@ -108,9 +116,11 @@ export function scrollToPedido() {
 }
 
 // Set initial active (menu is default)
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setActiveNav('menu'));
+} else {
     setActiveNav('menu');
-});
+}
 
 /**
  * Handle social link press (mobile only):
@@ -127,8 +137,12 @@ function handleSocialClick(el) {
         _socialTimer = null;
     }
 
-    // Reset ALL social links first
-    document.querySelectorAll('.social-link').forEach(link => {
+    // Reset ALL social links (cached on first use)
+    if (!handleSocialClick._links) {
+        handleSocialClick._links = document.querySelectorAll('.social-link');
+    }
+    
+    handleSocialClick._links.forEach(link => {
         link.classList.remove('active-tooltip');
         link.blur();
     });
