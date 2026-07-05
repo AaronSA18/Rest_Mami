@@ -237,8 +237,10 @@ footer::before{content:'';position:absolute;inset:0;background-image:radial-grad
 .footer-powered{margin-top:var(--spacing-sm);color:var(--color-secondary);font-weight:var(--font-weight-bold)}
 
 /* ========== WhatsApp Floating Button ========== */
-.whatsapp-float{position:fixed;bottom:24px;right:24px;width:60px;height:60px;background:linear-gradient(135deg,#25D366 0%,#128C7E 100%);color:var(--color-white);border-radius:var(--radius-circle);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(37,211,102,0.4);z-index:999;transition:all var(--transition-normal) ease;text-decoration:none;animation:whatsappPulse 2s ease-in-out infinite}
-.whatsapp-float:hover{transform:translateY(-3px) scale(1.1);box-shadow:0 6px 25px rgba(37,211,102,0.6)}
+.whatsapp-float{position:fixed;bottom:24px;right:40px;width:60px;height:60px;background:linear-gradient(135deg,#25D366 0%,#128C7E 100%);color:var(--color-white);border-radius:var(--radius-circle);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(37,211,102,0.4);z-index:999;transition:all var(--transition-normal) ease;text-decoration:none;animation:whatsappPulse 2s ease-in-out infinite}
+.whatsapp-float::before{content:'¡Escríbenos! 💬';position:absolute;bottom:calc(100% + 12px);right:0;background:var(--color-white);color:var(--color-primary);padding:10px 16px;border-radius:var(--radius-md);font-size:0.85rem;font-weight:var(--font-weight-semibold);white-space:nowrap;box-shadow:0 4px 15px rgba(10,34,64,0.15);border:1px solid rgba(10,34,64,0.08);opacity:0;visibility:hidden;transform:translateY(8px);transition:all var(--transition-normal) ease;pointer-events:none}
+.whatsapp-float::after{content:'';position:absolute;bottom:calc(100% + 4px);right:22px;border-width:6px;border-style:solid;border-color:var(--color-white) transparent transparent transparent;opacity:0;visibility:hidden;transition:all var(--transition-normal) ease}
+@media(hover:hover)and (pointer:fine){.whatsapp-float:hover::before,.whatsapp-float:hover::after{opacity:1;visibility:visible;transform:translateY(0)}.whatsapp-float:hover{transform:translateY(-3px) scale(1.1);box-shadow:0 6px 25px rgba(37,211,102,0.6)}}
 .whatsapp-float.hidden{opacity:0;pointer-events:none;transform:scale(0.5)}
 body.checkout-active .whatsapp-float{opacity:0;pointer-events:none;transform:scale(0.5)}
 @keyframes whatsappPulse{0%,100%{box-shadow:0 4px 15px rgba(37,211,102,0.4)}50%{box-shadow:0 4px 25px rgba(37,211,102,0.7)}}
