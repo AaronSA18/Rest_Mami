@@ -10,8 +10,10 @@
  */
 
 (async function auditRLS() {
-  const SUPABASE_URL = 'https://pqcrhfnwshrlyndhsvas.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxY3JoZm53c2hybHluZGhzdmFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMjY4MTEsImV4cCI6MjA5NjcwMjgxMX0.dfsnC1LSdBxSUNDCFuZ0MMNTLZHq0jp-Jx7wFPol-bo';
+  const SUPABASE_URL = window.location.origin.includes('localhost')
+    ? 'https://pqcrhfnwshrlyndhsvas.supabase.co'
+    : 'https://pqcrhfnwshrlyndhsvas.supabase.co';
+  const SUPABASE_ANON_KEY = 'REDACTED - Use your own anon key from .env for testing';
 
   const results = [];
   let passed = 0;

@@ -9,6 +9,10 @@ import { findItemById, getImagePath } from "./menu-data.js";
 import { CONFIG } from "../config.js";
 import { showSection } from "./navigation.js";
 
+const isDev = import.meta.env.DEV;
+const log = isDev ? console.log.bind(console) : () => {};
+const logError = isDev ? console.error.bind(console) : () => {};
+
 /**
  * Sanitize user input to prevent XSS attacks
  * @param {string} input - Raw user input
@@ -85,7 +89,7 @@ function loadCartFromStorage() {
       cart = JSON.parse(saved);
     }
   } catch (e) {
-    console.error("Error loading cart from storage:", e);
+    logError("Error loading cart from storage:", e);
     cart = [];
   }
 }
@@ -95,7 +99,7 @@ function saveCartToStorage() {
   try {
     sessionStorage.setItem("restaurantCart", JSON.stringify(cart));
   } catch (e) {
-    console.error("Error saving cart to storage:", e);
+    logError("Error saving cart to storage:", e);
   }
 }
 
@@ -523,13 +527,13 @@ export async function finalizeOrder() {
         CONFIG.emailjs.templateId,
         emailParams,
       );
-      console.log("✅ Pedido enviado exitosamente al email de la empresa");
+      log("✅ Pedido enviado exitosamente al email de la empresa");
       // Update cooldown timestamp after successful send
       updateCooldown();
       isSuccess = true;
     }
   } catch (emailError) {
-    console.error("Error al enviar el pedido:", emailError);
+    logError("Error al enviar el pedido:", emailError);
   }
 
   // Show result state in the same modal
