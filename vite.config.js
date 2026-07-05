@@ -30,12 +30,7 @@ export default defineConfig({
     sourcemap: false,
     // Optimize chunk size
     rollupOptions: {
-      output: {
-        // Manual chunk splitting for better caching
-        manualChunks: {
-          'vendor-supabase': ['@supabase/supabase-js'],
-        }
-      }
+      output: {}
     },
     // Enable compression
     reportCompressedSize: true,

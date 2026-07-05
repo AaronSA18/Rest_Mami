@@ -8,11 +8,11 @@
     background-image: url('../../images/fast-food-pattern.png');
     background-repeat: repeat;
     background-size: 800px;
-    background-attachment: fixed;
+    background-attachment: scroll;
     position: relative;
     padding: var(--spacing-4xl) 0;
     overflow: hidden;
-    animation: backgroundDrift 60s linear infinite;
+    contain: layout style;
 }
 
 /* Overlay azul marino sutil para integrar paleta */
@@ -23,11 +23,6 @@
     background: rgba(10, 34, 64, 0.04);
     pointer-events: none;
     z-index: 0;
-}
-
-@keyframes backgroundDrift {
-    from { background-position: 0 0; }
-    to { background-position: 800px 800px; }
 }
 
 .order-section {

@@ -281,7 +281,6 @@ header::after {
     object-fit: cover;
     z-index: 0;
     animation: bgZoom 8s ease-out forwards;
-    will-change: transform;
 }
 
 /* Stadium night overlay — azul marino oscuro */

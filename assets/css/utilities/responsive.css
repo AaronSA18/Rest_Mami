@@ -231,18 +231,6 @@
     #pedido {
         padding: var(--spacing-xl) var(--spacing-md);
         background-attachment: scroll; /* Performance on mobile */
-        animation: subtleDrift 60s linear infinite;
-        animation-play-state: paused; /* Paused by default, activated via JS when visible */
-    }
-
-    /* Activar drift solo cuando la sección está visible */
-    #pedido.section.active {
-        animation-play-state: running;
-    }
-
-    @keyframes subtleDrift {
-        from { background-position: 0 0; }
-        to { background-position: 300px 300px; }
     }
 
     .order-section {
