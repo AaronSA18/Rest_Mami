@@ -35,6 +35,45 @@ function isValidPhone(phone) {
   return /^[0-9]{9}$/.test(phone);
 }
 
+/**
+ * Rate Limiting: Cooldown between emails (5 minutes)
+ * Prevents spam by limiting how often a user can send orders
+ */
+
+const COOLDOWN_KEY = "lastEmailSent";
+const COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+/**
+ * Check if user can send email (cooldown expired)
+ * @returns {boolean} - true if can send, false if in cooldown
+ */
+function canSendEmail() {
+  const lastSent = localStorage.getItem(COOLDOWN_KEY);
+  if (!lastSent) return true;
+  const timePassed = Date.now() - parseInt(lastSent);
+  return timePassed >= COOLDOWN_MS;
+}
+
+/**
+ * Get remaining cooldown time in minutes
+ * @returns {number} - minutes remaining (0 if can send)
+ */
+function getRemainingCooldown() {
+  const lastSent = localStorage.getItem(COOLDOWN_KEY);
+  if (!lastSent) return 0;
+  const timePassed = Date.now() - parseInt(lastSent);
+  if (timePassed >= COOLDOWN_MS) return 0;
+  const remaining = COOLDOWN_MS - timePassed;
+  return Math.ceil(remaining / 60000);
+}
+
+/**
+ * Update cooldown timestamp after sending email
+ */
+function updateCooldown() {
+  localStorage.setItem(COOLDOWN_KEY, Date.now().toString());
+}
+
 // Cart state
 let cart = [];
 
@@ -398,6 +437,14 @@ export function closeConfirmationModal() {
  * Finalize order and send via EmailJS to business email
  */
 export async function finalizeOrder() {
+  // Rate limiting: Check cooldown before sending
+  if (!canSendEmail()) {
+    const minutes = getRemainingCooldown();
+    showNotification(`⏳ Espera ${minutes} minuto(s) antes de enviar otro pedido`);
+    setConfirmationModalState("reminder");
+    return;
+  }
+
   // Show loading state instead of hiding modal
   setConfirmationModalState("loading");
 
@@ -477,6 +524,8 @@ export async function finalizeOrder() {
         emailParams,
       );
       console.log("✅ Pedido enviado exitosamente al email de la empresa");
+      // Update cooldown timestamp after successful send
+      updateCooldown();
       isSuccess = true;
     }
   } catch (emailError) {
