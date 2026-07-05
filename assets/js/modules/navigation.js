@@ -158,6 +158,32 @@ function handleSocialClick(el) {
     }, 2000);
 }
 
+// WhatsApp floating button visibility
+function updateWhatsAppVisibility() {
+    const whatsappBtn = document.getElementById('whatsappFloat');
+    if (!whatsappBtn) return;
+
+    const isCheckoutActive = document.body.classList.contains('checkout-active');
+    const contactoSection = document.getElementById('contacto');
+    const isContactSection = contactoSection && contactoSection.classList.contains('active');
+
+    if (isCheckoutActive || isContactSection) {
+        whatsappBtn.classList.add('hidden');
+    } else {
+        whatsappBtn.classList.remove('hidden');
+    }
+}
+
+// Observe body class changes (checkout)
+const bodyObserver = new MutationObserver(updateWhatsAppVisibility);
+bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+// Observe section class changes (navigation)
+const sectionObserver = new MutationObserver(updateWhatsAppVisibility);
+document.querySelectorAll('.section').forEach(section => {
+    sectionObserver.observe(section, { attributes: true, attributeFilter: ['class'] });
+});
+
 // Make navigation functions available globally for onclick handlers
 window.showSection = showSection;
 window.scrollToMenu = scrollToMenu;
