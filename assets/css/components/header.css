@@ -1,17 +1,18 @@
 /**
  * Header Component Styles
- * Burger & Broaster Express
+ * Burger & Broaster Express — FIFA World Cup 2026 Edition
  */
 
 /* ========== Header ========== */
 header {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    background: var(--gradient-primary);
     color: var(--color-white);
     padding: var(--spacing-md) 0;
     position: sticky;
     top: 0;
     z-index: var(--z-index-header);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 20px rgba(10, 34, 64, 0.4);
+    border-bottom: 3px solid var(--color-secondary);
 }
 
 .header-content {
@@ -34,16 +35,24 @@ header {
     flex-shrink: 0;
 }
 
+.logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: var(--radius-circle);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
 .logo-icon {
     width: 50px;
     height: 50px;
-    background: var(--color-white);
+    background: var(--gradient-gold);
     border-radius: var(--radius-circle);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.8rem;
-    animation: bounceIn 0.6s ease-out;
+    box-shadow: var(--shadow-gold);
 }
 
 /* ========== Navigation ========== */
@@ -66,7 +75,7 @@ nav li {
 }
 
 nav a {
-    color: var(--color-white);
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -94,6 +103,7 @@ nav a::after {
 nav a:hover {
     opacity: 0.9;
     transform: translateY(-2px);
+    color: var(--color-secondary);
 }
 
 nav a:hover::after {
@@ -110,19 +120,20 @@ nav a.active::after {
 
 /* ========== Pedido Button Styles ========== */
 .nav-pedido {
-    background: var(--color-secondary);
-    color: var(--color-black) !important;
+    background: var(--gradient-gold);
+    color: var(--color-primary) !important;
     border-radius: var(--radius-lg);
     padding: var(--spacing-sm) var(--spacing-lg) !important;
     font-weight: var(--font-weight-bold);
     position: relative;
-    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    box-shadow: var(--shadow-gold);
     transition: all var(--transition-normal) ease;
 }
 
 .nav-pedido:hover {
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+    box-shadow: 0 6px 20px rgba(232, 201, 75, 0.5);
+    color: var(--color-primary) !important;
 }
 
 .nav-pedido:hover::after {
@@ -130,8 +141,8 @@ nav a.active::after {
 }
 
 .nav-pedido.active {
-    color: var(--color-black) !important;
-    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
+    color: var(--color-primary) !important;
+    box-shadow: 0 6px 20px rgba(232, 201, 75, 0.6);
 }
 
 .nav-pedido.active::after {
@@ -139,7 +150,7 @@ nav a.active::after {
 }
 
 .nav-pedido .cart-count {
-    background: var(--color-primary);
+    background: var(--color-accent);
     color: var(--color-white);
     border-radius: var(--radius-circle);
     width: 22px;
@@ -163,17 +174,15 @@ nav a.active::after {
     animation: popBadge 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* ========== Animations ========== */
+/* ========== Animations — Ligeras ========== */
 @keyframes bounceIn {
     0% {
         opacity: 0;
-        transform: scale(0.3);
+        transform: scale(0.4);
     }
-    50% {
+    60% {
         opacity: 1;
-    }
-    70% {
-        transform: scale(1.1);
+        transform: scale(1.08);
     }
     100% {
         transform: scale(1);
@@ -181,50 +190,36 @@ nav a.active::after {
 }
 
 @keyframes popBadge {
-    0% {
-        transform: scale(0);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(0); }
+    55% { transform: scale(1.2); }
+    100% { transform: scale(1); }
 }
 
 @keyframes fadeInUp {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 @keyframes bgZoom {
-    0% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(1.08); }
+    100% { transform: scale(1); }
 }
 
 @keyframes heroFadeIn {
     0% {
         opacity: 0;
-        transform: scale(0.95);
+        transform: translateY(12px);
     }
     100% {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0);
     }
 }
 
 @keyframes fadeInDown {
     0% {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-15px);
     }
     100% {
         opacity: 1;
@@ -235,7 +230,7 @@ nav a.active::after {
 @keyframes slideInLeft {
     0% {
         opacity: 0;
-        transform: translateX(-30px);
+        transform: translateX(-20px);
     }
     100% {
         opacity: 1;
@@ -243,17 +238,38 @@ nav a.active::after {
     }
 }
 
+/* ========== Trophy Line — Decorative bar below header ========== */
+header::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--color-secondary) 30%, #fff 50%, var(--color-secondary) 70%, transparent 100%);
+    background-size: 300% 100%;
+    animation: trophyShimmer 4s ease-in-out infinite;
+}
+
+@keyframes trophyShimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
 /* ========== Hero Section ========== */
 .hero {
     position: relative;
     color: var(--color-white);
     text-align: center;
-    padding: var(--spacing-5xl) var(--spacing-xl);
+    padding: 8rem var(--spacing-xl);
     min-height: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    background-image: url('https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/hero-bg.webp');
+    background-size: cover;
+    background-position: center;
 }
 
 .hero-bg {
@@ -264,9 +280,10 @@ nav a.active::after {
     height: 100%;
     object-fit: cover;
     z-index: 0;
-    animation: bgZoom 10s ease-out forwards;
+    animation: bgZoom 8s ease-out forwards;
 }
 
+/* Stadium night overlay — azul marino oscuro */
 .hero::before {
     content: '';
     position: absolute;
@@ -274,7 +291,12 @@ nav a.active::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.35);
+    background: linear-gradient(
+        160deg,
+        rgba(10, 34, 64, 0.72) 0%,
+        rgba(6, 22, 41, 0.55) 50%,
+        rgba(26, 74, 122, 0.60) 100%
+    );
     z-index: 1;
 }
 
@@ -283,28 +305,29 @@ nav a.active::after {
     max-width: 950px;
     position: relative;
     z-index: 2;
-    animation: heroFadeIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation: heroFadeIn 0.7s ease-out forwards;
 }
 
 .hero-card {
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(6, 22, 41, 0.45);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(232, 201, 75, 0.2);
     border-radius: var(--radius-xl);
     padding: 3rem 4rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 40px rgba(10, 34, 64, 0.5), 0 0 0 1px rgba(232, 201, 75, 0.1);
 }
 
 .hero-subtitle {
     display: block;
-    color: #FFC107;
+    color: var(--color-secondary);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 4px;
     text-transform: uppercase;
     margin-bottom: var(--spacing-lg);
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-    animation: fadeInDown 0.8s ease-out 0.3s both;
+    animation: fadeInDown 0.7s ease-out 0.2s both;
 }
 
 .hero h1 {
@@ -313,19 +336,19 @@ nav a.active::after {
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
     letter-spacing: -1px;
     line-height: 1.2;
-    font-weight: 800;
+    font-weight: var(--font-weight-extrabold);
 }
 
 .hero-highlight {
-    color: #FFC107;
+    color: var(--color-secondary);
     display: block;
-    font-weight: 800;
+    font-weight: var(--font-weight-extrabold);
 }
 
 .hero p {
     font-size: var(--font-size-h4);
     margin-bottom: var(--spacing-3xl);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     opacity: 0.95;
     line-height: 1.8;
     max-width: 650px;
@@ -353,29 +376,30 @@ nav a.active::after {
     align-items: center;
     gap: var(--spacing-sm);
     border: 2px solid transparent;
+    font-family: var(--font-family-base);
 }
 
 .cta-primary {
-    background: var(--color-secondary);
-    color: var(--color-black);
-    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+    background: var(--gradient-gold);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-gold);
 }
 
 .cta-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.6);
+    box-shadow: 0 8px 28px rgba(232, 201, 75, 0.6);
 }
 
 .cta-secondary {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
     color: var(--color-white);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.45);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
 }
 
 .cta-secondary:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: var(--color-white);
+    background: rgba(255, 255, 255, 0.22);
+    border-color: var(--color-secondary);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 20px rgba(232, 201, 75, 0.25);
 }

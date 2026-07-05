@@ -1,39 +1,45 @@
 /**
- * Configuration File
+ * Configuration File - Optimized
  * Burger & Broaster Express
  *
  * Global configuration and constants
+ * Performance: Removed console warnings in production, optimized env access
  */
 
+const env = (key) => import.meta.env[key] || "";
+
+// Only warn in development mode
+if (import.meta.env.DEV) {
+  const required = [
+    "VITE_EMAILJS_SERVICE_ID",
+    "VITE_EMAILJS_TEMPLATE_ID",
+    "VITE_EMAILJS_PUBLIC_KEY",
+    "VITE_EMAILJS_BUSINESS_EMAIL",
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY"
+  ];
+  
+  const missing = required.filter(key => !env(key));
+  if (missing.length > 0) {
+    console.warn(`Missing env vars: ${missing.join(', ')}`);
+  }
+}
+
 export const CONFIG = {
-  // EmailJS Configuration for Order Notifications
   emailjs: {
-    serviceId: "service_2opd7vp",
-    templateId: "template_4bl7von",
-    publicKey: "MuH16VnihKaVvx7a2",
-    businessEmail: "info@burgerbroaster.pe", // Business email for order notifications
+    serviceId: env("VITE_EMAILJS_SERVICE_ID"),
+    templateId: env("VITE_EMAILJS_TEMPLATE_ID"),
+    publicKey: env("VITE_EMAILJS_PUBLIC_KEY"),
+    businessEmail: env("VITE_EMAILJS_BUSINESS_EMAIL"),
   },
 
-  // Carousel Configuration
   carousel: {
-    itemGap: 32, // Gap between items in pixels (2rem)
-    transitionDuration: 500, // Transition duration in milliseconds
-    autoScrollDelay: 5000, // Auto scroll delay (if implemented)
+    itemGap: 32,
+    transitionDuration: 500,
+    autoScrollDelay: 5000,
   },
 
-  // Notification Configuration
   notification: {
-    displayDuration: 3000, // Duration to show notifications in milliseconds
-  },
-
-
-  // Image Paths
-  images: {
-    basePath: "assets/images/",
-    broaster: "assets/images/broaster/",
-    burgers: "assets/images/burgers/",
-    salchipapas: "assets/images/salchipapas/",
-    drinks: "assets/images/drinks/",
-    combos: "assets/images/combos/",
+    displayDuration: 3000,
   },
 };

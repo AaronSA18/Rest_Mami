@@ -20,9 +20,23 @@ let carouselPositions = {
 let isTransitioning = {};
 
 /**
- * Initialize menu rendering with IntersectionObserver
+ * Initialize menu rendering.
+ * @param {object} options
+ * @param {boolean} [options.immediate=false]
+ *   When true, renders all categories synchronously without waiting for
+ *   IntersectionObserver callbacks. Use this when data is already available
+ *   in menuData (e.g. loaded from cache) to avoid the skeleton flash.
  */
-export function renderMenu() {
+export function renderMenu({ immediate = false } = {}) {
+    if (immediate) {
+        // Bypass the observer — render all categories right now.
+        // Called when we have data from the synchronous cache hit.
+        Object.keys(menuData).forEach(category => {
+            renderCategory(category);
+        });
+        return;
+    }
+
     const observerOptions = {
         root: null,
         rootMargin: '100px',
@@ -76,6 +90,7 @@ export function renderCategory(category) {
 
 /**
  * Helper to render a single menu item HTML
+ * Optimized for performance with responsive images and proper dimensions
  */
 function renderMenuItem(item, index, category) {
     const imagePath = item.image ? getImagePath(category, item.image) : null;
@@ -83,21 +98,40 @@ function renderMenuItem(item, index, category) {
     const isPriority = category === 'broaster' && index < 2;
     const loadingAttr = isPriority ? '' : 'loading="lazy"';
     const priorityAttr = isPriority ? 'fetchpriority="high"' : '';
+    const decodingAttr = 'decoding="async"';
+    
+    // Responsive image dimensions based on category
+    const dimensions = {
+        broaster: { w: 460, h: 230 },
+        burgers: { w: 500, h: 250 },
+        salchipapas: { w: 500, h: 250 },
+        drinks: { w: 400, h: 200 },
+        combos: { w: 440, h: 220 }
+    };
+    const { w, h } = dimensions[category] || { w: 400, h: 200 };
 
     return `
         <div class="menu-item" data-index="${index}">
             <div class="menu-item-image">
                 ${imagePath
-            ? `<img src="${imagePath}" alt="${item.name}" ${loadingAttr} ${priorityAttr}
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                       <div style="display:none; align-items:center; 
-                             justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
-                             ${item.fallbackEmoji || item.emoji}
-                       </div>`
-            : `<div style="display:flex;align-items:center; 
-                             justify-content:center; font-size:4rem; background:linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
-                             ${item.fallbackEmoji || item.emoji}
-                       </div>`
+            ? `<div style="position: relative; width: 100%; height: 100%;">
+                   <div style="position: absolute; inset: 0; margin-left: 41%; display: flex; align-items: center; ">
+                       ${item.fallbackEmoji || item.emoji || '🍽️'}
+                   </div>
+                   <img src="${imagePath}?w=${w}&q=80&fm=webp" 
+                        alt="${item.name} - ${category}" 
+                        width="${w}" 
+                        height="${h}" 
+                        ${loadingAttr} 
+                        ${priorityAttr}
+                        ${decodingAttr}
+                        style="position: relative; z-index: 2; opacity: 0; transition: opacity 0.3s ease; width: 100%; height: 100%; object-fit: cover;" 
+                        onload="this.style.opacity=1;" 
+                        onerror="this.style.display='none'">
+               </div>`
+            : `<div style="display:flex;align-items:center; justify-content:center; font-size:4rem;">
+                   ${item.fallbackEmoji || item.emoji || '🍽️'}
+               </div>`
         }
             </div>
             <div class="menu-item-content">
@@ -105,7 +139,7 @@ function renderMenuItem(item, index, category) {
                 <p>${item.description}</p>
                 <div class="price-cart">
                     <span class="price">S/ ${item.price.toFixed(2)}</span>
-                    <button class="add-to-cart" onclick="window.addToCart(${item.id})">Agregar</button>
+                    <button class="add-to-cart" onclick="window.addToCart('${item.id}')">Agregar</button>
                 </div>
             </div>
         </div>
@@ -113,9 +147,10 @@ function renderMenuItem(item, index, category) {
 }
 
 /**
- * Initialize progress bar for mobile carousel
+ * Initialize progress bar for mobile carousel - Optimized
  * @param {string} category - Category name
  * @param {HTMLElement} grid - Grid element
+ * Performance: Batched reads/writes, debounced resize, passive listeners
  */
 function initMobileProgressBar(category, grid) {
     const wrapper = grid.parentElement;
@@ -127,8 +162,23 @@ function initMobileProgressBar(category, grid) {
     progressBar.className = 'scroll-progress-bar';
     container.appendChild(progressBar);
 
+    // Cache DOM measurements
+    let cachedTrackWidth = container.offsetWidth - 32;
+    let rafId = null;
+
+    // Debounce utility
+    let resizeTimeout;
+    const debounce = (fn, delay) => (...args) => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => fn(...args), delay);
+    };
+
     // Calculate initial bar width based on visible portion
     const updateProgressBar = () => {
+        // Cancel any pending animation frame
+        if (rafId) cancelAnimationFrame(rafId);
+
+        // Batch read phase
         const scrollLeft = wrapper.scrollLeft;
         const scrollWidth = wrapper.scrollWidth;
         const clientWidth = wrapper.clientWidth;
@@ -138,46 +188,47 @@ function initMobileProgressBar(category, grid) {
         const progress = maxScroll > 0 ? scrollLeft / maxScroll : 0;
 
         // Calculate bar width (proportional to visible content)
-        const trackWidth = container.offsetWidth - 32; // minus padding
-        const barWidth = Math.max(30, (clientWidth / scrollWidth) * trackWidth);
+        const barWidth = Math.max(30, (clientWidth / scrollWidth) * cachedTrackWidth);
 
         // Calculate bar position
-        const maxBarTravel = trackWidth - barWidth;
+        const maxBarTravel = cachedTrackWidth - barWidth;
         const barPosition = progress * maxBarTravel;
 
-        progressBar.style.width = `${barWidth}px`;
-        progressBar.style.transform = `translateX(${barPosition}px)`;
+        // Batch write phase using rAF
+        rafId = requestAnimationFrame(() => {
+            progressBar.style.cssText = `width:${barWidth}px;transform:translateX(${barPosition}px)`;
 
-        // Mark start and end with color change
-        if (scrollLeft <= 5) {
-            // At start
-            progressBar.classList.add('at-start');
-            progressBar.classList.remove('at-end');
-        } else if (scrollLeft >= maxScroll - 5) {
-            // At end
-            progressBar.classList.add('at-end');
-            progressBar.classList.remove('at-start');
-        } else {
-            // In middle
-            progressBar.classList.remove('at-start');
-            progressBar.classList.remove('at-end');
-        }
+            // Mark start and end with color change
+            if (scrollLeft <= 5) {
+                progressBar.classList.add('at-start');
+                progressBar.classList.remove('at-end');
+            } else if (scrollLeft >= maxScroll - 5) {
+                progressBar.classList.add('at-end');
+                progressBar.classList.remove('at-start');
+            } else {
+                progressBar.classList.remove('at-start', 'at-end');
+            }
+        });
     };
 
     // Initial update
     updateProgressBar();
 
-    // Update on scroll
-    wrapper.addEventListener('scroll', updateProgressBar);
+    // Update on scroll (passive for better performance)
+    wrapper.addEventListener('scroll', updateProgressBar, { passive: true });
 
-    // Update on resize
-    window.addEventListener('resize', updateProgressBar);
+    // Update on resize (debounced)
+    window.addEventListener('resize', debounce(() => {
+        cachedTrackWidth = container.offsetWidth - 32;
+        updateProgressBar();
+    }, 100), { passive: true });
 }
 
 /**
- * Update carousel position
+ * Update carousel position - Optimized
  * @param {string} category - Category name
  * @param {boolean} animate - Whether to animate the transition
+ * Performance: Cached measurements, batched writes, GPU-accelerated
  */
 function updateCarouselPosition(category, animate = true) {
     const grid = document.getElementById(`${category}-grid`);
@@ -186,17 +237,18 @@ function updateCarouselPosition(category, animate = true) {
     const items = grid.querySelectorAll('.menu-item');
     if (items.length === 0) return;
 
+    // Batch read phase
     const itemWidth = items[0].offsetWidth;
     const gap = CONFIG.carousel.itemGap;
     const offset = carouselPositions[category] * (itemWidth + gap);
 
+    // Batch write phase
     if (!animate) {
-        grid.style.transition = 'none';
+        grid.style.cssText = `transition:none;will-change:auto;transform:translateX(-${offset}px)`;
     } else {
-        grid.style.transition = `transform ${CONFIG.carousel.transitionDuration}ms ease-in-out`;
+        // GPU-accelerated animation
+        grid.style.cssText = `will-change:transform;transition:transform ${CONFIG.carousel.transitionDuration}ms ease-in-out;transform:translateX(-${offset}px)`;
     }
-
-    grid.style.transform = `translateX(-${offset}px)`;
 }
 
 /**
@@ -225,6 +277,10 @@ export function moveCarousel(category, direction) {
             carouselPositions[category] = totalItems * 2 - 1;
             updateCarouselPosition(category, false);
         }
+
+        // Limpiar will-change al terminar la transición (liberar capa GPU)
+        const grid = document.getElementById(`${category}-grid`);
+        if (grid) grid.style.willChange = 'auto';
 
         isTransitioning[category] = false;
     }, CONFIG.carousel.transitionDuration);

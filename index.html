@@ -15,26 +15,45 @@
     Burger & Broaster Express - Las mejores hamburguesas y broaster
   </title>
 
-  <!-- Favicon -->
+  <!-- Favicon — Balón Mundial 2026 -->
   <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍔</text></svg>" />
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>" />
+
+  <!-- Preconnect for faster font loading -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Preload Outfit font file directly (faster than Google Fonts API) -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/QGYyz_MVcBeNP4NjuGObqx1XmO1I4TC1C4G-EiAou6Y.woff2" as="font" type="font/woff2" crossorigin />
+
+  <!-- Critical CSS (inlined for instant rendering) -->
+  <style>
+    /* Skeleton loaders - Essential for instant feedback */
+    .skeleton{background:linear-gradient(90deg,#dce9f5 25%,#c8ddef 50%,#dce9f5 75%);background-size:200% 100%;animation:skeleton-loading 2s ease-in-out infinite;border-radius:8px}
+    @keyframes skeleton-loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .menu-item-skeleton{flex:0 0 280px;height:320px;margin-right:1.5rem;padding:1rem;border-radius:15px;background:#fff;box-shadow:0 2px 10px rgba(10,34,64,0.06);contain:layout style}
+    .skeleton-img{height:160px;width:100%;margin-bottom:1rem}
+    .skeleton-text{height:20px;width:80%;margin-bottom:0.5rem}
+    .skeleton-text.short{width:40%}
+    .skeleton-price{height:30px;width:40%;margin-top:auto}
+    @media(max-width:768px){.menu-item-skeleton{flex:0 0 68vw;height:280px}}
+    /* Reduced motion support */
+    @media(prefers-reduced-motion:reduce){.skeleton,.menu-item-skeleton *{animation:none!important}.hero,.hero-card,.hero-content,.hero-subtitle,.cta-button,.section,.modal-state{animation:none!important;opacity:1!important;transform:none!important}*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+    :root{--color-primary:#0A2240;--color-primary-dark:#061629;--color-primary-light:#1A4A7A;--color-secondary:#E8C94B;--color-secondary-dark:#C9A830;--color-accent:#C8102E;--color-accent-dark:#A50D26;--color-white:#ffffff;--color-black:#1a1a2e;--color-gray-light:#f4f6f9;--color-gray:#64748b;--color-gray-dark:#e2e8f0;--color-success:#10B981;--color-success-dark:#059669;--color-danger:#EF4444;--gradient-primary:linear-gradient(135deg,#0A2240 0%,#1A4A7A 100%);--gradient-gold:linear-gradient(135deg,#E8C94B 0%,#C9A830 100%);--font-family-base:'Outfit','Segoe UI',Tahoma,Geneva,Verdana,sans-serif;--font-size-base:1rem;--font-size-small:0.9rem;--font-size-large:1.1rem;--font-size-h1:3rem;--font-size-h2:2.5rem;--font-size-h3:1.8rem;--font-size-h4:1.3rem;--font-size-price:1.5rem;--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--font-weight-extrabold:800;--line-height-base:1.6;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--spacing-3xl:4rem;--spacing-4xl:6rem;--radius-sm:5px;--radius-md:8px;--radius-lg:15px;--radius-xl:25px;--radius-full:50px;--radius-circle:50%;--shadow-sm:0 2px 10px rgba(10,34,64,0.15);--shadow-md:0 4px 15px rgba(10,34,64,0.1);--shadow-lg:0 8px 25px rgba(10,34,64,0.15);--shadow-gold:0 5px 15px rgba(232,201,75,0.35);--transition-fast:0.2s;--transition-normal:0.35s;--transition-slow:0.6s;--max-width-container:1200px;--header-height:80px;--z-index-header:1000;--z-index-notification:2000;--z-index-carousel-btn:10}html{scroll-behavior:smooth}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-family-base);line-height:var(--line-height-base);color:var(--color-black)}.container{max-width:var(--max-width-container);margin:0 auto;padding:var(--spacing-2xl) var(--spacing-xl)}.section{display:none;animation:fadeIn var(--transition-normal) ease-in-out}.section.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}h2{color:var(--color-primary);font-size:var(--font-size-h2);margin-bottom:var(--spacing-xl);text-align:center;font-weight:var(--font-weight-extrabold)}h3{color:var(--color-primary-light);font-size:var(--font-size-h3)}header{background:var(--gradient-primary);color:var(--color-white);padding:var(--spacing-md) 0;position:sticky;top:0;z-index:var(--z-index-header);box-shadow:0 2px 20px rgba(10,34,64,0.4);border-bottom:3px solid var(--color-secondary)}.header-content{max-width:var(--max-width-container);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 var(--spacing-xl);gap:var(--spacing-3xl)}.logo{display:flex;align-items:center;gap:var(--spacing-sm);font-size:var(--font-size-large);font-weight:var(--font-weight-bold);flex-shrink:0}.logo-img{width:40px;height:40px;object-fit:contain;border-radius:var(--radius-circle);filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1))}nav{flex:1;display:flex;justify-content:flex-end}nav ul{display:flex;list-style:none;gap:var(--spacing-2xl);align-items:center;position:relative}nav li{position:relative}nav a{color:rgba(255,255,255,0.9);text-decoration:none;font-weight:var(--font-weight-medium);cursor:pointer;transition:all var(--transition-normal) ease;padding:var(--spacing-sm) var(--spacing-md);border-radius:var(--radius-md);position:relative;display:flex;align-items:center;gap:var(--spacing-sm)}nav a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--color-secondary);transition:width var(--transition-normal) ease;border-radius:2px}nav a:hover{opacity:0.9;transform:translateY(-2px);color:var(--color-secondary)}nav a:hover::after{width:100%}nav a.active{color:var(--color-secondary)}nav a.active::after{width:100%}.nav-pedido{background:var(--gradient-gold);color:var(--color-primary)!important;border-radius:var(--radius-lg);padding:var(--spacing-sm) var(--spacing-lg)!important;font-weight:var(--font-weight-bold);position:relative;box-shadow:var(--shadow-gold);transition:all var(--transition-normal) ease}.nav-pedido:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 6px 20px rgba(232,201,75,0.5);color:var(--color-primary)!important}.nav-pedido:hover::after{display:none}.nav-pedido.active{color:var(--color-primary)!important;box-shadow:0 6px 20px rgba(232,201,75,0.6)}.nav-pedido.active::after{display:none}.nav-pedido .cart-count{background:var(--color-accent);color:var(--color-white);border-radius:var(--radius-circle);width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:var(--font-weight-bold);position:absolute;top:-8px;right:-8px;opacity:0;transform:scale(0);transition:all var(--transition-normal) ease}.nav-pedido .cart-count.visible{opacity:1;transform:scale(1);animation:popBadge 0.4s cubic-bezier(0.68,-0.55,0.265,1.55)}@keyframes popBadge{0%{transform:scale(0)}55%{transform:scale(1.2)}100%{transform:scale(1)}}@keyframes fadeInUp{0%{opacity:0}100%{opacity:1}}header::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent 0%,var(--color-secondary) 30%,#fff 50%,var(--color-secondary) 70%,transparent 100%);background-size:300% 100%;animation:trophyShimmer 4s ease-in-out infinite}@keyframes trophyShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}.hero{position:relative;color:var(--color-white);text-align:center;padding:8rem var(--spacing-xl);min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden;background-image:url('https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/hero-bg.webp');background-size:cover;background-position:center}.hero::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(160deg,rgba(10,34,64,0.72) 0%,rgba(6,22,41,0.55) 50%,rgba(26,74,122,0.60) 100%);z-index:1}.hero-content{width:100%;max-width:950px;position:relative;z-index:2;animation:heroFadeIn 0.7s ease-out forwards}.hero-card{background:rgba(6,22,41,0.45);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(232,201,75,0.2);border-radius:var(--radius-xl);padding:3rem 4rem;box-shadow:0 8px 40px rgba(10,34,64,0.5),0 0 0 1px rgba(232,201,75,0.1)}.hero-subtitle{display:block;color:var(--color-secondary);font-size:0.8rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:var(--spacing-lg);text-shadow:1px 1px 3px rgba(0,0,0,0.6);animation:fadeInDown 0.7s ease-out 0.2s both}.hero h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:var(--spacing-2xl);text-shadow:2px 2px 8px rgba(0,0,0,0.7);letter-spacing:-1px;line-height:1.2;font-weight:var(--font-weight-extrabold)}.hero-highlight{color:var(--color-secondary);display:block;font-weight:var(--font-weight-extrabold)}.hero p{font-size:var(--font-size-h4);margin-bottom:var(--spacing-3xl);text-shadow:1px 1px 3px rgba(0,0,0,0.5);opacity:0.95;line-height:1.8;max-width:650px;margin-left:auto;margin-right:auto}.hero-buttons{display:flex;gap:var(--spacing-md);justify-content:center;flex-wrap:wrap}.cta-button{padding:var(--spacing-md) 2.5rem;border:none;border-radius:var(--radius-full);font-size:var(--font-size-large);font-weight:var(--font-weight-bold);cursor:pointer;transition:all var(--transition-normal);text-decoration:none;display:inline-flex;align-items:center;gap:var(--spacing-sm);border:2px solid transparent;font-family:var(--font-family-base)}.cta-primary{background:var(--gradient-gold);color:var(--color-primary);box-shadow:var(--shadow-gold)}.cta-primary:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(232,201,75,0.6)}.cta-secondary{background:rgba(255,255,255,0.12);color:var(--color-white);border-color:rgba(255,255,255,0.45);box-shadow:0 4px 15px rgba(255,255,255,0.1)}.cta-secondary:hover{background:rgba(255,255,255,0.22);border-color:var(--color-secondary);transform:translateY(-3px);box-shadow:0 6px 20px rgba(232,201,75,0.25)}@keyframes heroFadeIn{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}@keyframes fadeInDown{0%{opacity:0;transform:translateY(-15px)}100%{opacity:1;transform:translateY(0)}}</style>
+
+  <!-- Full CSS (loaded asynchronously) -->
+  <link rel="preload" href="assets/css/styles.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet" href="assets/css/styles.min.css" />
+  </noscript>
 
   <!-- Preload Critical Images for better LCP & UX -->
-  <link rel="preload" href="assets/images/hero-bg.webp" as="image" fetchpriority="high" />
-  <link rel="preload" href="assets/images/broaster/Alita.webp" as="image" fetchpriority="high" />
-  <link rel="preload" href="assets/images/broaster/Pierna.webp" as="image" fetchpriority="high" />
-
-  <!-- Stylesheet (async load for performance) -->
-  <link rel="preload" href="assets/css/main.css" as="style" onload="
-        this.onload = null;
-        this.rel = 'stylesheet';
-      " />
-  <noscript>
-    <link rel="stylesheet" href="assets/css/main.css" />
-  </noscript>
+  <link rel="preload" href="https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/hero-bg.webp?w=1600&q=75&fm=webp" as="image" fetchpriority="high" />
 
   <!-- EmailJS Library (async for performance) -->
   <script async src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- Supabase CDN (defer to avoid blocking) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -42,7 +61,7 @@
   <header>
     <div class="header-content">
       <div class="logo">
-        <div class="logo-icon">🍔</div>
+        <img src="https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/Log.webp?w=80&q=80&fm=webp" alt="Rest Mami Logo" class="logo-img" width="40" height="40" fetchpriority="high" />
         <span>Burger & Broaster Express</span>
       </div>
       <nav aria-label="Navegación principal">
@@ -75,11 +94,9 @@
   <!-- Inicio Section -->
   <section id="inicio" class="section">
     <div class="hero">
-      <img src="assets/images/hero-bg.webp" alt="Fondo Hero" class="hero-bg" fetchpriority="high" width="1200"
-        height="600" />
       <div class="hero-content">
         <div class="hero-card">
-          <span class="hero-subtitle">SABOR QUE TE CONECTA</span>
+          <span class="hero-subtitle">⚽ MUNDIAL 2026 · SABOR QUE TE CONECTA</span>
           <h1>
             ¡Bienvenido a
             <span class="hero-highlight">Burger & Broaster Express!</span>
@@ -98,8 +115,9 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container about-section-wrapper">
       <h2>Sobre Nosotros</h2>
+      <img src="https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/about-food.webp?w=1200&q=80&fm=webp" alt="Sobre Nosotros - Hamburguesas y Broaster Express" class="about-main-img" width="1200" height="400" loading="lazy" decoding="async" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 2rem; box-shadow: var(--shadow-md);" />
       <div class="about-content">
         <div class="about-card">
           <div class="about-card-icon">📖</div>
@@ -496,10 +514,10 @@
       <!-- Footer Brand Section -->
       <div class="footer-section footer-brand">
         <div class="footer-logo">
-          <span class="logo-icon-footer">🍔</span>
+          <img src="https://pqcrhfnwshrlyndhsvas.supabase.co/storage/v1/object/public/menu-images/imagen/Log.webp?w=100&q=80&fm=webp" alt="Rest Mami Logo" class="logo-icon-footer" width="50" height="50" loading="lazy" decoding="async" />
           <div>
             <h3>Burger & Broaster Express</h3>
-            <p class="footer-tagline">Las mejores hamburguesas y broaster</p>
+            <p class="footer-tagline">Sabor campeón · FIFA World Cup 2026 🏆</p>
           </div>
         </div>
       </div>
@@ -558,10 +576,10 @@
     <!-- Footer Bottom -->
     <div class="footer-bottom">
       <p>
-        &copy; 2024 Burger & Broaster Express. Todos los derechos reservados.
+        &copy; 2026 Burger & Broaster Express. Todos los derechos reservados.
       </p>
       <p class="footer-powered">
-        Delivery Express | Comida Rápida de Calidad
+        ⚽ Delivery Express | Temporada Mundial 2026 🏆
       </p>
     </div>
   </footer>

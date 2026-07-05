@@ -5,9 +5,74 @@
  * Handles shopping cart functionality and order processing
  */
 
-import { findItemById } from "./menu-data.js";
+import { findItemById, getImagePath } from "./menu-data.js";
 import { CONFIG } from "../config.js";
 import { showSection } from "./navigation.js";
+
+/**
+ * Sanitize user input to prevent XSS attacks
+ * @param {string} input - Raw user input
+ * @returns {string} - Sanitized input
+ */
+function sanitizeInput(input) {
+  if (typeof input !== "string") return "";
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;")
+    .replace(/\//g, "&#x2F;")
+    .trim();
+}
+
+/**
+ * Validate phone number (Peruvian format)
+ * @param {string} phone - Phone number
+ * @returns {boolean} - Is valid
+ */
+function isValidPhone(phone) {
+  return /^[0-9]{9}$/.test(phone);
+}
+
+/**
+ * Rate Limiting: Cooldown between emails (5 minutes)
+ * Prevents spam by limiting how often a user can send orders
+ */
+
+const COOLDOWN_KEY = "lastEmailSent";
+const COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+/**
+ * Check if user can send email (cooldown expired)
+ * @returns {boolean} - true if can send, false if in cooldown
+ */
+function canSendEmail() {
+  const lastSent = localStorage.getItem(COOLDOWN_KEY);
+  if (!lastSent) return true;
+  const timePassed = Date.now() - parseInt(lastSent);
+  return timePassed >= COOLDOWN_MS;
+}
+
+/**
+ * Get remaining cooldown time in minutes
+ * @returns {number} - minutes remaining (0 if can send)
+ */
+function getRemainingCooldown() {
+  const lastSent = localStorage.getItem(COOLDOWN_KEY);
+  if (!lastSent) return 0;
+  const timePassed = Date.now() - parseInt(lastSent);
+  if (timePassed >= COOLDOWN_MS) return 0;
+  const remaining = COOLDOWN_MS - timePassed;
+  return Math.ceil(remaining / 60000);
+}
+
+/**
+ * Update cooldown timestamp after sending email
+ */
+function updateCooldown() {
+  localStorage.setItem(COOLDOWN_KEY, Date.now().toString());
+}
 
 // Cart state
 let cart = [];
@@ -152,22 +217,41 @@ export function updateCart() {
 
 /**
  * Helper to render a single cart item HTML
+ * Optimized for performance with responsive images and proper dimensions
  */
 function renderCartItem(item) {
-  const imagePath = `assets/images/${item.category}/${item.image}`;
+  const imagePath = item.image ? getImagePath(item.dbCategory || item.category, item.image) : null;
   return `
         <div class="cart-item">
             <div class="cart-item-image">
-                <img src="${imagePath}" alt="${item.name}" onerror="this.parentElement.innerHTML='<span style=\'font-size:2rem\'>${item.emoji}</span>'" loading="lazy">
+                ${imagePath
+      ? `<div style="position: relative; width: 100%; height: 100%;">
+                   <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2rem;z-index: 1;">
+                       ${item.fallbackEmoji || item.emoji || '🍽️'}
+                   </div>
+                   <img src="${imagePath}?w=120&q=80&fm=webp" 
+                        alt="${item.name}" 
+                        width="60" 
+                        height="60" 
+                        loading="lazy" 
+                        decoding="async"
+                        style="position: relative; z-index: 2; opacity: 0; transition: opacity 0.3s ease; width: 100%; height: 100%; object-fit: cover;" 
+                        onload="this.style.opacity=1;" 
+                        onerror="this.style.display='none'">
+               </div>`
+      : `<div style="display:flex; align-items:center; justify-content:center; width: 100%; height: 100%;">
+                   ${item.fallbackEmoji || item.emoji || '🍽️'}
+               </div>`
+    }
             </div>
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
                 <p>S/ ${item.price.toFixed(2)}</p>
             </div>
             <div class="cart-item-controls">
-                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, -1)">−</button>
+                <button class="quantity-btn" onclick="window.updateQuantity('${item.id}', -1)">−</button>
                 <span class="quantity-display">${item.quantity}</span>
-                <button class="quantity-btn" onclick="window.updateQuantity(${item.id}, 1)">+</button>
+                <button class="quantity-btn" onclick="window.updateQuantity('${item.id}', 1)">+</button>
             </div>
         </div>
     `;
@@ -338,7 +422,7 @@ export function closeConfirmationModal() {
   if (modal) {
     const status = modal.getAttribute("data-status");
     const isError = status === "error";
-    
+
     modal.style.display = "none";
 
     // Only redirect to inicio if order was successful
@@ -353,16 +437,38 @@ export function closeConfirmationModal() {
  * Finalize order and send via EmailJS to business email
  */
 export async function finalizeOrder() {
+  // Rate limiting: Check cooldown before sending
+  if (!canSendEmail()) {
+    const minutes = getRemainingCooldown();
+    showNotification(`⏳ Espera ${minutes} minuto(s) antes de enviar otro pedido`);
+    setConfirmationModalState("reminder");
+    return;
+  }
+
   // Show loading state instead of hiding modal
   setConfirmationModalState("loading");
 
-  const name = document.getElementById("customerName").value;
-  const phone = document.getElementById("customerPhone").value;
-  const district = document.getElementById("customerDistrict").value;
-  const address = document.getElementById("customerAddress").value.trim();
-  const reference = document.getElementById("customerReference").value;
+  // Sanitize all user inputs to prevent XSS
+  const name = sanitizeInput(document.getElementById("customerName").value);
+  const phone = document.getElementById("customerPhone").value.replace(/[^0-9]/g, "");
+  const district = sanitizeInput(document.getElementById("customerDistrict").value);
+  const address = sanitizeInput(document.getElementById("customerAddress").value);
+  const reference = sanitizeInput(document.getElementById("customerReference").value);
   const paymentMethod = document.getElementById("paymentMethod").value;
-  const comments = document.getElementById("customerComments").value;
+  const comments = sanitizeInput(document.getElementById("customerComments").value);
+
+  // Validate required fields
+  if (!name || !phone || !district || !address) {
+    showNotification("⚠️ Por favor completa todos los campos obligatorios");
+    setConfirmationModalState("reminder");
+    return;
+  }
+
+  if (!isValidPhone(phone)) {
+    showNotification("⚠️ El teléfono debe tener 9 dígitos");
+    setConfirmationModalState("reminder");
+    return;
+  }
 
   // Build order details
   let total = 0;
@@ -418,6 +524,8 @@ export async function finalizeOrder() {
         emailParams,
       );
       console.log("✅ Pedido enviado exitosamente al email de la empresa");
+      // Update cooldown timestamp after successful send
+      updateCooldown();
       isSuccess = true;
     }
   } catch (emailError) {
@@ -481,7 +589,15 @@ export function initCart() {
   const districtInput = document.getElementById("customerDistrict");
   const addressInput = document.getElementById("customerAddress");
 
-  if (nameInput) nameInput.addEventListener("input", checkFormValidity);
+  if (nameInput) {
+    nameInput.addEventListener("input", (e) => {
+      // Limit name to 100 characters
+      if (e.target.value.length > 100) {
+        e.target.value = e.target.value.slice(0, 100);
+      }
+      checkFormValidity();
+    });
+  }
   if (phoneInput) {
     phoneInput.addEventListener("input", (e) => {
       // Allow only numbers
@@ -495,8 +611,16 @@ export function initCart() {
   }
   if (districtInput)
     districtInput.addEventListener("change", checkFormValidity);
-  
-  if (addressInput) addressInput.addEventListener("input", checkFormValidity);
+
+  if (addressInput) {
+    addressInput.addEventListener("input", (e) => {
+      // Limit address to 200 characters
+      if (e.target.value.length > 200) {
+        e.target.value = e.target.value.slice(0, 200);
+      }
+      checkFormValidity();
+    });
+  }
 
   updateCart();
   updateCartBadge();
