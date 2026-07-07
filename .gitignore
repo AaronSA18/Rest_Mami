@@ -6,6 +6,9 @@
 # Ignorar salida de build de Vite
 dist/
 
+# Ignorar caché de Vite
+.vite/
+
 # Ignorar archivos del sistema
 .DS_Store
 Thumbs.db
@@ -34,3 +37,6 @@ yarn-error.log*
 # Ignorar archivos internos del proyecto / notas personales
 .impeccable/
 PRODUCT.md
+
+# Supabase CLI (sin uso)
+supabase/
